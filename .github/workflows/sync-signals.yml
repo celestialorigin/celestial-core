@@ -1,44 +1,59 @@
-name: Observation OS Sync
+name: Auto Update & Deploy
 
 on:
   schedule:
-    - cron: '0 * * * *' # Every hour
-  workflow_dispatch: # Manual trigger
+    - cron: "0 */6 * * *" # 6時間おき
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: auto-update
+  cancel-in-progress: true
 
 jobs:
-  sync-signals:
+  update-and-deploy:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write # Needed to push changes
-    
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
 
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
-          cache: 'npm'
-          cache-dependency-path: './celestial/package-lock.json'
+          node-version: "20"
+          cache: "npm"
 
-      - name: Install Dependencies
-        working-directory: ./celestial
+      - name: Install
         run: npm ci
 
-      - name: Run Sync Script
-        working-directory: ./celestial
-        env:
-          ENABLE_SYNC: ${{ vars.ENABLE_SYNC }}
-          ENABLE_X_POST: ${{ vars.ENABLE_X_POST }}
-          YOUTUBE_RSS_URL: ${{ secrets.YOUTUBE_RSS_URL }}
-        run: npx tsx scripts/sync-signals.ts
+      # ここは君の実装に合わせて選ぶ（両方やってもOK）
+      - name: Pull feeds
+        run: node scripts/pull-feeds.mjs
 
-      - name: Commit and Push if Changed
+      - name: Pull youtube
+        run: node scripts/pull-youtube.mjs
+
+      - name: Commit & Push if changed
         run: |
-          git config --global user.name 'Observation OS Bot'
-          git config --global user.email 'bot@celestial.void'
-          git add celestial/src/data/signals.json
-          git commit -m "feat(obs): automated signal sync [skip ci]" || exit 0
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add src/data/updates.json src/data/feeds.json
+          git diff --cached --quiet && echo "No changes" && exit 0
+          git commit -m "chore(update): refresh external data [skip ci]"
           git push
-        continue-on-error: true # Don't fail if nothing to commit
+
+      - name: Build Astro
+        run: npm run build
+
+      - name: Deploy to Xserver
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./dist/
+          server-dir: ${{ secrets.FTP_REMOTE_DIR }}
+          dangerous-clean-slate: false
+          
