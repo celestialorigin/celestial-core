@@ -88,11 +88,11 @@ function parsePublishAtRaw(publishAtRaw) {
  *   --publish "YYYY-MM-DD HH:mm"   (空なら今)
  *   --visibility public|private
  *   --open                         (生成後にファイルパス表示のみ。エディタ起動はしない)
- *   --git                           (git add/commit まで実行)
- *   --push                          (--git と併用で git push もする)
+ *   --git                          (git add/commit まで実行)
+ *   --push                         (--git と併用で git pull --rebase & git push もする)
  *
  * Filename policy:
- *   1) 2026-01-14_hello.md の形式は維持
+ *   1) 2026-01-14_slug.md の形式は維持
  *   2) 衝突したら _01,_02... を自動付与（永久に被らない）
  */
 function parseArgs(argv) {
@@ -109,24 +109,29 @@ function parseArgs(argv) {
     help: false,
   };
 
-  // タイトル：最初に -- なしで来た “塊” を採用（npm run ... -- "title" の想定）
-  // ※オプションが先に来てもOKにする
   const takeValue = (i) => (i + 1 < args.length ? args[i + 1] : "");
   for (let i = 0; i < args.length; i++) {
     const a = args[i];
     if (a === "--help" || a === "-h") out.help = true;
-    else if (a === "--desc") out.desc = takeValue(i), i++;
-    else if (a === "--slug") out.slug = takeValue(i), i++;
-    else if (a === "--publish") out.publish = takeValue(i), i++;
-    else if (a === "--visibility") out.visibility = takeValue(i), i++;
-    else if (a === "--open") out.open = true;
+    else if (a === "--desc") {
+      out.desc = takeValue(i);
+      i++;
+    } else if (a === "--slug") {
+      out.slug = takeValue(i);
+      i++;
+    } else if (a === "--publish") {
+      out.publish = takeValue(i);
+      i++;
+    } else if (a === "--visibility") {
+      out.visibility = takeValue(i);
+      i++;
+    } else if (a === "--open") out.open = true;
     else if (a === "--git") out.git = true;
     else if (a === "--push") out.push = true;
     else if (!a.startsWith("--") && !out.title) out.title = a;
   }
 
   if (out.push) out.git = true;
-
   if (!["public", "private"].includes(out.visibility)) out.visibility = "public";
   return out;
 }
@@ -139,18 +144,18 @@ Usage:
   npm run new:dialogue -- "Title" --slug "my-slug" --git --push
 
 Options:
-  --desc "..."               Description（任意）
-  --slug "..."               slug を指定（任意）
-  --publish "YYYY-MM-DD HH:mm"  publishAt（任意。省略で今）
+  --desc "..."                   Description（任意）
+  --slug "..."                   slug を指定（任意）
+  --publish "YYYY-MM-DD HH:mm"   publishAt（任意。省略で今）
   --visibility public|private
-  --git                      git add/commit まで実行
-  --push                     （--git含む）git push も実行
+  --git                          git add/commit まで実行
+  --push                         （--git含む）git pull --rebase & git push も実行
+  --open
   --help
 `.trim();
 }
 
 function uniqueFilePath(dir, baseName) {
-  // baseName: "2026-01-14_slug.md"
   const ext = path.extname(baseName);
   const stem = baseName.slice(0, -ext.length);
 
@@ -162,7 +167,6 @@ function uniqueFilePath(dir, baseName) {
     const candidate = path.join(dir, `${stem}${suffix}${ext}`);
     if (!fileExists(candidate)) return candidate;
   }
-  // それでもダメなら時刻を足して確実にユニーク
   const now = new Date();
   return path.join(dir, `${stem}_${formatDateYmdHms(now)}${ext}`);
 }
@@ -171,19 +175,44 @@ function safeExec(cmd) {
   execSync(cmd, { stdio: "inherit" });
 }
 
+function safeExecTry(cmd) {
+  try {
+    execSync(cmd, { stdio: "inherit" });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 async function interactiveFallback(current) {
   const rl = makeRl();
+
+  // Ctrl+C で綺麗に終了（interactive中に確実に閉じる）
+  const onSigint = () => {
+    console.log("\n⛔ Cancelled.");
+    try {
+      rl.close();
+    } catch {}
+    process.exit(130);
+  };
+  process.once("SIGINT", onSigint);
+
   try {
     const title = current.title || (await ask(rl, "Title（必須）: "));
     if (!title) return { ...current, title: "" };
 
-    const desc = current.desc || (await ask(rl, "Description（任意・空でOK）: "));
-    const publish = current.publish || (await ask(rl, 'publishAt（任意）: 空=今 / 例 "2026-02-01 21:00": '));
-    const slugSeed = current.slug || (await ask(rl, "slug（任意）: 空=タイトルから自動生成: "));
+    const desc =
+      current.desc || (await ask(rl, "Description（任意・空でOK）: "));
+    const publish =
+      current.publish ||
+      (await ask(rl, 'publishAt（任意）: 空=今 / 例 "2026-02-01 21:00": '));
+    const slugSeed =
+      current.slug || (await ask(rl, "slug（任意）: 空=タイトルから自動生成: "));
     const visibility = current.visibility || "public";
 
     return { ...current, title, desc, publish, slug: slugSeed, visibility };
   } finally {
+    process.removeListener("SIGINT", onSigint);
     rl.close();
   }
 }
@@ -260,14 +289,32 @@ visibility: "${opts.visibility}"
     console.log("");
     console.log("🔧 git automation:");
 
-    // add
-    safeExec(`git add "${rel}"`);
+    // add（日本語パス対策で -- を挟む）
+    safeExec(`git add -- "${rel}"`);
 
     // commit message: feat: add dialogue <slug>
     const msg = `feat: add dialogue ${slug}`;
     safeExec(`git commit -m "${msg}"`);
 
     if (opts.push) {
+      // “fetch first” を潰す：push前に必ず rebase
+      console.log("");
+      console.log("🔁 sync before push: git pull --rebase");
+      const ok = safeExecTry(`git pull --rebase`);
+
+      if (!ok) {
+        console.log("");
+        console.log("⚠️ rebase failed. You may have conflicts.");
+        console.log("Resolve conflicts, then run:");
+        console.log("  git add .");
+        console.log("  git rebase --continue");
+        console.log("  git push");
+        process.exitCode = 1;
+        return;
+      }
+
+      console.log("");
+      console.log("🚀 pushing...");
       safeExec(`git push`);
     }
 
@@ -276,7 +323,7 @@ visibility: "${opts.visibility}"
     console.log("");
     console.log("Next:");
     console.log("1) 内容を書く");
-    console.log('2) git add . && git commit -m "feat: add dialogue" && git push');
+    console.log('2) git add . && git commit -m "feat: add dialogue" && git pull --rebase && git push');
   }
 
   if (opts.open) {
