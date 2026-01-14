@@ -8,7 +8,8 @@
   "preview": "astro preview",
   "check": "astro check",
   "new:dialogue": "node ./scripts/new-dialogue.mjs",
-  "new:activity": "node ./scripts/new-activity.mjs"
+  "new:activity": "node ./scripts/new-activity.mjs",
+  "cel": "node ./scripts/celestial.mjs"
 },
 
   "dependencies": {

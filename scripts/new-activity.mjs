@@ -425,8 +425,9 @@ relations: []${externalBlock}
 
     if (opts.push) {
       console.log("");
-      console.log("🔁 sync before push: git pull --rebase");
-      const ok = safeExecTry(`git pull --rebase`);
+      console.log("🔁 sync before push: git pull --rebase --autostash");
+      const ok = safeExecTry(`git pull --rebase --autostash`);
+
 
       if (!ok) {
         console.log("");
