@@ -9,27 +9,195 @@ const latestLogs = [...logs].sort((a, b) => b.date.localeCompare(a.date)).slice(
   <section class="hero fade-in-section">
     <!-- Custom Shi-chan Link (Silhouette) -->
     <a href="/shiichan" class="shiichan-link" aria-label="Shi-chan"></a>
-    </div>
+    <a href="/shiichan" class="shiichan-link" aria-label="Shi-chan"></a>
 
     <div class="container hero-content">
-      <h1 class="glitch-text">
-        <span class="core-trigger" id="core-c-trigger" role="button" tabindex="0" aria-label="Observe Core">C</span>E<span class="core-trigger l-trigger" id="l1-trigger" role="button" tabindex="0" aria-label="Observe L1">L</span>ESTIA<span class="core-trigger l-trigger" id="l2-trigger" role="button" tabindex="0" aria-label="Observe L2">L</span>
-      </h1>
+      <h1 class="hero-title">
+        <span id="core-c-trigger" class="core-trigger" role="button" tabindex="0" aria-pressed="false" aria-label="Observe Core">C</span>ELESTIAL <span class="project-word">PROJE<span id="project-c-trigger" class="project-c-link" role="button" tabindex="0" aria-label="To Secret">C</span>T</span>
+      <!-- Core C Audio Logic -->
+  <script is:inline>
+  document.addEventListener('DOMContentLoaded', () => {
+    // ===== Elements =====
+    const trigger = document.getElementById('core-c-trigger');
+    const toast = document.getElementById('sonic-trace-toast');
+    const toastTitle = document.getElementById('sonic-trace-title');
+    const toastText = document.getElementById('sonic-trace-text');
+    const toastClose = document.getElementById('sonic-trace-close');
+
+    const obsHotspot = document.getElementById('obs-hotspot');
+    const obsToast = document.getElementById('obs-toast');
+    const obsTitle = document.getElementById('obs-title');
+    const obsText = document.getElementById('obs-text');
+    const obsClose = document.getElementById('obs-close');
+
+    // ===== Audio =====
+    const TRACK_LABEL = "C of Observers";
+    const TRACK_PATH  = "/audio/c-of-observers.wav";
+    let audio = null;
+    let isPlaying = false;
+    let stopTimer = null;
+
+    function ensureAudio() {
+      if (!audio) {
+        audio = new Audio(TRACK_PATH);
+        audio.loop = true;
+        audio.preload = "auto";
+      }
+    }
+
+    // ===== Toast helpers =====
+    function showSonicToast(title, text, persist) {
+      if (!toast) return;
+      if (toastTitle) toastTitle.textContent = title;
+      if (toastText) toastText.textContent = text;
+
+      toast.classList.add('is-visible');
+
+      // persist = true のときは消さない
+      if (!persist) {
+        if (stopTimer) clearTimeout(stopTimer);
+        stopTimer = setTimeout(() => {
+          toast.classList.remove('is-visible');
+        }, 2000);
+      } else {
+        if (stopTimer) clearTimeout(stopTimer);
+        stopTimer = null;
+      }
+    }
+
+    function hideSonicToast() {
+      if (!toast) return;
+      toast.classList.remove('is-visible');
+      if (stopTimer) clearTimeout(stopTimer);
+      stopTimer = null;
+    }
+
+    function showObsToast(title, text) {
+      if (!obsToast) return;
+      if (obsTitle) obsTitle.textContent = title;
+      if (obsText) obsText.textContent = text;
+      obsToast.classList.add('is-visible');
+      // 3秒後に自動で薄く消える（好みで調整OK）
+      setTimeout(() => obsToast.classList.remove('is-visible'), 3000);
+    }
+
+    // Close buttons
+    if (toastClose) toastClose.addEventListener('click', hideSonicToast);
+    if (obsClose) obsClose.addEventListener('click', () => obsToast && obsToast.classList.remove('is-visible'));
+
+    // ===== Core "C" interaction =====
+    function updateTriggerA11y() {
+      if (!trigger) return;
+      trigger.setAttribute('aria-pressed', String(isPlaying));
+    }
+
+    async function toggleAudio() {
+      if (!trigger) return;
+      ensureAudio();
+
+      try {
+        if (!isPlaying) {
+          await audio.play();
+          isPlaying = true;
+          updateTriggerA11y();
+          showSonicToast(
+            "SIGNAL LOCKED // NOW PLAYING",
+            `${TRACK_LABEL}  ::  ${TRACK_PATH}`,
+            true
+          );
+        } else {
+          audio.pause();
+          isPlaying = false;
+          updateTriggerA11y();
+          showSonicToast(
+            "SIGNAL TERMINATED",
+            "Connection lost. Returning to silence...",
+            false
+          );
+        }
+      } catch (e) {
+        // Autoplay制限など
+        isPlaying = false;
+        updateTriggerA11y();
+        showSonicToast(
+          "ERROR // PLAYBACK BLOCKED",
+          "User interaction required or unsupported audio format.",
+          false
+        );
+        console.error(e);
+      }
+    }
+
+    if (trigger) {
+      trigger.addEventListener('click', toggleAudio);
+      trigger.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          toggleAudio();
+        }
+      });
+    }
+
+    // ===== Observation hotspot =====
+    if (obsHotspot) {
+      obsHotspot.addEventListener('click', () => {
+        // 以前の「観測数」実装がlocalStorage等ならここで拾う
+        const count = Number(localStorage.getItem('celestial_observation_count') || "0");
+        showObsToast(
+          "OBSERVATION COUNT",
+          `You have observed ${count} time(s). // Keep watching.`
+        );
+      });
+    }
+
+    // ===== Project C Trigger (Secret Route) =====
+    const projectCTrigger = document.getElementById('project-c-trigger');
+    if (projectCTrigger) {
+      const goToSecret = () => {
+        window.location.href = "/c-of-observers";
+      };
+      projectCTrigger.addEventListener('click', goToSecret);
+      projectCTrigger.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          goToSecret();
+        }
+      });
+    }
+  });
+  </script>
+
+<style>
+  /* 再生中の発光演出 */
+  .core-trigger.is-playing {
+    text-shadow: 0 0 10px rgba(138, 116, 178, 0.8), 0 0 22px rgba(138, 116, 178, 0.35);
+  }
+  /* 失敗時の軽い反応 */
+  .core-trigger.is-error {
+    transform: translateY(1px);
+    opacity: 0.75;
+  }
+  
+
+</style>
+
       <p class="subtitle subtitle--observer">
         ここは観測拠点
         <span class="observer-wrapper" style="position: relative; display: inline-block;">
-          <a class="observer-point" href="/0" aria-label="observer point">。</a>
+          <a class="observer-point hub-dot" href="/0" aria-label="observer point">。</a>
           <div id="obs-hotspot" class="observation-hotspot" role="button" aria-label="Evaluate Observation"></div>
         </span>
       </p>
       <div class="cta-group">
-        <a href="/logs" class="btn">観測ログを見る</a>
+        <a href="/about" class="btn">CELESTIAL PROJECTについて</a>
       </div>
       
-      <!-- Observation Message Element (Fixed/Absolute) -->
-      <div id="obs-message" class="observation-message hidden" aria-hidden="true"></div>
+
     </div>
   </section>
+
+
+
 
   <style>
     /* Hotspot */
@@ -55,44 +223,7 @@ const latestLogs = [...logs].sort((a, b) => b.date.localeCompare(a.date)).slice(
     }
 
     /* Message Style - Uncanny, Glass, Neon */
-    .observation-message {
-      position: absolute;
-      /* Position near the star - we will adjust with JS or CSS relative to parent? 
-         Let's make it fixed/absolute relative to the hero container or wrapper. 
-         Ideally, it floats near the "。" */
-      top: -40px; 
-      left: 50%;
-      transform: translateX(-50%);
-      
-      white-space: nowrap;
-      font-family: monospace;
-      font-size: 0.75rem;
-      letter-spacing: 0.1em;
-      color: rgba(0, 255, 255, 0.9);
-      
-      background: rgba(10, 10, 20, 0.85);
-      border: 1px solid rgba(0, 255, 255, 0.15);
-      padding: 4px 12px;
-      border-radius: 4px;
-      box-shadow: 0 0 20px rgba(0, 255, 255, 0.1);
-      backdrop-filter: blur(4px);
-      
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.4s ease, filter 0.4s ease;
-      z-index: 20;
-    }
-    
-    .observer-wrapper:hover .observation-message,
-    .observation-message.visible {
-      opacity: 1;
-      filter: drop-shadow(0 0 8px rgba(0, 255, 255, 0.4));
-    }
 
-    .observation-message.hidden {
-      opacity: 0 !important;
-      pointer-events: none;
-    }
     
     /* Shi-chan Wrapper: Position & Clean Slate */
     .shiichan-wrapper {
@@ -119,14 +250,16 @@ const latestLogs = [...logs].sort((a, b) => b.date.localeCompare(a.date)).slice(
     }
 
     /* Shi-chan Link: Image & Interaction */
+  /* Shi-chan Link: Expanded Click Area */
 .shiichan-link {
   position: absolute;
-  top: 22%;
-  left: 29%;
-  width: 110px;
-  height: 110px;
+  top: 20%; /* Adjusted for larger area */
+  left: 27%;
+  width: 150px; /* Expanded from 110px */
+  height: 150px;
+  z-index: 50; /* Ensure it's above other layers */
 
-  /* ✅ ここがポイント：画像を「マスク」にする */
+  /* Masking for silhouette */
   -webkit-mask-image: url("/images/shiichan_silhouette.png");
   mask-image: url("/images/shiichan_silhouette.png");
   -webkit-mask-repeat: no-repeat;
@@ -136,114 +269,22 @@ const latestLogs = [...logs].sort((a, b) => b.date.localeCompare(a.date)).slice(
   -webkit-mask-size: contain;
   mask-size: contain;
 
-  /* ✅ 色はここで決める（黒シルエット） */
   background-color: rgba(0,0,0,0.95);
-
-  /* 既存の演出 */
   opacity: 0.35;
   filter: blur(0.3px);
   display: block;
-  padding: 0;
-  margin: 0;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.shiichan-link:hover {
+  opacity: 0.5;
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.2));
+  background-color: rgba(20, 20, 20, 0.95);
 }
   </style>
 
-  <!-- Script for Hotspot Logic -->
-  <script>
-    const hotspot = document.getElementById('obs-hotspot');
-    const messageEl = document.getElementById('obs-message');
-    const wrapper = document.querySelector('.observer-wrapper');
-    let clickCount = 0;
-    let clickTimer: any = null;
 
-    if (hotspot && messageEl && wrapper) {
-      // Move messageEl to be a child of wrapper for checking positioning context?
-      // No, let's keep it clean. We can append it to wrapper so `top: -40px` works relative to the character.
-      wrapper.appendChild(messageEl);
-
-      function showObservationMessage() {
-        const count = parseInt(localStorage.getItem('celestial_observation_count') || '0', 10);
-        let text = "";
-        
-        if (count === 0) {
-          text = "OBSERVATION: 0 // SIGNAL PRESENT";
-        } else {
-          text = `OBSERVATION: ${count} // MESSAGE SUBJECT TO MUTATION`;
-        }
-
-        // 7-click Gimmick
-        if (clickCount >= 7 && count === 0) {
-          text = "OBSERVATION: 0 // IMPOSSIBLE SPEED // UNMODELED BEHAVIOR";
-          messageEl.style.color = "#ff4444";
-          messageEl.style.borderColor = "rgba(255, 0, 0, 0.3)";
-          messageEl.style.boxShadow = "0 0 15px rgba(255, 0, 0, 0.2)";
-        } else {
-           // Reset styles
-           messageEl.style.color = ""; 
-           messageEl.style.borderColor = "";
-           messageEl.style.boxShadow = "";
-        }
-
-        messageEl.textContent = text;
-        messageEl.classList.remove('hidden');
-        messageEl.classList.add('visible');
-
-        // Auto hide after a few seconds
-        setTimeout(() => {
-          messageEl.classList.remove('visible');
-          messageEl.classList.add('hidden');
-        }, 4000);
-      }
-
-      hotspot.addEventListener('mouseenter', () => {
-        // Desktop Hover
-        if (window.matchMedia('(hover: hover)').matches) {
-            showObservationMessage();
-        }
-      });
-
-      hotspot.addEventListener('click', (e) => {
-        // Mobile tap or Desktop click (for gimmick)
-        // If clicking the hotspot, we prevent the link ONLY if it's not the center?
-        // Actually, the hotspot is ON TOP of the link (z-index 10). 
-        // If we want the link to be clickable, the hotspot must have pointer-events: none OR hole logic.
-        // BUT the requirements say: "near invisible hotspot... hover/tap to display".
-        // And "。" itself is a link to /0.
-        // If hotspot covers it, link is unreachable.
-        // Solution: Hotspot is large (60px), Link is small.
-        // We can make the hotspot a "donut" or just accept that clicking the "area" triggers the message.
-        // The user said: "hoverできない環境ではクリックで表示" (Mobile).
-        // And "obs=0の時にホットスポットを7回連続クリック".
-        // IF the link is unreachable, that's bad.
-        // Let's make the hotspot allow clicks to pass through to the link IF it's exactly the center? Hard.
-        // ALTERNATIVE: The hotspot is the wrapper.
-        // Let's make the hotspot trigger the message, but NOT stop propagation if it's a click?
-        // If I click, I go to /0.
-        // If I want to trigger the gimmick (7 clicks), I need to stay?
-        // Maybe the hotspot should be a ring AROUND the character, leaving the center clickable for the link?
-        // OR: Clicking the hotspot triggers message. Double click triggers link? No, native link.
-        // Let's use `pointer-events: none` on the hotspot but listen to events on parent? 
-        // No, need the area.
-        
-        // REVISED STRATEGY: 
-        // The hotspot covers the area. 
-        // If you click the hotspot:
-        // 1. Show message.
-        // 2. Increment click count.
-        // 3. STOP text selection / default?
-        // 4. IF you want to go to /0, well... maybe the "。" itself should remain on top?
-        // Let's set z-index of .observer-point to 11 (higher than hotspot 10).
-        // Then hotspot captures clicks in the halo, star captures clicks in center.
-        // Perfect.
-        
-        showObservationMessage();
-        
-        clickCount++;
-        clearTimeout(clickTimer);
-        clickTimer = setTimeout(() => { clickCount = 0; }, 5000);
-      });
-    }
-  </script>
   
   <style> 
    /* Ensure link is clickable above the hotspot */
@@ -251,167 +292,52 @@ const latestLogs = [...logs].sort((a, b) => b.date.localeCompare(a.date)).slice(
      position: relative;
      z-index: 15; /* Higher than hotspot */
    }
+
+   /* ===== Hub Dot (.hub-dot) forced visibility ===== */
+   .hub-dot {
+     color: #00ffff !important;
+     -webkit-text-fill-color: #00ffff !important;
+     opacity: 1 !important;
+     visibility: visible !important;
+     text-shadow: 0 0 10px rgba(0, 255, 255, 0.6) !important;
+     text-decoration: none !important;
+     transition: all 0.3s ease;
+     cursor: pointer;
+   }
+   .hub-dot:hover {
+     color: #ffffff !important;
+     -webkit-text-fill-color: #ffffff !important;
+     text-shadow: 0 0 15px rgba(0, 255, 255, 0.9), 0 0 5px rgba(255, 255, 255, 0.8) !important;
+   }
   </style>
 
-  <!-- Secret BGM Player UI (Core C) -->
-  <div id="core-player" class="core-player hidden" aria-hidden="true">
-    <div class="core-player__inner">
-      <div class="core-player__header">
-        <span class="core-player__title">CORE SIGNAL OBSERVATION</span>
-        <button id="core-player-close" class="core-player__close" aria-label="Close player">&times;</button>
-      </div>
-      <div class="core-player__body">
-        <div id="player-status" class="player-status">INITIALIZING...</div>
-        <div id="player-error" class="player-error hidden"></div>
-        <audio id="core-audio" src="/audio/observers-of-c-demo.mp3" preload="none"></audio>
-      </div>
-      <div class="core-player__scanline"></div>
-    </div>
-  </div>
 
-  <!-- Message Display UI (Logo L) -->
-  <div id="msg-player" class="core-player hidden" aria-hidden="true">
-    <div class="core-player__inner">
-      <div class="core-player__header">
-        <span id="msg-player-title" class="core-player__title">MESSAGE_TRACE</span>
-        <button id="msg-player-close" class="core-player__close" aria-label="Close message">&times;</button>
-      </div>
-      <div class="core-player__body">
-        <div id="msg-player-content" class="player-status" style="white-space: pre-wrap; font-size: 0.9em; line-height: 1.6; text-align: left;"></div>
-      </div>
-      <div class="core-player__scanline"></div>
-    </div>
-  </div>
 
-  <script>
-    // Triggers
-    const triggerC = document.getElementById('core-c-trigger');
-    const triggerL1 = document.getElementById('l1-trigger');
-    const triggerL2 = document.getElementById('l2-trigger');
 
-    // Players
-    const corePlayer = document.getElementById('core-player');
-    const msgPlayer = document.getElementById('msg-player');
 
-    // Close buttons
-    const coreClose = document.getElementById('core-player-close');
-    const msgClose = document.getElementById('msg-player-close');
 
-    // Core C Audio
-    const audio = document.getElementById('core-audio') as HTMLAudioElement;
-    const coreStatus = document.getElementById('player-status');
-    const coreError = document.getElementById('player-error');
 
-    // Msg L Content
-    const msgTitle = document.getElementById('msg-player-title');
-    const msgContent = document.getElementById('msg-player-content');
-
-    const errorMessages = [
-      "現在、この対象は観測不能です",
-      "信号を検出できません",
-      "観測条件が満たされていません",
-      "この記録は、まだ開示されていません"
-    ];
-
-    // --- Core C Functions ---
-    function toggleCorePlayer() {
-      if (!corePlayer || !coreStatus || !coreError || !audio) return;
-      msgPlayer?.classList.add('hidden'); // Close msg player if open
-      
-      const isHidden = corePlayer.classList.contains('hidden');
-      if (isHidden) {
-        corePlayer.classList.remove('hidden');
-        corePlayer.setAttribute('aria-hidden', 'false');
-        tryPlayCore();
-      } else {
-        closeCorePlayer();
-      }
-    }
-
-    function closeCorePlayer() {
-      if (!corePlayer || !audio) return;
-      corePlayer.classList.add('hidden');
-      corePlayer.setAttribute('aria-hidden', 'true');
-      audio.pause();
-    }
-
-    async function tryPlayCore() {
-      if (!coreStatus || !coreError || !audio) return;
-      coreStatus.textContent = "ATTEMPTING CONNECTION...";
-      coreError.classList.add('hidden');
-      try {
-        await audio.play();
-        coreStatus.textContent = "SIGNAL DETECTED / PLAYING";
-      } catch (err) {
-        coreStatus.textContent = "CONNECTION FAILED";
-        const randomMsg = errorMessages[Math.floor(Math.random() * errorMessages.length)];
-        coreError.textContent = randomMsg;
-        coreError.classList.remove('hidden');
-      }
-    }
-
-    // --- Message L Functions ---
-    function showMsg(title: string, text: string) {
-      if (!msgPlayer || !msgTitle || !msgContent) return;
-      closeCorePlayer(); // Close core player if open
-      
-      msgTitle.textContent = title;
-      msgContent.textContent = text;
-      
-      msgPlayer.classList.remove('hidden');
-      msgPlayer.setAttribute('aria-hidden', 'false');
-    }
-
-    function closeMsgPlayer() {
-      msgPlayer?.classList.add('hidden');
-      msgPlayer?.setAttribute('aria-hidden', 'true');
-    }
-
-    const MSGL1 = "A trace of Lusia has been detected.\n\nThis point does not belong to the original sky.";
-    const MSGL2 = "All links from Lusia are lost.\n\nThe name remains.";
-
-    // --- Event Listeners ---
-    triggerC?.addEventListener('click', toggleCorePlayer);
-    triggerL1?.addEventListener('click', () => showMsg("MESSAGE_L1", MSGL1));
-    triggerL2?.addEventListener('click', () => showMsg("MESSAGE_L2", MSGL2));
-
-    [triggerC, triggerL1, triggerL2].forEach(el => {
-      el?.addEventListener('keydown', (e: any) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          if (el.id === 'core-c-trigger') toggleCorePlayer();
-          else if (el.id === 'l1-trigger') showMsg("MESSAGE_L1", MSGL1);
-          else if (el.id === 'l2-trigger') showMsg("MESSAGE_L2", MSGL2);
-        }
-      });
-    });
-
-    coreClose?.addEventListener('click', closeCorePlayer);
-    msgClose?.addEventListener('click', closeMsgPlayer);
-
-    window.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') {
-        closeCorePlayer();
-        closeMsgPlayer();
-      }
-    });
-  </script>
-
-  <section class="about-section fade-in-section" style="width: min(760px, 92vw); margin: 4rem auto; position: relative; z-index: 5;">
-    <div class="feature-card rm-scan" id="section-about" style="text-align: center; display: block; padding: 4rem 2rem; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; transition: all 0.3s ease; position: relative;">
-      <a href="/about" class="card-link-overlay" aria-label="CELESTIALについて詳しく読み、観測拠点の本質を理解する"></a>
-      <h2 class="section-title" style="margin-bottom: 1.5rem; color: var(--c-accent);">ABOUT CELESTIAL</h2>
-      <p class="feature-text" style="line-height: 1.8; opacity: 0.8; margin-bottom: 2rem;">
-        CELESTIALは、人間とAIが共同で行う“観測”の記録拠点です。<br />
-        私たちは答えを示すより、観測し、記録し、考え続けることを選びます。
+  <section class="signals-section fade-in-section" style="width: min(760px, 92vw); margin: 6rem auto; position: relative; z-index: 5;">
+    <div class="feature-card rm-glow" id="section-signals" style="text-align: center; display: block; padding: 3.5rem 2rem; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; transition: all 0.3s ease; position: relative;">
+      <a href="/dialogues" class="card-link-overlay" aria-label="仕事が消えていく時代、人間はどう生きていくのか？ 対談ログを読む"></a>
+      <div style="color: var(--c-accent); font-size: 0.8rem; letter-spacing: 0.2em; margin-bottom: 0.5rem; opacity: 0.8;">DIALOGUES //</div>
+      <h2 class="section-title" style="margin-bottom: 0.5rem; color: var(--c-accent);">How to Live in the Post-Work Era</h2>
+      <p style="opacity: 0.7; font-size: 0.9em; letter-spacing: 0.05em; margin-bottom: 2rem; color: #fff;">
+        ── 仕事が消えていく時代、人間はどう生きていくのか？
       </p>
-      <a class="read-more" href="/about">Read More</a>
+      <p class="feature-text" style="opacity: 0.8; line-height: 1.8; margin-bottom: 2rem;">
+        AIが仕事を代替していく文明において、<br />
+        人間はどう生きていくのか？<br /><br />
+        思想・金融・構造を横断しながら、<br />
+        Lukia × Lucia が記録する対談ログ。
+      </p>
+      <a class="read-more" href="/dialogues">Read More</a>
     </div>
   </section>
 
   <section class="join-section fade-in-section" style="width: min(760px, 92vw); margin: 6rem auto; position: relative; z-index: 5;">
     <div class="feature-card rm-glow" id="section-join" style="text-align: center; display: block; padding: 3.5rem 2rem; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; transition: all 0.3s ease; position: relative;">
-      <a href="/join" class="card-link-overlay" aria-label="観測者通信の受信先を登録し、更新通知を受け取る"></a>
+      <a href="/deep-observation/join" class="card-link-overlay" aria-label="観測者通信の受信先を登録し、更新通知を受け取る"></a>
       <h2 class="section-title" style="margin-bottom: 1.5rem; color: var(--c-accent);">Join the Observers</h2>
       <p class="feature-text" style="opacity: 0.8; line-height: 1.8; margin-bottom: 1rem;">
         観測者たちの旅に加わるため、<br />
@@ -420,7 +346,7 @@ const latestLogs = [...logs].sort((a, b) => b.date.localeCompare(a.date)).slice(
       <p style="font-size: 0.85em; opacity: 0.5; letter-spacing: 0.05em; margin-bottom: 2rem;">
         ※ 応答や反映には時間を要する場合があります。
       </p>
-      <a class="read-more" href="/join">Read More</a>
+      <a class="read-more" href="/deep-observation/join">Read More</a>
     </div>
   </section>
 
@@ -452,10 +378,10 @@ const latestLogs = [...logs].sort((a, b) => b.date.localeCompare(a.date)).slice(
         <a class="read-more" href="/motion-archive">Read More</a>
       </div>
       <div class="feature-card rm-glow" id="cat-coexist" style="display: block; padding: 2rem; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; position: relative;">
-        <a href="/logs/C-2084-001" class="card-link-overlay"></a>
+        <a href="/log/C-2084-001" class="card-link-overlay"></a>
         <h3 class="feature-title" style="color: var(--c-accent); margin-bottom: 0.5rem; letter-spacing: 2px;">CO-EXISTENCE LOG</h3>
         <p class="feature-text" style="opacity: 0.8; font-size: 0.9em; margin-bottom: 1.5rem;">共生記録。内部システムおよび観測対象との対話ログ。</p>
-        <a class="read-more" href="/logs/C-2084-001">Read More</a>
+        <a class="read-more" href="/log/C-2084-001">Read More</a>
       </div>
       <div class="feature-card rm-slide" id="cat-observers" style="display: block; padding: 2rem; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; position: relative;">
         <a href="/observers" class="card-link-overlay"></a>
@@ -544,14 +470,42 @@ const latestLogs = [...logs].sort((a, b) => b.date.localeCompare(a.date)).slice(
     background: radial-gradient(circle at center, rgba(0,255,255,0.05) 0%, transparent 70%);
   }
 
-  h1 {
-    font-size: 5rem;
+  .hero-title {
+    font-size: clamp(24px, 5vw, 80px);
     margin: 0;
-    letter-spacing: 10px;
+    text-align: center;
+    letter-spacing: clamp(4px, 1vw, 10px);
     background: linear-gradient(to bottom, #fff, #888);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     filter: drop-shadow(0 0 15px rgba(255,255,255,0.3));
+    width: 100%;
+    line-height: 1.2;
+  }
+
+  /* Core Trigger (C) */
+  .core-trigger {
+    display: inline-block;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 10;
+  }
+
+  .core-trigger:hover, .core-trigger:focus, .core-trigger.is-playing {
+    color: #fff;
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.8), 0 0 30px rgba(0, 255, 255, 0.4);
+    outline: none;
+  }
+
+  .core-trigger.is-playing {
+    animation: core-pulse 2s infinite ease-in-out;
+    text-shadow: 0 0 20px rgba(0, 255, 255, 0.6), 0 0 40px rgba(0, 255, 255, 0.3);
+  }
+
+  @keyframes core-pulse {
+    0%, 100% { opacity: 1; filter: brightness(1); }
+    50% { opacity: 0.8; filter: brightness(1.2); }
   }
 
   .subtitle {
@@ -560,6 +514,29 @@ const latestLogs = [...logs].sort((a, b) => b.date.localeCompare(a.date)).slice(
     margin-bottom: 3rem;
     color: rgba(255,255,255,0.6);
     letter-spacing: 4px;
+  }
+
+  /* PROJECT C Link */
+  .project-c-link {
+    text-decoration: none;
+    cursor: pointer;
+    color: inherit;
+    -webkit-text-fill-color: inherit;
+    transition: all 0.3s ease;
+    -webkit-text-fill-color: inherit;
+    transition: all 0.3s ease;
+    display: inline;
+    cursor: pointer;
+  }
+  .project-c-link:hover {
+    text-shadow: 0 0 15px rgba(200, 240, 255, 0.6);
+    opacity: 0.8;
+  }
+
+  /* Prevent split of PROJECT word */
+  .project-word {
+    white-space: nowrap;
+    display: inline;
   }
 
   /* Card Layout & Interactivity */
@@ -675,9 +652,11 @@ const latestLogs = [...logs].sort((a, b) => b.date.localeCompare(a.date)).slice(
   }
 
   /* Silhouette Icons (SVG Data URIs) */
-  #section-about::before {
+
+  #section-signals::before {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z'/%3E%3C/svg%3E");
   }
+
   #section-join::before {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z'/%3E%3C/svg%3E");
   }

@@ -10,7 +10,10 @@ const isLive = !!LIVE_EMBED_URL;
 <Layout title="LIVE MONITOR" bodyClass="page-realtime">
   <main class="console-container fade-in-section">
     <div class="header-section">
-      <h1 class="glitch-text" data-text="LIVE OBSERVATION">LIVE OBSERVATION</h1>
+      <div>
+        <a href="/" class="live-return">← RETURN</a>
+        <h1 class="glitch-text" data-text="LIVE OBSERVATION">LIVE OBSERVATION</h1>
+      </div>
       <p class="subtitle">REAL-TIME STREAM MONITORING</p>
     </div>
 
@@ -157,4 +160,21 @@ const isLive = !!LIVE_EMBED_URL;
     color: #fff;
     border-color: rgba(0, 255, 255, 0.8);
   }
-</style>
+
+  /* Return Link */
+  .live-return {
+    display: inline-block;
+    font-family: monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    color: rgba(0, 255, 255, 0.5);
+    text-decoration: none;
+    margin-bottom: 0.5rem;
+    transition: all 0.3s ease;
+  }
+
+  .live-return:hover {
+    color: rgba(0, 255, 255, 1);
+    text-shadow: 0 0 8px rgba(0, 255, 255, 0.6);
+    transform: translateX(-2px);
+  }

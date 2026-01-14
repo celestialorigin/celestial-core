@@ -19,6 +19,7 @@ const summary = log.summary || getSummary(log.category, "");
   <div class="card-body">
     <div class="badge-wrapper">
       <span class="log-badge">{log.badge}</span>
+      <span class="c-trace" style="display: none;">C</span>
     </div>
     <h3 class="log-title">{log.title}</h3>
     <p class="log-summary">{summary}</p>

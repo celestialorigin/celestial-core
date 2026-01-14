@@ -2,7 +2,13 @@
 import Layout from "../layouts/Layout.astro";
 import { logs } from "../data/logs";
 
-const sortedLogs = [...logs].sort((a, b) => a.internalId.localeCompare(b.internalId));
+const safeLogs = (logs ?? []).filter(
+  (log) => log && typeof log.internalId === "string" && log.internalId.length > 0
+);
+
+const sortedLogs = [...safeLogs].sort((a, b) =>
+  a.internalId.localeCompare(b.internalId)
+);
 ---
 
 <Layout title="OBSERVATION TERMINAL | CELESTIAL">

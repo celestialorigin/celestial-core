@@ -48,11 +48,15 @@ if (pathname === "/" || pathname === "/index.html") {
 	<body class={bodyClass} data-star-pattern={starPattern} data-stars={showStars ? "on" : "off"}>
 		<header class="site-header">
 			<div class="header-inner">
-				<a href="/" class="logo">CELESTIAL</a>
+				<a href="/" class="site-logo">
+					<span class="site-logo-main">CELESTIAL</span>
+					<span class="site-logo-sub">PROJECT</span>
+				</a>
 				<nav>
 					<div class="nav-main">
 						<a href="/">Home</a>
 						<a href="/about">About</a>
+						<a href="/dialogues">Dialogues</a>
 						<a href="/archive">Archive</a>
 						<a href="/signals">Signals</a>
 						<a href="/real-time">Real-time</a>
@@ -88,6 +92,31 @@ if (pathname === "/" || pathname === "/index.html") {
   <a class="secret-star s5" href="/tbd-05" tabindex="-1" aria-label="silver star"></a>
   <a class="secret-star s6" href="/tbd-06" tabindex="-1" aria-label="yellow star"></a>
   <a class="secret-star s7" href="/tbd-07" tabindex="-1" aria-label="purple star"></a>
+  <a class="secret-star s7" href="/tbd-07" tabindex="-1" aria-label="purple star"></a>
+</div>
+
+<!-- Sonic Trace Toast (global) -->
+<div id="sonic-trace-toast" class="sonic-trace-toast" aria-live="polite" aria-atomic="true">
+  <div class="sonic-trace-head">
+    <span class="sonic-trace-tag">SONIC_TRACE</span>
+    <button id="sonic-trace-close" class="sonic-trace-close" aria-label="Close">×</button>
+  </div>
+  <div class="sonic-trace-body">
+    <div id="sonic-trace-title" class="sonic-trace-title">NO SIGNAL</div>
+    <div id="sonic-trace-text" class="sonic-trace-text">Awaiting input...</div>
+  </div>
+</div>
+
+<!-- Observation Toast (global) -->
+<div id="obs-toast" class="obs-toast" aria-live="polite" aria-atomic="true">
+  <div class="obs-head">
+    <span class="obs-tag">OBSERVATION</span>
+    <button id="obs-close" class="obs-close" aria-label="Close">×</button>
+  </div>
+  <div class="obs-body">
+    <div id="obs-title" class="obs-title">COUNT</div>
+    <div id="obs-text" class="obs-text">...</div>
+  </div>
 </div>
 	  <div class="scanlines" aria-hidden="true" style="pointer-events: none;"></div>
 	</body>
@@ -126,13 +155,60 @@ if (pathname === "/" || pathname === "/index.html") {
 		gap: 2rem;
 	}
 
-	.logo {
-		font-size: 1.5rem;
-		font-weight: 700;
-		letter-spacing: 2px;
+	/* Logo = navと同じ基準サイズ */
+	.site-logo {
+		font-size: 0.9rem;         /* navと同じ */
+		line-height: 1;
+		font-weight: 500;
 		color: #fff;
 		flex-shrink: 0;
-		margin-right: 4.5rem; /* 72px gap between logo and main nav */
+		margin-right: 3rem;
+		display: inline-flex;
+		align-items: baseline;       /* ★高さ揃え（重要） */
+		gap: 0.6em;                  /* 少し詰める */
+		text-decoration: none;
+		letter-spacing: 0.05em;
+		opacity: 0.95;
+	}
+
+	/* CELESTIAL / PROJECT 同格表示 */
+	.site-logo-main {
+		font-size: 1em;
+		letter-spacing: 0.12em;
+		font-weight: 500;
+		opacity: 0.95;
+	}
+
+	.site-logo-sep {
+		opacity: 0.3;
+		font-weight: 300;
+		font-size: 0.9em;
+		transform: translateY(-1px); /* 微調整 */
+	}
+
+	.site-logo-sub {
+		font-size: 1em;
+		letter-spacing: 0.1em;
+		font-weight: 500;
+		opacity: 0.95;
+		color: #fff;
+		/* 以前のボーダー/パディングは撤去 */
+	}
+
+	@media (max-width: 480px) {
+		.site-logo {
+			gap: 0.5em; /* Tighter gap on mobile */
+		}
+		.site-logo-sub {
+			border-left: none;
+			padding-left: 0;
+			/* On extremely small screens, maybe stack? User said "Same line" requirement... 
+			   But earlier mobile req was "responsive". 
+               Let's keep row layout unless it breaks. 
+               User instruction #3: "CELESTIAL と PROJECT を span で分け、同一行・同一高さに揃える"
+            */
+            display: inline-block; /* revert flex alignment */
+		}
 	}
 
 	nav a {
@@ -215,4 +291,168 @@ if (pathname === "/" || pathname === "/index.html") {
 			gap: 1.5rem;
 		}
 	}
+
+  /* ===== Refined CTA: Celestial Accent ===== */
+  .btn, .btn * {
+    color: var(--c-accent, #00ffff) !important;
+    -webkit-text-fill-color: var(--c-accent, #00ffff) !important;
+    opacity: 1 !important;
+    text-shadow: 0 0 12px rgba(0,255,255,0.35);
+    transition: all 0.3s ease;
+  }
+  .btn:hover, .btn:focus-visible {
+    text-shadow: 0 0 20px rgba(0,255,255,0.6);
+  }
+
+  /* ===== Sonic Trace Toast (global + visible) ===== */
+  .sonic-trace-toast {
+    position: fixed !important;
+    right: 28px !important;
+    bottom: 28px !important;
+    width: 360px;
+    max-width: calc(100vw - 40px);
+    background: rgba(5, 10, 18, 0.88) !important;
+    border: 1px solid rgba(0, 255, 255, 0.22) !important;
+    box-shadow: 0 0 18px rgba(0, 255, 255, 0.12) !important;
+    backdrop-filter: blur(10px);
+    border-radius: 10px;
+    z-index: 9999 !important;
+
+    opacity: 0;
+    transform: translateY(10px);
+    pointer-events: none;
+    transition: opacity .25s ease, transform .25s ease, visibility 0s linear .25s;
+    visibility: hidden;
+    display: none;
+
+    color: rgba(255,255,255,0.95) !important;
+    -webkit-text-fill-color: rgba(255,255,255,0.95) !important;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace !important;
+    text-shadow: 0 0 10px rgba(0,255,255,0.12);
+  }
+
+  .sonic-trace-toast.is-visible {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+    pointer-events: auto !important;
+    visibility: visible;
+    display: block; /* Force show */
+    transition-delay: 0s;
+  }
+
+  .sonic-trace-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+  }
+
+  .sonic-trace-tag {
+    letter-spacing: .16em;
+    font-size: 0.72rem;
+    color: rgba(0, 255, 255, 0.9) !important;
+    -webkit-text-fill-color: rgba(0, 255, 255, 0.9) !important;
+  }
+
+  .sonic-trace-close {
+    border: none;
+    background: transparent;
+    color: rgba(255,255,255,0.7) !important;
+    -webkit-text-fill-color: rgba(255,255,255,0.7) !important;
+    cursor: pointer;
+    font-size: 1.1rem;
+    line-height: 1;
+  }
+  .sonic-trace-close:hover {
+    color: rgba(255,255,255,0.98) !important;
+    -webkit-text-fill-color: rgba(255,255,255,0.98) !important;
+  }
+
+  .sonic-trace-body { padding: 12px; }
+  .sonic-trace-title {
+    font-size: 0.9rem;
+    letter-spacing: .12em;
+    margin-bottom: 6px;
+    color: rgba(255,255,255,0.98) !important;
+    -webkit-text-fill-color: rgba(255,255,255,0.98) !important;
+    opacity: 1 !important;
+  }
+  .sonic-trace-text {
+    font-size: 0.78rem;
+    line-height: 1.5;
+    color: rgba(255,255,255,0.86) !important;
+    -webkit-text-fill-color: rgba(255,255,255,0.86) !important;
+    opacity: 1 !important;
+  }
+
+  /* ===== Observation Toast ===== */
+  .obs-toast {
+    position: fixed !important;
+    right: 28px !important;
+    bottom: 28px !important; /* 同位置。Sonicと被る場合はJSで上下ずらす */
+    width: 360px;
+    max-width: calc(100vw - 40px);
+    background: rgba(12, 8, 18, 0.88) !important;
+    border: 1px solid rgba(138, 116, 178, 0.30) !important;
+    box-shadow: 0 0 18px rgba(138, 116, 178, 0.12) !important;
+    backdrop-filter: blur(10px);
+    border-radius: 10px;
+    z-index: 9998 !important;
+
+    opacity: 0;
+    transform: translateY(10px);
+    pointer-events: none;
+    transition: opacity .25s ease, transform .25s ease, visibility 0s linear .25s;
+    visibility: hidden;
+    display: none;
+
+    color: rgba(255,255,255,0.95) !important;
+    -webkit-text-fill-color: rgba(255,255,255,0.95) !important;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace !important;
+    text-shadow: 0 0 10px rgba(138,116,178,0.10);
+  }
+
+  .obs-toast.is-visible {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+    pointer-events: auto !important;
+    visibility: visible;
+    display: block; /* Force show */
+    transition-delay: 0s;
+  }
+
+  .obs-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+  }
+
+  .obs-tag {
+    letter-spacing: .16em;
+    font-size: 0.72rem;
+    color: rgba(168, 146, 208, 0.95) !important;
+    -webkit-text-fill-color: rgba(168, 146, 208, 0.95) !important;
+  }
+
+  .obs-close {
+    border: none;
+    background: transparent;
+    color: rgba(255,255,255,0.7) !important;
+    -webkit-text-fill-color: rgba(255,255,255,0.7) !important;
+    cursor: pointer;
+    font-size: 1.1rem;
+    line-height: 1;
+  }
+
+  .obs-body { padding: 12px; }
+  .obs-title, .obs-text {
+    opacity: 1 !important;
+    color: rgba(255,255,255,0.95) !important;
+    -webkit-text-fill-color: rgba(255,255,255,0.95) !important;
+  }
+  .obs-title { font-size: 0.9rem; letter-spacing: .12em; margin-bottom: 6px; }
+  .obs-text  { font-size: 0.78rem; line-height: 1.5; opacity: 0.88 !important; }
 </style>

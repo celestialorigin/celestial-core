@@ -38,10 +38,10 @@ import Layout from '../../layouts/Layout.astro';
       </div>
 
       <div class="feature-card rm-glow rm-coexistence" id="card-co-existence">
-        <a class="card-link-overlay" href="/logs/C-2084-001" aria-label="CO-EXISTENCE LOG"></a>
+        <a class="card-link-overlay" href="/log/C-2084-001" aria-label="CO-EXISTENCE LOG"></a>
         <h3 class="feature-title">CO-EXISTENCE LOG</h3>
         <p class="feature-text">共生記録。内部システムおよび観測対象との対話ログ。</p>
-        <a class="read-more" href="/logs/C-2084-001">Read More</a>
+        <a class="read-more" href="/log/C-2084-001">Read More</a>
       </div>
 
       <div class="feature-card rm-slide rm-observers" id="card-observers">
@@ -53,8 +53,10 @@ import Layout from '../../layouts/Layout.astro';
 
     </div>
 
-    <div style="margin-top: 60px; text-align: center;">
-      <a href="/archive" style="opacity: 0.6; text-decoration: none;">→ 全アーカイブを見る</a>
+    <div class="logs-footer-nav" style="margin-top: 60px;">
+      <a class="footer-link footer-link--back" href="/">← 観測拠点へ戻る</a>
+      <span class="footer-divider">|</span>
+      <a class="footer-link footer-link--all" href="/archive">全アーカイブを見る →</a>
     </div>
   </div>
 </Layout>
@@ -206,5 +208,73 @@ import Layout from '../../layouts/Layout.astro';
   .feature-title, .feature-text {
     position: relative;
     z-index: 1;
+  }
+
+  /* Logs Footer Nav */
+  .logs-footer-nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+    font-size: 13px;
+    letter-spacing: .12em;
+  }
+
+  .footer-divider {
+    opacity: .25;
+    color: rgba(224,224,240,.7);
+  }
+
+  .footer-link {
+    position: relative;
+    text-decoration: none;
+    padding: 6px 4px;
+    opacity: .9;
+    text-shadow: 0 0 10px rgba(0,255,255,.10);
+    transition: opacity .18s ease, text-shadow .18s ease;
+  }
+
+  .footer-link--all {
+    color: var(--c-accent);
+    -webkit-text-fill-color: var(--c-accent);
+    opacity: .95;
+  }
+
+  .footer-link--back {
+    color: rgba(224,224,240,.82);
+    -webkit-text-fill-color: rgba(224,224,240,.82);
+  }
+
+  .footer-link::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(0,255,255,0), rgba(0,255,255,.9), rgba(0,255,255,0));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform .22s ease;
+    filter: drop-shadow(0 0 6px rgba(0,255,255,.35));
+    opacity: .85;
+  }
+
+  .footer-link:hover {
+    opacity: 1;
+    text-shadow: 0 0 14px rgba(0,255,255,.22);
+  }
+
+  .footer-link:hover::after {
+    transform: scaleX(1);
+  }
+
+  .footer-link:focus-visible {
+    outline: none;
+    opacity: 1;
+  }
+  .footer-link:focus-visible::after {
+    transform: scaleX(1);
   }
 </style>

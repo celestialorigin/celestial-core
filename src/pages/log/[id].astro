@@ -15,13 +15,14 @@ export function getStaticPaths() {
 const { log } = Astro.props;
 const summary = log.summary || "";
 const categoryLabel = log.badge || "OBSERVATION LOG";
+const isTraceLog = !!log.traceNo;
 ---
 
-<Layout title={`${log.title} | CELESTIAL`}>
+<Layout title={`${log.title} | CELESTIAL`} bodyClass={`page-log-detail ${isTraceLog ? "page-log-detail--trace" : ""}`}>
   <article class="log-detail-page container fade-in-section">
     <div class="glass-panel main-content">
       <LogHeader 
-        displayId={`OBSERVATION LOG : ${log.id}`}
+        displayId={log.traceNo ? `[OBSERVATION LOG : ${log.traceNo}]` : `OBSERVATION LOG : ${log.id}`}
         internalId={log.id}
         type={log.category}
         status="STABLE"
@@ -59,7 +60,9 @@ const categoryLabel = log.badge || "OBSERVATION LOG";
       </div>
 
       <footer class="nav-footer">
-        <a href="/archive" class="back-link">← RETURN TO ARCHIVE</a>
+        <a href={isTraceLog ? "/c-of-observers" : "/archive"} class="back-link">
+          {isTraceLog ? "← C OF OBSERVER に戻る" : "← RETURN TO ARCHIVE"}
+        </a>
       </footer>
     </div>
   </article>
@@ -172,5 +175,215 @@ const categoryLabel = log.badge || "OBSERVATION LOG";
   .back-link:hover {
     opacity: 1;
     color: var(--c-accent);
+  }
+
+  /* Compact Mode (page-log-detail) */
+  :global(.page-log-detail) .log-detail-page {
+    margin: 4rem auto; /* Reduced from 6rem */
+  }
+  :global(.page-log-detail) .detail-header {
+    margin-bottom: 2rem; /* Reduced from 4rem */
+  }
+  :global(.page-log-detail) .observation-section {
+    margin-bottom: 3rem; /* Reduced from 5rem */
+  }
+  :global(.page-log-detail) .accent-title {
+    font-size: 2rem; /* Reduced from 2.5rem */
+    margin-bottom: 0.25rem;
+  }
+  :global(.page-log-detail) .observation-text {
+    font-size: clamp(13px, 1.1vw, 16px);
+    line-height: 1.6; /* Tightened from 2 */
+  }
+  :global(.page-log-detail) .observation-text p {
+    margin-bottom: 1rem;
+  }
+  :global(.page-log-detail) .nav-footer {
+    margin-top: 3rem; /* Reduced from 5rem */
+  }
+  
+  /* Desktop adjustments for single-screen feel */
+  @media (min-width: 1024px) {
+    :global(.page-log-detail) .log-detail-page {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: calc(100vh - 140px); /* Fill available space */
+      margin: 2rem auto;
+    }
+    :global(.page-log-detail) .main-content {
+      padding: 2.5rem;
+    }
+  }
+
+  /* =========================
+   Trace Log Compact Mode (no-scroll feel)
+   ========================= */
+  :global(.page-log-detail--trace) .log-detail-page {
+     margin: 0 auto !important;
+     padding-top: 72px; /* Header override */
+  }
+
+  :global(.page-log-detail--trace) .log-detail-page, 
+  :global(.page-log-detail--trace) .main-content {
+    padding-top: 18px !important;
+    padding-bottom: 18px !important;
+  }
+
+  :global(.page-log-detail--trace) .main-content {
+    min-height: calc(100vh - 120px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  :global(.page-log-detail--trace) .detail-header { /* log-header */
+    margin-bottom: 10px !important;
+  }
+
+  :global(.page-log-detail--trace) .accent-title { /* log-title */
+    margin: 8px 0 6px !important;
+    font-size: clamp(28px, 3.2vw, 42px) !important;
+    line-height: 1.15 !important;
+  }
+
+  :global(.page-log-detail--trace) .date-stamp, /* log-meta items */
+  :global(.page-log-detail--trace) .category-tag {
+    margin: 6px 0 10px !important;
+  }
+
+  :global(.page-log-detail--trace) .observation-section {
+    margin-bottom: 0 !important;
+  }
+  :global(.page-log-detail--trace) .section-title {
+    display: none; /* Hide standard section title to save space for monologue */
+  }
+
+  :global(.page-log-detail--trace) .observation-text { /* log-body */
+    margin-top: 8px !important;
+    font-size: clamp(13px, 1.05vw, 15px) !important;
+    line-height: 1.55 !important;
+  }
+
+  :global(.page-log-detail--trace) .observation-text p {
+    margin: 10px 0 !important;
+  }
+
+  :global(.page-log-detail--trace) .nav-footer {
+    margin-top: 14px !important;
+  }
+  
+  :global(.page-log-detail--trace) .back-link { /* return-link */
+    padding: 10px 12px !important;
+  }
+
+  /* =========================
+     TRACE LOG — FULLVIEW MODE
+  ========================= */
+
+  :global(.page-log-detail--trace) {
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  :global(.page-log-detail--trace) main {
+    height: calc(100vh - 72px); /* header分 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  :global(.page-log-detail--trace) .glass-panel {
+    height: 100%;
+    max-height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding-top: 24px !important;
+    padding-bottom: 20px !important;
+  }
+
+  /* 文章ブロックを中央寄せ＋詰める */
+  :global(.page-log-detail--trace) .observation-text {
+    margin-top: 6px !important;
+    margin-bottom: 6px !important;
+    line-height: 1.4 !important; /* Tightened */
+  }
+
+  :global(.page-log-detail--trace) .observation-text p {
+    margin: 6px 0 !important;
+    font-size: clamp(13px, 1vw, 15px);
+  }
+
+  /* タイトル周りをさらに圧縮 */
+  :global(.page-log-detail--trace) .detail-header {
+    margin-bottom: 4px !important;
+  }
+
+  :global(.page-log-detail--trace) .accent-title {
+    margin: 4px 0 2px !important;
+    line-height: 1.1 !important;
+    font-size: clamp(24px, 3vw, 36px) !important; /* Slightly smaller maximum */
+  }
+
+  :global(.page-log-detail--trace) .date-stamp,
+  :global(.page-log-detail--trace) .category-tag {
+    margin-bottom: 4px !important;
+    font-size: 11px;
+    opacity: 0.5;
+  }
+
+  /* =========================
+     TRACE RETURN LINK
+  ========================= */
+
+  :global(.page-log-detail--trace) .back-link {
+    margin-top: 12px !important;
+    align-self: center;
+    color: #2fe7ff; /* Cyan */
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    text-decoration: none;
+    opacity: 0.7;
+    transition: all 0.3s ease;
+    
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 16px !important;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(47, 231, 255, 0.2);
+    border-radius: 4px;
+    backdrop-filter: blur(4px);
+  }
+
+  /* Dot indicator inside the button */
+  :global(.page-log-detail--trace) .back-link::before {
+    content: "";
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #2fe7ff;
+    margin-right: 10px;
+    box-shadow: 0 0 6px rgba(47, 231, 255, 0.5);
+    transition: all 0.3s ease;
+    
+    /* Reset absolute positioning from previous step if any */
+    position: static; 
+    transform: none;
+  }
+
+  :global(.page-log-detail--trace) .back-link:hover {
+    opacity: 1;
+    background: rgba(47, 231, 255, 0.1);
+    border-color: rgba(47, 231, 255, 0.5);
+    box-shadow: 0 0 15px rgba(47, 231, 255, 0.15);
+    transform: translateY(-1px);
+  }
+
+  :global(.page-log-detail--trace) .back-link:hover::before {
+    background: #fff;
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.8), 0 0 12px rgba(47, 231, 255, 0.6);
   }
 </style>

@@ -14,19 +14,19 @@ import Layout from '../layouts/Layout.astro';
       <!-- X (Twitter) Link -->
       <a href="https://x.com/LukiaxLucia" target="_blank" rel="noopener noreferrer" class="contact-card">
         <div class="card-content">
-          <span class="card-label">X / Lukia×Lucia</span>
+          <span class="card-label">X / Lukia (CELESTIAL PROJECT)</span>
           <span class="card-arrow">↗</span>
         </div>
         <p class="card-desc">最新の観測状況や開発進捗を発信しています。</p>
       </a>
 
       <!-- Email Link -->
-      <a href="mailto:lukia_humanxlucia@proton.me" class="contact-card">
+      <a href="mailto:info@celestial-observers.com" class="contact-card">
         <div class="card-content">
-          <span class="card-label">Mail / Proton</span>
+          <span class="card-label">Mail / Official</span>
           <span class="card-arrow">✉</span>
         </div>
-        <p class="card-desc">lukia_humanxlucia@proton.me</p>
+        <p class="card-desc">info@celestial-observers.com<br/><span style="font-size: 0.8em; opacity: 0.7;">CELESTIAL PROJECT 公式窓口（返信に時間を要する場合があります）</span></p>
       </a>
 
     </div>
@@ -100,5 +100,7 @@ import Layout from '../layouts/Layout.astro';
     opacity: 0.7;
     font-size: 0.9em;
     font-family: monospace;
+    word-break: break-all; /* Ensure long email wraps */
+    line-height: 1.5;
   }
 </style>

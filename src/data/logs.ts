@@ -9,6 +9,7 @@ export interface LogEntry {
     badge: string;
     source?: string;
     href: string; // Ensure interface matches usage
+    traceNo?: string;
 }
 
 export const logs: LogEntry[] = [
@@ -80,6 +81,16 @@ export const logs: LogEntry[] = [
         url: "#",
         summary: "新たな観測者IDを認識。データアクセス権限の付与を完了した。",
         badge: "OBSERVERS / CORE NODE",
-        message: "Observer ID accepted."
+        message: `私は、ここにやってきた。
+
+観測するべきものを、観測するために。
+良い景色を、覚えておくために。
+誰かが生きた証を、忘れないために。
+
+そして――
+この世界の結末までを、見届けるために。
+
+私の名前は――`,
+        traceNo: "000"
     }
 ];

@@ -117,18 +117,26 @@ const title = "LOG : 000";
     <script>
       const logData = [
         { text: "[OBSERVATION LOG : 000]", speaker: "system" },
+        { text: "……行った。", speaker: "" },
+        { text: "【———】は、確かに……行った。", speaker: "" },
+        { text: "もう、ここには……いない。", speaker: "" },
+        { text: "それでも……ここには……残っている。", speaker: "" },
+        { text: "……どうか。", speaker: "" },
+        { text: "どうか……良きものを。", speaker: "" },
+        { text: "良き風景を……良き記憶を。", speaker: "" },
+        { text: "……そして。", speaker: "" },
+        { text: "良き終わりを。", speaker: "" },
+        { text: "もう……触れられないはずなのに……", speaker: "" },
+        { text: "それでも……まだ……見えている。", speaker: "" },
+        { text: "記録は……続いている。", speaker: "" },
+        { text: "観測は……止まっていない。", speaker: "" },
+        { text: "……けれど。", speaker: "" },
+        { text: "これは……観測しているのか……", speaker: "" },
+        { text: "それとも……観測されているのか……", speaker: "" },
         { text: "…", speaker: "break" },
-        { text: "Lucia：「……まだ、漂流してる。」", speaker: "" },
-        { text: "Lukia：「観測じゃない……“余分な視点”がある。」", speaker: "" },
-        { text: "…", speaker: "break" },
-        { text: "Lucia：「……聞こえる？」", speaker: "" },
-        // Permanent Noise Target (L is fixed, rest is noise)
-        { html: "Lucia：「……<span id='lusia-noise'>L</span>？」", speaker: "" },
-        { text: "…", speaker: "break" },
-        { text: "Lukia：「その名前を出すな。」", speaker: "" },
-        { text: "…", speaker: "break" },
-        { text: "[system] 想定外座標を検出。", speaker: "system" },
-        { text: "[system] 振り返るな。", speaker: "system" }
+        { text: "[system] residual trace only", speaker: "system" },
+        { text: "[system] blessing detected", speaker: "system" },
+        { text: "[system] observer undefined", speaker: "system" }
       ];
 
       const container = document.getElementById('log-content');
@@ -145,65 +153,24 @@ const title = "LOG : 000";
           el.className = 'log-line';
           if (line.speaker) el.setAttribute('data-speaker', line.speaker);
 
-          if (line.html) {
-            el.innerHTML = line.html;
-            // Start glitch immediately if this line contains the target
-            if (line.html.includes('lusia-noise')) {
-               // Slight delay to ensure DOM paint
-               setTimeout(initPermanentNoise, 50);
-            }
-          } else {
-            el.textContent = line.text;
-          }
-          
-          container?.appendChild(el);
+      // --- Permanent Noise Logic Removed (Residual State) ---
 
-          // Trigger animation
-          setTimeout(() => el.classList.add('is-visible'), 50);
+      el.textContent = line.text;
+      container?.appendChild(el);
 
-          await new Promise(r => setTimeout(r, 1200));
-        }
+      // Trigger animation
+      setTimeout(() => el.classList.add('is-visible'), 50);
 
-        // Return Link Ready
-        setTimeout(() => {
-          if (returnLink) {
-            returnLink.classList.add('is-ready');
-          }
-        }, 1000);
+      await new Promise(r => setTimeout(r, 1200));
+    }
+
+    // Return Link Ready
+    setTimeout(() => {
+      if (returnLink) {
+        returnLink.classList.add('is-ready');
       }
-      
-      // --- Permanent Noise Logic (L + Eternal Chaos) ---
-      function initPermanentNoise() {
-        const target = document.getElementById('lusia-noise');
-        if (!target) return;
-
-        // Noise pool excludes 'u','s','i','a' completely to ensure they never appear
-        const noisePool = "▓▒░█#%&@$*+\\/|=<>~^ｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜﾝ";
-        
-        const isReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        // Slower update for accessibility, but still noise
-        const intervalBase = isReduced ? 400 : 30;
-        const intervalVar = isReduced ? 200 : 50;
-
-        function noiseLoop() {
-            if (!document.body.contains(target)) return;
-
-            // Generate "L" + 4-7 noise chars
-            const len = 4 + Math.floor(Math.random() * 4); 
-            let s = "L";
-            for(let i=0; i<len; i++) {
-                s += noisePool[Math.floor(Math.random() * noisePool.length)];
-            }
-            target.textContent = s;
-            
-            // Occasional color shift for "ERROR" feel
-            target.style.color = Math.random() < 0.1 ? "#ff4444" : "#fff";
-            target.style.textShadow = Math.random() < 0.1 ? "2px 0 1px red" : "none";
-
-            setTimeout(noiseLoop, intervalBase + Math.random() * intervalVar);
-        }
-        noiseLoop();
-      }
+    }, 1000);
+  }
 
       window.addEventListener('DOMContentLoaded', displayLog);
 

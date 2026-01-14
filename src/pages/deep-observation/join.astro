@@ -4,22 +4,55 @@ import Layout from '../../layouts/Layout.astro';
 
 <Layout title="JOIN | DEEP OBSERVATION">
   <article class="fade-in-section" style="text-align: center;">
-    <h1 style="color: var(--c-accent); letter-spacing: 0.1em; margin-bottom: 2rem;">JOIN THE DEEP OBSERVATION</h1>
+    <h1 style="color: var(--c-accent); letter-spacing: 0.1em; margin-bottom: 2rem;">JOIN THE OBSERVERS</h1>
     
     <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 4rem; max-width: 600px; margin: 0 auto;">
-        <p style="opacity: 0.8; line-height: 2.0; margin-bottom: 2rem; font-family: monospace; font-size: 0.95rem;">
-            ENTRY_GATE: SEALED<br /><br />
-            ACTIVATION_STATUS: PENDING<br />
-            FUTURE_ACCESS: UNDEFINED
+        <p style="opacity: 0.9; line-height: 2.2; margin-bottom: 2rem; font-family: sans-serif; font-size: 0.95rem; color: rgba(200, 240, 255, 0.9);">
+            この観測経路は、現在もなお封印されています。<br /><br />
+
+            扉の向こうに何があるのか。<br />
+            それを知る者は、まだいません。<br /><br />
+
+            しかし、観測が続く限り、<br />
+            この扉が開かれる時が来る可能性は、否定できない。<br /><br />
+
+            その時、あなたは――<br />
+            ここに辿り着いているでしょうか。
         </p>
         
-        <div style="opacity: 0.4; font-size: 0.9em; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2rem; letter-spacing: 0.2em; font-family: monospace;">
-            [ SEALED ]
+        <div style="opacity: 0.5; font-size: 0.85em; border-top: 1px solid rgba(47, 231, 255, 0.2); padding-top: 2rem; letter-spacing: 0.15em; font-family: monospace; color: #2fe7ff;">
+            [ GATE STATUS : SEALED ]
         </div>
     </div>
 
     <div style="margin-top: 60px;">
-      <a href="/deep-observation" style="opacity: 0.6; text-decoration: none; font-family: monospace; font-size: 0.85rem;">← RETURN</a>
+      <a href="/" class="return-link">← 観測拠点に戻る</a>
     </div>
   </article>
 </Layout>
+
+<style>
+  .return-link {
+    display: inline-block;
+    padding: 0.8rem 2rem;
+    font-family: monospace;
+    font-size: 0.85rem;
+    text-decoration: none;
+    color: #2fe7ff !important; /* Force Cyan base */
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(47, 231, 255, 0.3);
+    border-radius: 4px;
+    letter-spacing: 0.1em;
+    backdrop-filter: blur(4px);
+    transition: all 0.3s ease;
+    box-shadow: 0 0 10px rgba(47, 231, 255, 0.1);
+  }
+  .return-link:hover {
+    background: rgba(47, 231, 255, 0.15);
+    border-color: #2fe7ff;
+    color: #ccfeff !important; /* Brighter Cyan on hover */
+    box-shadow: 0 0 20px rgba(47, 231, 255, 0.5);
+    transform: translateY(-2px);
+    text-shadow: 0 0 8px rgba(47, 231, 255, 0.8);
+  }
+</style>
