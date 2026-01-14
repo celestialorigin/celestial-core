@@ -1,0 +1,30 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { getCollection } from "astro:content";
+
+export async function getStaticPaths() {
+  const entries = await getCollection("dialogues");
+  return entries.map((entry) => ({
+    params: { slug: entry.slug },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+---
+
+<Layout showStars={true} starPattern="home" bodyClass="page-dialogue-single">
+  <article class="container page fade-in-section">
+    <a href="/dialogues/">← DIALOGUES</a>
+
+    <h1>{entry.data.title}</h1>
+    <p style="opacity:0.7;">
+      {entry.data.publishAt.toLocaleString("ja-JP")}
+    </p>
+
+    <section class="content">
+      <Content />
+    </section>
+  </article>
+</Layout>

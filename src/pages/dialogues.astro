@@ -1,170 +1,40 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import { getCollection } from "astro:content";
 
-// Temporary mock data for dialogues
-const dialogues = [
-  {
-    date: "2026-01-14",
-    title: "Post-Work Era: Initial Dialogue Setup",
-    tags: ["SYSTEM"],
-    href: "#"
-  }
-];
+const now = new Date();
+
+const all = await getCollection("dialogues");
+const items = all
+  .filter((e) => e.data.publishAt <= now)
+  .sort((a, b) => b.data.publishAt.getTime() - a.data.publishAt.getTime());
 ---
 
-<Layout title="DIALOGUE LOG | CELESTIAL" bodyClass="page-dialogues">
-  <main class="console-container fade-in-section">
-    <div class="header-section">
-      <h1 class="glitch-text" data-text="DIALOGUE // LOG">DIALOGUE // LOG</h1>
-      <p class="subtitle">「仕事が消えていく時代、人間はどう生きていくのか？」</p>
-      <p class="meta-info">思想・金融・構造を横断する Lukia × Lucia の対談ログ。</p>
-    </div>
+<Layout showStars={true} starPattern="home" bodyClass="page-dialogues">
+  <section class="container page fade-in-section">
+    <h1 class="glitch-text">DIALOGUES //</h1>
+    <p class="lead">
+      思想・構造・生存戦略。Gitに積まれ、時間で公開される対話ログ。
+    </p>
 
-    <div class="archive-list">
-      {dialogues.length > 0 ? (
-        dialogues.map((item) => (
-           <div class="archive-row">
-              <span class="date">{item.date}</span>
-              <span class="kind-badge dialogue">DIALOGUE</span>
-              <a href={item.href} class="link-title">{item.title}</a>
-              <span class="source-id">[LUKIA x LUCIA]</span>
-           </div>
-        ))
+    <div class="dialogues-list">
+      {items.length === 0 ? (
+        <div class="empty">
+          <p>まだ公開されている対話ログはありません。</p>
+        </div>
       ) : (
-        <div class="no-data">NO DIALOGUE LOGS FOUND.</div>
+        items.map((entry) => (
+          <a class="dialogue-card" href={`/dialogues/${entry.slug}/`}>
+            <div class="meta">
+              <time datetime={entry.data.publishAt.toISOString()}>
+                {entry.data.publishAt.toLocaleString("ja-JP")}
+              </time>
+            </div>
+            <h2 class="title">{entry.data.title}</h2>
+            {entry.data.description && <p class="desc">{entry.data.description}</p>}
+          </a>
+        ))
       )}
     </div>
-    
-     <div class="actions">
-      <a href="/" class="btn-secondary">&lt;&lt; RETURN TO BASE</a>
-    </div>
-
-  </main>
+  </section>
 </Layout>
-
-<style>
-  .console-container {
-    max-width: 900px;
-    margin: 120px auto 40px;
-    padding: 0 20px;
-  }
-
-  .header-section {
-    margin-bottom: 30px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    padding-bottom: 15px;
-  }
-
-  h1 {
-    font-family: 'Zen Kaku Gothic New', sans-serif;
-    color: var(--c-accent);
-    font-size: 1.8rem;
-    letter-spacing: 0.1em;
-    margin-bottom: 0.5rem;
-  }
-
-  .subtitle {
-    font-family: monospace;
-    color: #e2e8f0;
-    font-size: 1.1rem;
-    margin-bottom: 0.5rem;
-    letter-spacing: 0.05em;
-  }
-
-  .meta-info {
-    font-family: monospace;
-    color: rgba(255, 255, 255, 0.6);
-    font-size: 0.9rem;
-  }
-  
-  .archive-list {
-    display: flex;
-    flex-direction: column;
-    gap: 1px;
-    background: rgba(255, 255, 255, 0.05);
-    min-height: 200px;
-  }
-
-  .archive-row {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    padding: 12px 15px;
-    background: rgba(10, 15, 20, 0.8);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    font-family: monospace;
-    font-size: 0.9rem;
-    transition: background 0.2s;
-  }
-
-  .archive-row:hover {
-    background: rgba(20, 30, 40, 0.9);
-  }
-
-  .date {
-    color: rgba(255, 255, 255, 0.5);
-    min-width: 90px;
-  }
-
-  .kind-badge {
-    font-size: 0.7rem;
-    padding: 2px 6px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 4px;
-    color: rgba(255, 255, 255, 0.7);
-    min-width: 60px;
-    text-align: center;
-  }
-  
-  .kind-badge.dialogue { border-color: rgba(0, 255, 255, 0.4); color: #e0faff; }
-
-  .link-title {
-    color: #e0faff;
-    text-decoration: none;
-    flex-grow: 1;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  
-  .link-title:hover {
-    color: #00ffff;
-    text-decoration: underline;
-  }
-
-  .source-id {
-    color: rgba(255, 255, 255, 0.3);
-    font-size: 0.8rem;
-  }
-
-  .no-data {
-    color: rgba(255,255,255,0.3);
-    padding: 2rem;
-    text-align: center;
-    font-family: monospace;
-  }
-
-  .actions {
-    margin-top: 40px;
-    display: flex;
-    justify-content: flex-start;
-  }
-  
-  .btn-secondary {
-    display: inline-block;
-    padding: 10px 24px;
-    border: 1px solid rgba(0, 255, 255, 0.3);
-    color: rgba(0, 255, 255, 0.8);
-    text-decoration: none;
-    font-family: monospace;
-    font-size: 0.9rem;
-    background: rgba(0, 20, 30, 0.6);
-    transition: all 0.3s;
-  }
-  
-  .btn-secondary:hover {
-     background: rgba(0, 255, 255, 0.15);
-     color: #fff;
-     border-color: rgba(0, 255, 255, 0.6);
-  }
-</style>
