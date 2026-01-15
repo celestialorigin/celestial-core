@@ -47,47 +47,25 @@ jobs:
           if [ -z "$WEBHOOK" ]; then
             WEBHOOK="${{ secrets.DISCORD_WEBHOOK_URL }}"
           fi
+
           WEBHOOK="$(printf "%s" "$WEBHOOK" | tr -d '\r\n')"
+
           if [ -z "$WEBHOOK" ]; then
             echo "Missing DISCORD_WEBHOOK_OS_URL (or DISCORD_WEBHOOK_URL)"
             exit 1
           fi
+
           {
             echo "DISCORD_WEBHOOK_URL<<EOF"
             echo "$WEBHOOK"
             echo "EOF"
           } >> "$GITHUB_ENV"
 
-      # --- Discord notify (カテゴリ分割) ---
-      - name: Notify Discord (OS)
+      - name: Notify Discord (OS Status)
         env:
           CELESTIAL_COMMAND_ROOM_URL: ${{ secrets.CELESTIAL_COMMAND_ROOM_URL }}
-        run: npm run cel -- notify os --to discord
+        run: npm run cel -- notify discord
 
-      - name: Notify Discord (PLAN)
-        env:
-          CELESTIAL_COMMAND_ROOM_URL: ${{ secrets.CELESTIAL_COMMAND_ROOM_URL }}
-        run: npm run cel -- notify plan --to discord
-
-      - name: Notify Discord (PUBLISH)
-        env:
-          CELESTIAL_COMMAND_ROOM_URL: ${{ secrets.CELESTIAL_COMMAND_ROOM_URL }}
-        run: npm run cel -- notify publish --to discord
-
-      # --- Mail notify (Resend API) ---
-      # ここは「文明が死なない」ための第二経路
-      - name: Notify Mail (OS/PLAN/PUBLISH)
-        env:
-          CELESTIAL_COMMAND_ROOM_URL: ${{ secrets.CELESTIAL_COMMAND_ROOM_URL }}
-          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
-          CELESTIAL_MAIL_TO: ${{ secrets.CELESTIAL_MAIL_TO }}
-          CELESTIAL_MAIL_FROM: ${{ secrets.CELESTIAL_MAIL_FROM }}
-        run: |
-          npm run cel -- notify os --to mail
-          npm run cel -- notify plan --to mail
-          npm run cel -- notify publish --to mail
-
-      # --- 差分があれば自動コミット（任意だが「将来が楽」最大化） ---
       - name: Commit & Push (if changed)
         shell: bash
         run: |
@@ -102,14 +80,8 @@ jobs:
             echo "No changes to commit."
           fi
 
-      # --- 失敗時ALERT（Discord+Mail両方へ） ---
-      - name: Notify ALERT (on failure)
+      - name: Notify Discord (ALERT on failure)
         if: failure()
         env:
           CELESTIAL_COMMAND_ROOM_URL: ${{ secrets.CELESTIAL_COMMAND_ROOM_URL }}
-          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
-          CELESTIAL_MAIL_TO: ${{ secrets.CELESTIAL_MAIL_TO }}
-          CELESTIAL_MAIL_FROM: ${{ secrets.CELESTIAL_MAIL_FROM }}
-        run: |
-          npm run cel -- notify alert --to discord || true
-          npm run cel -- notify alert --to mail || true
+        run: npm run cel -- notify alert || true
