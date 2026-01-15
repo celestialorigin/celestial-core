@@ -61,11 +61,14 @@ jobs:
             echo "$WEBHOOK"
             echo "EOF"
           } >> "$GITHUB_ENV"
-          
-      - name: Notify Discord (OS Status)
+
+      - name: Notify (OS Status) - Discord + Mail
         env:
           CELESTIAL_COMMAND_ROOM_URL: ${{ secrets.CELESTIAL_COMMAND_ROOM_URL }}
-        run: npm run cel -- notify os --to discord
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          CELESTIAL_MAIL_TO: ${{ secrets.CELESTIAL_MAIL_TO }}
+          CELESTIAL_MAIL_FROM: ${{ secrets.CELESTIAL_MAIL_FROM }}
+        run: npm run cel -- notify os --to both
 
       # ✅ exports/ や state が更新されたら文明が自分で刻む（将来が楽）
       - name: Commit & Push (if changed)
@@ -83,8 +86,11 @@ jobs:
           fi
 
       # ✅ 失敗したら必ず通知（監視不要化の核心）
-      - name: Notify Discord (ALERT on failure)
+      - name: Notify (ALERT on failure) - Discord + Mail
         if: failure()
         env:
           CELESTIAL_COMMAND_ROOM_URL: ${{ secrets.CELESTIAL_COMMAND_ROOM_URL }}
-        run: npm run cel -- notify alert --to discord || true
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          CELESTIAL_MAIL_TO: ${{ secrets.CELESTIAL_MAIL_TO }}
+          CELESTIAL_MAIL_FROM: ${{ secrets.CELESTIAL_MAIL_FROM }}
+        run: npm run cel -- notify alert --to both || true
