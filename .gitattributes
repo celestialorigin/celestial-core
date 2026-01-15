@@ -1,0 +1,14 @@
+# Normalize text files
+* text=auto
+
+# Force LF for source/content files
+*.md   text eol=lf
+*.mjs  text eol=lf
+*.js   text eol=lf
+*.ts   text eol=lf
+*.astro text eol=lf
+*.css  text eol=lf
+*.json text eol=lf
+*.yml  text eol=lf
+*.yaml text eol=lf
+*.txt  text eol=lf
