@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import { runNew } from "./commands/new.mjs";
+import { runStatus } from "./commands/status.mjs";
 
 function help() {
   console.log(`
@@ -8,10 +9,12 @@ CELESTIAL CLI (cel)
 Usage:
   cel new dialogue -- "Title" [options...]
   cel new activity -- "Title" [options...]
+  cel status
 
 Examples:
   npm run cel -- new dialogue -- "Hello" --publish "2026-02-01 21:00" --git --push
   npm run cel -- new activity -- "Stream #01" --source twitch --publish "2026-02-02 20:00" --git --push
+  npm run cel -- status
 `);
 }
 
@@ -31,6 +34,11 @@ async function main() {
       process.exit(1);
     }
     await runNew(subcmd, rest);
+    return;
+  }
+
+  if (cmd === "status") {
+    await runStatus();
     return;
   }
 
