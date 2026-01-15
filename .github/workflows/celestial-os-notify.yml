@@ -33,24 +33,35 @@ jobs:
       - name: Doctor
         run: npm run cel -- doctor
 
-      # exports を最新化
       - name: Export
         run: npm run cel -- export
 
-      # publish.plan / x_queue.ready を最新化
       - name: Publish Plan
         run: npm run cel -- publish
 
-      # webhook を確実に選択（OS専用 → 通常の順でフォールバック）
+      # ✅ webhook を安全に $GITHUB_ENV へセット（改行/特殊文字に強い）
       - name: Select Discord Webhook
+        shell: bash
         run: |
-          if [ -n "${{ secrets.DISCORD_WEBHOOK_OS_URL }}" ]; then
-            echo "DISCORD_WEBHOOK_URL=${{ secrets.DISCORD_WEBHOOK_OS_URL }}" >> $GITHUB_ENV
-          else
-            echo "DISCORD_WEBHOOK_URL=${{ secrets.DISCORD_WEBHOOK_URL }}" >> $GITHUB_ENV
+          WEBHOOK="${{ secrets.DISCORD_WEBHOOK_OS_URL }}"
+          if [ -z "$WEBHOOK" ]; then
+            WEBHOOK="${{ secrets.DISCORD_WEBHOOK_URL }}"
           fi
 
-      # OS状態をDiscordに通知
+          # 改行（CR/LF）を除去：コピペ事故対策
+          WEBHOOK="$(printf "%s" "$WEBHOOK" | tr -d '\r\n')"
+
+          if [ -z "$WEBHOOK" ]; then
+            echo "Missing DISCORD_WEBHOOK_OS_URL (or DISCORD_WEBHOOK_URL)"
+            exit 1
+          fi
+
+          {
+            echo "DISCORD_WEBHOOK_URL<<EOF"
+            echo "$WEBHOOK"
+            echo "EOF"
+          } >> "$GITHUB_ENV"
+
       - name: Notify Discord (OS Status)
         env:
           CELESTIAL_COMMAND_ROOM_URL: ${{ secrets.CELESTIAL_COMMAND_ROOM_URL }}
