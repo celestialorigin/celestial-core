@@ -8,7 +8,7 @@ on:
     - cron: "0 12 * * *"
 
 permissions:
-  contents: read
+  contents: write
 
 concurrency:
   group: celestial-os-notify
@@ -47,22 +47,69 @@ jobs:
           if [ -z "$WEBHOOK" ]; then
             WEBHOOK="${{ secrets.DISCORD_WEBHOOK_URL }}"
           fi
-
-          # 改行（CR/LF）を除去：コピペ事故対策
           WEBHOOK="$(printf "%s" "$WEBHOOK" | tr -d '\r\n')"
-
           if [ -z "$WEBHOOK" ]; then
             echo "Missing DISCORD_WEBHOOK_OS_URL (or DISCORD_WEBHOOK_URL)"
             exit 1
           fi
-
           {
             echo "DISCORD_WEBHOOK_URL<<EOF"
             echo "$WEBHOOK"
             echo "EOF"
           } >> "$GITHUB_ENV"
 
-      - name: Notify Discord (OS Status)
+      # --- Discord notify (カテゴリ分割) ---
+      - name: Notify Discord (OS)
         env:
           CELESTIAL_COMMAND_ROOM_URL: ${{ secrets.CELESTIAL_COMMAND_ROOM_URL }}
-        run: npm run cel -- notify discord
+        run: npm run cel -- notify os --to discord
+
+      - name: Notify Discord (PLAN)
+        env:
+          CELESTIAL_COMMAND_ROOM_URL: ${{ secrets.CELESTIAL_COMMAND_ROOM_URL }}
+        run: npm run cel -- notify plan --to discord
+
+      - name: Notify Discord (PUBLISH)
+        env:
+          CELESTIAL_COMMAND_ROOM_URL: ${{ secrets.CELESTIAL_COMMAND_ROOM_URL }}
+        run: npm run cel -- notify publish --to discord
+
+      # --- Mail notify (Resend API) ---
+      # ここは「文明が死なない」ための第二経路
+      - name: Notify Mail (OS/PLAN/PUBLISH)
+        env:
+          CELESTIAL_COMMAND_ROOM_URL: ${{ secrets.CELESTIAL_COMMAND_ROOM_URL }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          CELESTIAL_MAIL_TO: ${{ secrets.CELESTIAL_MAIL_TO }}
+          CELESTIAL_MAIL_FROM: ${{ secrets.CELESTIAL_MAIL_FROM }}
+        run: |
+          npm run cel -- notify os --to mail
+          npm run cel -- notify plan --to mail
+          npm run cel -- notify publish --to mail
+
+      # --- 差分があれば自動コミット（任意だが「将来が楽」最大化） ---
+      - name: Commit & Push (if changed)
+        shell: bash
+        run: |
+          set -e
+          if [ -n "$(git status --porcelain)" ]; then
+            git config user.name "celestial-os[bot]"
+            git config user.email "celestial-os[bot]@users.noreply.github.com"
+            git add -A
+            git commit -m "chore(os): automated export/publish update"
+            git push
+          else
+            echo "No changes to commit."
+          fi
+
+      # --- 失敗時ALERT（Discord+Mail両方へ） ---
+      - name: Notify ALERT (on failure)
+        if: failure()
+        env:
+          CELESTIAL_COMMAND_ROOM_URL: ${{ secrets.CELESTIAL_COMMAND_ROOM_URL }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          CELESTIAL_MAIL_TO: ${{ secrets.CELESTIAL_MAIL_TO }}
+          CELESTIAL_MAIL_FROM: ${{ secrets.CELESTIAL_MAIL_FROM }}
+        run: |
+          npm run cel -- notify alert --to discord || true
+          npm run cel -- notify alert --to mail || true
