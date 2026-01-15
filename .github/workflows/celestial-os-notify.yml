@@ -48,6 +48,7 @@ jobs:
             WEBHOOK="${{ secrets.DISCORD_WEBHOOK_URL }}"
           fi
 
+          # 改行（CR/LF）を除去：コピペ事故対策
           WEBHOOK="$(printf "%s" "$WEBHOOK" | tr -d '\r\n')"
 
           if [ -z "$WEBHOOK" ]; then
@@ -66,6 +67,7 @@ jobs:
           CELESTIAL_COMMAND_ROOM_URL: ${{ secrets.CELESTIAL_COMMAND_ROOM_URL }}
         run: npm run cel -- notify discord
 
+      # ✅ exports/ や state が更新されたら文明が自分で刻む（将来が楽）
       - name: Commit & Push (if changed)
         shell: bash
         run: |
@@ -80,6 +82,7 @@ jobs:
             echo "No changes to commit."
           fi
 
+      # ✅ 失敗したら必ず通知（監視不要化の核心）
       - name: Notify Discord (ALERT on failure)
         if: failure()
         env:
