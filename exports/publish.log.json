@@ -102,6 +102,15 @@
       "marked": [
         "dialogue:タイトル_01"
       ]
+    },
+    {
+      "at": "2026-01-15T14:56:28.844Z",
+      "counts": {
+        "totalIndex": 11,
+        "candidates": 10,
+        "todo": 0
+      },
+      "marked": []
     }
   ]
 }

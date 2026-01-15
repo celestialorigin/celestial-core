@@ -1,24 +1,10 @@
 {
-  "generatedAt": "2026-01-15T13:54:23.811Z",
-  "now": "2026-01-15T13:54:23.811Z",
+  "generatedAt": "2026-01-15T14:56:28.844Z",
+  "now": "2026-01-15T14:56:28.844Z",
   "counts": {
     "totalIndex": 11,
     "candidates": 10,
-    "todo": 1
+    "todo": 0
   },
-  "todo": [
-    {
-      "id": "dialogue:タイトル_01",
-      "type": "dialogue",
-      "source": "internal",
-      "title": "観測記録 0001――「器」が最初に生成された日",
-      "slug": "タイトル_01",
-      "publishAt": "2026-01-15T12:00:00.000Z",
-      "path": "/home/runner/work/celestial-core/celestial-core/src/content/dialogues/2026-01-15_タイトル_01.md",
-      "actions": [
-        "site",
-        "x"
-      ]
-    }
-  ]
+  "todo": []
 }
