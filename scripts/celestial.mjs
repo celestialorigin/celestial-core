@@ -1,6 +1,8 @@
 #!/usr/bin/env node
+
 import { runNew } from "./commands/new.mjs";
 import { runStatus } from "./commands/status.mjs";
+import { runPush } from "./commands/push.mjs";
 
 function help() {
   console.log(`
@@ -10,11 +12,13 @@ Usage:
   cel new dialogue -- "Title" [options...]
   cel new activity -- "Title" [options...]
   cel status
+  cel push
 
 Examples:
   npm run cel -- new dialogue -- "Hello" --publish "2026-02-01 21:00" --git --push
   npm run cel -- new activity -- "Stream #01" --source twitch --publish "2026-02-02 20:00" --git --push
   npm run cel -- status
+  npm run cel -- push
 `);
 }
 
@@ -39,6 +43,11 @@ async function main() {
 
   if (cmd === "status") {
     await runStatus();
+    return;
+  }
+
+  if (cmd === "push") {
+    await runPush();
     return;
   }
 
