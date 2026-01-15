@@ -9,6 +9,7 @@ import { runPublish } from "./commands/publish.mjs";
 import { runPlan } from "./commands/plan.mjs";
 import { runNext } from "./commands/next.mjs";
 import { runToday } from "./commands/today.mjs";
+import { runNotifyDiscord } from "./commands/notify-discord.mjs";
 
 function help() {
   console.log(`
@@ -25,6 +26,8 @@ Usage:
   cel plan
   cel next
   cel today
+  cel notify discord [--dry]
+
 
 
 
@@ -91,7 +94,7 @@ async function main() {
     await runPlan();
     return;
   }
-  
+
   if (cmd === "next") {
     await runNext();
     return;
@@ -101,6 +104,16 @@ async function main() {
     await runToday();
     return;
   }
+  if (cmd === "notify") {
+    if (subcmd === "discord") {
+      await runNotifyDiscord(rest);
+      return;
+    }
+    console.error("Missing target: discord");
+    help();
+    process.exit(1);
+  }
+
 
   console.error(`Unknown command: ${cmd}`);
   help();
