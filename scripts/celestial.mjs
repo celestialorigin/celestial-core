@@ -4,6 +4,7 @@ import { runNew } from "./commands/new.mjs";
 import { runStatus } from "./commands/status.mjs";
 import { runPush } from "./commands/push.mjs";
 import { runExport } from "./commands/export.mjs";
+import { runDoctor } from "./commands/doctor.mjs";
 
 function help() {
   console.log(`
@@ -15,6 +16,7 @@ Usage:
   cel status
   cel push
   cel export
+  cel doctor
 
 Examples:
   npm run cel -- new dialogue -- "Hello" --publish "2026-02-01 21:00" --git --push
@@ -22,6 +24,7 @@ Examples:
   npm run cel -- status
   npm run cel -- push
   npm run cel -- export
+  npm run cel -- doctor
 `);
 }
 
@@ -56,6 +59,11 @@ async function main() {
 
   if (cmd === "export") {
     await runExport();
+    return;
+  }
+
+  if (cmd === "doctor") {
+    await runDoctor();
     return;
   }
 
