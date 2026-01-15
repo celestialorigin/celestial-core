@@ -14,6 +14,20 @@
         "activity:celestial-os-起動",
         "dialogue:自動化テスト001"
       ]
+    },
+    {
+      "at": "2026-01-15T05:48:18.608Z",
+      "counts": {
+        "totalIndex": 10,
+        "candidates": 9,
+        "todo": 4
+      },
+      "marked": [
+        "dialogue:pushテスト_01",
+        "dialogue:pushテスト",
+        "dialogue:gitテスト",
+        "dialogue:000_prologue"
+      ]
     }
   ]
 }

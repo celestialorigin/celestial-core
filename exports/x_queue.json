@@ -6,7 +6,7 @@
     "slug": "cel-status復旧テスト",
     "publishAt": "2026-01-15T04:16:32.000Z",
     "message": "【dialogue】cel-status復旧テスト",
-    "ref": "E:/Lukia_Luciaアーカイブ/CELESTIAL/celestial_core/src/content/dialogues/2026-01-15_cel-status復旧テスト.md"
+    "ref": "/home/runner/work/celestial-core/celestial-core/src/content/dialogues/2026-01-15_cel-status復旧テスト.md"
   },
   {
     "kind": "post",
@@ -15,7 +15,7 @@
     "slug": "push再テスト",
     "publishAt": "2026-01-14T23:23:33.000Z",
     "message": "【dialogue】push再テスト",
-    "ref": "E:/Lukia_Luciaアーカイブ/CELESTIAL/celestial_core/src/content/dialogues/2026-01-15_push再テスト.md"
+    "ref": "/home/runner/work/celestial-core/celestial-core/src/content/dialogues/2026-01-15_push再テスト.md"
   },
   {
     "kind": "post",
@@ -24,7 +24,7 @@
     "slug": "配信ログ",
     "publishAt": "2026-01-14T23:10:14.000Z",
     "message": "【activity】配信ログ",
-    "ref": "E:/Lukia_Luciaアーカイブ/CELESTIAL/celestial_core/src/content/activities/2026-01-15_配信ログ.md"
+    "ref": "/home/runner/work/celestial-core/celestial-core/src/content/activities/2026-01-15_配信ログ.md"
   },
   {
     "kind": "post",
@@ -33,7 +33,7 @@
     "slug": "celestial-os-起動",
     "publishAt": "2026-01-14T15:56:35.000Z",
     "message": "【activity】CELESTIAL OS 起動",
-    "ref": "E:/Lukia_Luciaアーカイブ/CELESTIAL/celestial_core/src/content/activities/2026-01-15_celestial-os-起動.md"
+    "ref": "/home/runner/work/celestial-core/celestial-core/src/content/activities/2026-01-15_celestial-os-起動.md"
   },
   {
     "kind": "post",
@@ -42,6 +42,42 @@
     "slug": "自動化テスト001",
     "publishAt": "2026-01-14T13:03:59.000Z",
     "message": "【dialogue】自動化テスト001",
-    "ref": "E:/Lukia_Luciaアーカイブ/CELESTIAL/celestial_core/src/content/dialogues/2026-01-14_自動化テスト001.md"
+    "ref": "/home/runner/work/celestial-core/celestial-core/src/content/dialogues/2026-01-14_自動化テスト001.md"
+  },
+  {
+    "kind": "post",
+    "source": "internal",
+    "title": "pushテスト",
+    "slug": "pushテスト_01",
+    "publishAt": "2026-01-14T12:47:18.000Z",
+    "message": "【dialogue】pushテスト",
+    "ref": "/home/runner/work/celestial-core/celestial-core/src/content/dialogues/2026-01-14_pushテスト_01.md"
+  },
+  {
+    "kind": "post",
+    "source": "internal",
+    "title": "pushテスト",
+    "slug": "pushテスト",
+    "publishAt": "2026-01-14T12:46:37.000Z",
+    "message": "【dialogue】pushテスト",
+    "ref": "/home/runner/work/celestial-core/celestial-core/src/content/dialogues/2026-01-14_pushテスト.md"
+  },
+  {
+    "kind": "post",
+    "source": "internal",
+    "title": "gitテスト",
+    "slug": "gitテスト",
+    "publishAt": "2026-01-14T12:46:33.000Z",
+    "message": "【dialogue】gitテスト",
+    "ref": "/home/runner/work/celestial-core/celestial-core/src/content/dialogues/2026-01-14_gitテスト.md"
+  },
+  {
+    "kind": "post",
+    "source": "internal",
+    "title": "文明OS起動ログ",
+    "slug": "000_prologue",
+    "publishAt": "2025-12-31T15:00:00.000Z",
+    "message": "【dialogue】文明OS起動ログ",
+    "ref": "/home/runner/work/celestial-core/celestial-core/src/content/dialogues/000_prologue.md"
   }
 ]
