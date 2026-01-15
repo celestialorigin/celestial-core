@@ -1,0 +1,98 @@
+[
+  {
+    "type": "dialogue",
+    "source": "internal",
+    "title": "タイトル",
+    "slug": "タイトル",
+    "description": "",
+    "visibility": "public",
+    "publishAt": "2026-02-01T12:00:00.000Z",
+    "createdAt": "2026-01-14T23:10:12.000Z",
+    "path": "E:/Lukia_Luciaアーカイブ/CELESTIAL/celestial_core/src/content/dialogues/2026-01-15_タイトル.md",
+    "excerpt": ""
+  },
+  {
+    "type": "dialogue",
+    "source": "internal",
+    "title": "cel-status復旧テスト",
+    "slug": "cel-status復旧テスト",
+    "description": "",
+    "visibility": "public",
+    "publishAt": "2026-01-15T04:16:32.000Z",
+    "createdAt": "2026-01-15T04:16:32.000Z",
+    "path": "E:/Lukia_Luciaアーカイブ/CELESTIAL/celestial_core/src/content/dialogues/2026-01-15_cel-status復旧テスト.md",
+    "excerpt": ""
+  },
+  {
+    "type": "dialogue",
+    "source": "internal",
+    "title": "push再テスト",
+    "slug": "push再テスト",
+    "description": "",
+    "visibility": "public",
+    "publishAt": "2026-01-14T23:23:33.000Z",
+    "createdAt": "2026-01-14T23:23:33.000Z",
+    "path": "E:/Lukia_Luciaアーカイブ/CELESTIAL/celestial_core/src/content/dialogues/2026-01-15_push再テスト.md",
+    "excerpt": ""
+  },
+  {
+    "type": "dialogue",
+    "source": "internal",
+    "title": "自動化テスト001",
+    "slug": "自動化テスト001",
+    "description": "",
+    "visibility": "public",
+    "publishAt": "2026-01-14T13:03:59.000Z",
+    "createdAt": null,
+    "path": "E:/Lukia_Luciaアーカイブ/CELESTIAL/celestial_core/src/content/dialogues/2026-01-14_自動化テスト001.md",
+    "excerpt": ""
+  },
+  {
+    "type": "dialogue",
+    "source": "internal",
+    "title": "000_prologue",
+    "slug": "000_prologue",
+    "description": "",
+    "visibility": "public",
+    "publishAt": null,
+    "createdAt": null,
+    "path": "E:/Lukia_Luciaアーカイブ/CELESTIAL/celestial_core/src/content/dialogues/000_prologue.md",
+    "excerpt": "Lukia："
+  },
+  {
+    "type": "dialogue",
+    "source": "internal",
+    "title": "gitテスト",
+    "slug": "gitテスト",
+    "description": "",
+    "visibility": "public",
+    "publishAt": null,
+    "createdAt": null,
+    "path": "E:/Lukia_Luciaアーカイブ/CELESTIAL/celestial_core/src/content/dialogues/2026-01-14_gitテスト.md",
+    "excerpt": ""
+  },
+  {
+    "type": "dialogue",
+    "source": "internal",
+    "title": "pushテスト",
+    "slug": "pushテスト",
+    "description": "",
+    "visibility": "public",
+    "publishAt": null,
+    "createdAt": null,
+    "path": "E:/Lukia_Luciaアーカイブ/CELESTIAL/celestial_core/src/content/dialogues/2026-01-14_pushテスト.md",
+    "excerpt": ""
+  },
+  {
+    "type": "dialogue",
+    "source": "internal",
+    "title": "pushテスト_01",
+    "slug": "pushテスト_01",
+    "description": "",
+    "visibility": "public",
+    "publishAt": null,
+    "createdAt": null,
+    "path": "E:/Lukia_Luciaアーカイブ/CELESTIAL/celestial_core/src/content/dialogues/2026-01-14_pushテスト_01.md",
+    "excerpt": ""
+  }
+]
