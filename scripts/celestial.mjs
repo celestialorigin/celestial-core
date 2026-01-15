@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+import { runNotify } from "./commands/notify.mjs";
 import { runNew } from "./commands/new.mjs";
 import { runStatus } from "./commands/status.mjs";
 import { runPush } from "./commands/push.mjs";
@@ -26,22 +27,26 @@ Usage:
   cel plan
   cel next
   cel today
+
+  # legacy
   cel notify discord [--dry]
 
-
-
+  # new (extensible)
+  cel notify os [--to discord|mail|both] [--dry]
+  cel notify plan [--to discord|mail|both] [--dry]
+  cel notify publish [--to discord|mail|both] [--dry]
+  cel notify alert [--to discord|mail|both] [--dry]
+  cel notify digest [--to discord|mail|both] [--dry]
 
 Examples:
   npm run cel -- new dialogue -- "Hello" --publish "2026-02-01 21:00" --git --push
   npm run cel -- new activity -- "Stream #01" --source twitch --publish "2026-02-02 20:00" --git --push
   npm run cel -- status
-  npm run cel -- push
   npm run cel -- export
-  npm run cel -- doctor
   npm run cel -- publish
-  npm run cel -- plan
-  npm run cel -- next
-  npm run cel -- today
+  npm run cel -- notify os --to discord
+  npm run cel -- notify os --to mail
+  npm run cel -- notify os --to both
 
 `);
 }
@@ -104,16 +109,24 @@ async function main() {
     await runToday();
     return;
   }
+
   if (cmd === "notify") {
+    // legacy: `notify discord`
     if (subcmd === "discord") {
       await runNotifyDiscord(rest);
       return;
     }
-    console.error("Missing target: discord");
-    help();
-    process.exit(1);
-  }
 
+    // new: `notify os|plan|publish|alert|digest`
+    if (!subcmd) {
+      console.error("Missing kind: os|plan|publish|alert|digest");
+      help();
+      process.exit(1);
+    }
+
+    await runNotify(subcmd, rest);
+    return;
+  }
 
   console.error(`Unknown command: ${cmd}`);
   help();
