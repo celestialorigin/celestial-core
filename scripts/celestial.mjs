@@ -6,6 +6,9 @@ import { runPush } from "./commands/push.mjs";
 import { runExport } from "./commands/export.mjs";
 import { runDoctor } from "./commands/doctor.mjs";
 import { runPublish } from "./commands/publish.mjs";
+import { runPlan } from "./commands/plan.mjs";
+import { runNext } from "./commands/next.mjs";
+import { runToday } from "./commands/today.mjs";
 
 function help() {
   console.log(`
@@ -19,6 +22,11 @@ Usage:
   cel export
   cel doctor
   cel publish
+  cel plan
+  cel next
+  cel today
+
+
 
 Examples:
   npm run cel -- new dialogue -- "Hello" --publish "2026-02-01 21:00" --git --push
@@ -28,6 +36,10 @@ Examples:
   npm run cel -- export
   npm run cel -- doctor
   npm run cel -- publish
+  npm run cel -- plan
+  npm run cel -- next
+  npm run cel -- today
+
 `);
 }
 
@@ -72,6 +84,21 @@ async function main() {
 
   if (cmd === "publish") {
     await runPublish();
+    return;
+  }
+
+  if (cmd === "plan") {
+    await runPlan();
+    return;
+  }
+  
+  if (cmd === "next") {
+    await runNext();
+    return;
+  }
+
+  if (cmd === "today") {
+    await runToday();
     return;
   }
 
