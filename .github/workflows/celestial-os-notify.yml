@@ -65,7 +65,7 @@ jobs:
       - name: Notify Discord (OS Status)
         env:
           CELESTIAL_COMMAND_ROOM_URL: ${{ secrets.CELESTIAL_COMMAND_ROOM_URL }}
-        run: npm run cel -- notify discord
+        run: npm run cel -- notify os --to discord
 
       # ✅ exports/ や state が更新されたら文明が自分で刻む（将来が楽）
       - name: Commit & Push (if changed)
@@ -87,4 +87,4 @@ jobs:
         if: failure()
         env:
           CELESTIAL_COMMAND_ROOM_URL: ${{ secrets.CELESTIAL_COMMAND_ROOM_URL }}
-        run: npm run cel -- notify alert || true
+        run: npm run cel -- notify alert --to discord || true
