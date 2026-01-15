@@ -3,6 +3,7 @@
 import { runNew } from "./commands/new.mjs";
 import { runStatus } from "./commands/status.mjs";
 import { runPush } from "./commands/push.mjs";
+import { runExport } from "./commands/export.mjs";
 
 function help() {
   console.log(`
@@ -13,12 +14,14 @@ Usage:
   cel new activity -- "Title" [options...]
   cel status
   cel push
+  cel export
 
 Examples:
   npm run cel -- new dialogue -- "Hello" --publish "2026-02-01 21:00" --git --push
   npm run cel -- new activity -- "Stream #01" --source twitch --publish "2026-02-02 20:00" --git --push
   npm run cel -- status
   npm run cel -- push
+  npm run cel -- export
 `);
 }
 
@@ -48,6 +51,11 @@ async function main() {
 
   if (cmd === "push") {
     await runPush();
+    return;
+  }
+
+  if (cmd === "export") {
+    await runExport();
     return;
   }
 
