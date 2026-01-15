@@ -3,7 +3,7 @@ name: CELESTIAL OS - Notify (Scheduled)
 on:
   workflow_dispatch:
   schedule:
-    # JST 09:00 / 21:00 にしたい場合は UTC 00:00 / 12:00
+    # JST 09:00 / 21:00 → UTC 00:00 / 12:00
     - cron: "0 0 * * *"
     - cron: "0 12 * * *"
 
@@ -37,12 +37,21 @@ jobs:
       - name: Export
         run: npm run cel -- export
 
-      # publish.plan / x_queue.ready を最新化（通知が正確になる）
+      # publish.plan / x_queue.ready を最新化
       - name: Publish Plan
         run: npm run cel -- publish
 
+      # webhook を確実に選択（OS専用 → 通常の順でフォールバック）
+      - name: Select Discord Webhook
+        run: |
+          if [ -n "${{ secrets.DISCORD_WEBHOOK_OS_URL }}" ]; then
+            echo "DISCORD_WEBHOOK_URL=${{ secrets.DISCORD_WEBHOOK_OS_URL }}" >> $GITHUB_ENV
+          else
+            echo "DISCORD_WEBHOOK_URL=${{ secrets.DISCORD_WEBHOOK_URL }}" >> $GITHUB_ENV
+          fi
+
+      # OS状態をDiscordに通知
       - name: Notify Discord (OS Status)
         env:
-          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_OS_URL }}
           CELESTIAL_COMMAND_ROOM_URL: ${{ secrets.CELESTIAL_COMMAND_ROOM_URL }}
         run: npm run cel -- notify discord
