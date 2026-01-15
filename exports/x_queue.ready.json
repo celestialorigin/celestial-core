@@ -1,45 +1,4 @@
 {
-  "generatedAt": "2026-01-15T05:48:18.608Z",
-  "items": [
-    {
-      "id": "dialogue:pushテスト_01",
-      "kind": "post",
-      "source": "internal",
-      "title": "pushテスト",
-      "slug": "pushテスト_01",
-      "publishAt": "2026-01-14T12:47:18.000Z",
-      "message": "【dialogue】pushテスト",
-      "ref": "/home/runner/work/celestial-core/celestial-core/src/content/dialogues/2026-01-14_pushテスト_01.md"
-    },
-    {
-      "id": "dialogue:pushテスト",
-      "kind": "post",
-      "source": "internal",
-      "title": "pushテスト",
-      "slug": "pushテスト",
-      "publishAt": "2026-01-14T12:46:37.000Z",
-      "message": "【dialogue】pushテスト",
-      "ref": "/home/runner/work/celestial-core/celestial-core/src/content/dialogues/2026-01-14_pushテスト.md"
-    },
-    {
-      "id": "dialogue:gitテスト",
-      "kind": "post",
-      "source": "internal",
-      "title": "gitテスト",
-      "slug": "gitテスト",
-      "publishAt": "2026-01-14T12:46:33.000Z",
-      "message": "【dialogue】gitテスト",
-      "ref": "/home/runner/work/celestial-core/celestial-core/src/content/dialogues/2026-01-14_gitテスト.md"
-    },
-    {
-      "id": "dialogue:000_prologue",
-      "kind": "post",
-      "source": "internal",
-      "title": "文明OS起動ログ",
-      "slug": "000_prologue",
-      "publishAt": "2025-12-31T15:00:00.000Z",
-      "message": "【dialogue】文明OS起動ログ",
-      "ref": "/home/runner/work/celestial-core/celestial-core/src/content/dialogues/000_prologue.md"
-    }
-  ]
+  "generatedAt": "2026-01-15T07:02:45.587Z",
+  "items": []
 }

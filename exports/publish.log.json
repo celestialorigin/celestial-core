@@ -28,6 +28,15 @@
         "dialogue:gitテスト",
         "dialogue:000_prologue"
       ]
+    },
+    {
+      "at": "2026-01-15T07:02:45.587Z",
+      "counts": {
+        "totalIndex": 10,
+        "candidates": 9,
+        "todo": 0
+      },
+      "marked": []
     }
   ]
 }
