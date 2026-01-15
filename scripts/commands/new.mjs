@@ -12,7 +12,5 @@ export async function runNew(target, args) {
   }
 
   // 既存CLIをそのまま呼ぶ（互換維持）
-  // argsは例: ['--', '"Title"', '--publish', ...] ではなく、
-  // npm run cel -- new dialogue -- "Title" ... で渡ってくる配列をそのまま転送
   await spawnNodeScript(script, args);
 }

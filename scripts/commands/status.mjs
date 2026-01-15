@@ -30,7 +30,7 @@ function latestFile(dir) {
 
 export async function runStatus() {
   const branch = sh("git rev-parse --abbrev-ref HEAD");
-  const dirty = sh("git status --porcelain");
+  const dirtyRaw = sh("git status --porcelain");
   const head = sh('git log -1 --pretty=format:"%h %s"');
 
   // ahead/behind
@@ -45,15 +45,31 @@ export async function runStatus() {
     aheadBehind = "(could not compute ahead/behind)";
   }
 
+  const dirtyList = dirtyRaw
+    ? dirtyRaw.split("\n").filter(Boolean)
+    : [];
+
   const root = process.cwd();
   const latestDialogue = latestFile(path.join(root, "src", "content", "dialogues"));
   const latestActivity = latestFile(path.join(root, "src", "content", "activities"));
 
   console.log("🛰️  CELESTIAL STATUS");
   console.log(`- branch: ${branch}`);
-  console.log(`- state: ${dirty ? "DIRTY" : "CLEAN"}`);
+  console.log(`- state: ${dirtyList.length > 0 ? "DIRTY" : "CLEAN"}`);
   console.log(`- sync: ${aheadBehind}`);
   console.log(`- head: ${head}`);
+
+  if (dirtyList.length > 0) {
+    console.log("");
+    console.log("🧩 working tree changes:");
+    dirtyList.slice(0, 10).forEach((line) => {
+      console.log(`  - ${line}`);
+    });
+    if (dirtyList.length > 10) {
+      console.log(`  ... (${dirtyList.length - 10} more)`);
+    }
+  }
+
   console.log("");
   console.log("📌 latest content:");
   console.log(`- dialogue: ${latestDialogue ? path.relative(root, latestDialogue) : "(none)"}`);
