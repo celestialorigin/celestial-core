@@ -1,0 +1,171 @@
+---
+import Layout from "../layouts/Layout.astro";
+import fs from "node:fs";
+import path from "node:path";
+
+const exportsDir = path.join(process.cwd(), "exports");
+
+function readJson(relPath) {
+  const p = path.join(exportsDir, relPath);
+  if (!fs.existsSync(p)) return null;
+  return JSON.parse(fs.readFileSync(p, "utf-8"));
+}
+
+function toLocal(iso) {
+  try {
+    const d = new Date(iso);
+    if (Number.isNaN(d.getTime())) return String(iso);
+    return d.toLocaleString();
+  } catch {
+    return String(iso);
+  }
+}
+
+function ymdLocal(d) {
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+}
+
+const plan = readJson("publish.plan.json");
+const schedule = readJson("schedule.json");
+const xReady = readJson("x_queue.ready.json");
+
+const todoItems = Array.isArray(plan?.todo)
+  ? plan.todo
+  : Array.isArray(plan)
+    ? plan
+    : Array.isArray(plan?.items)
+      ? plan.items
+      : [];
+
+const todoCount = todoItems.length;
+
+const xReadyCount = Array.isArray(xReady?.items)
+  ? xReady.items.length
+  : Array.isArray(xReady)
+    ? xReady.length
+    : 0;
+
+const now = new Date();
+const todayKey = ymdLocal(now);
+
+const scheduleArr = Array.isArray(schedule) ? schedule : [];
+
+const todayItems = scheduleArr
+  .map((x) => ({ ...x, _t: new Date(x?.publishAt).getTime() }))
+  .filter((x) => !Number.isNaN(x._t))
+  .filter((x) => ymdLocal(new Date(x._t)) === todayKey)
+  .sort((a, b) => a._t - b._t);
+
+const nextItems = scheduleArr
+  .filter((x) => {
+    const t = new Date(x?.publishAt).getTime();
+    return !Number.isNaN(t) && t >= now.getTime();
+  })
+  .sort((a, b) => new Date(a.publishAt).getTime() - new Date(b.publishAt).getTime());
+
+const nextOne = nextItems[0] ?? null;
+
+const hasExports =
+  fs.existsSync(path.join(exportsDir, "schedule.json")) &&
+  fs.existsSync(path.join(exportsDir, "publish.plan.json"));
+---
+
+<Layout showStars={true} starPattern="home" bodyClass="page-today">
+  <section class="hero fade-in-section">
+    <div class="container hero-content">
+      <h1 class="hero-title">TODAY</h1>
+      <p class="hero-subtitle">CELESTIAL Command Room</p>
+
+      {!hasExports ? (
+        <div class="card">
+          <h2>Exports not found</h2>
+          <p>
+            <code>exports/</code> が見つからないか、必要なJSONがありません。
+            先に <code>npm run cel -- export</code> と <code>npm run cel -- publish</code> を実行してください。
+          </p>
+        </div>
+      ) : (
+        <>
+          <div class="grid">
+            <div class="card">
+              <h2>Status</h2>
+              <ul>
+                <li><strong>Date:</strong> {todayKey}</li>
+                <li><strong>Plan todo:</strong> {todoCount}</li>
+                <li><strong>X queue ready:</strong> {xReadyCount}</li>
+                <li><strong>Schedule items:</strong> {scheduleArr.length}</li>
+              </ul>
+            </div>
+
+            <div class="card">
+              <h2>Next</h2>
+              {nextOne ? (
+                <ul>
+                  <li><strong>When:</strong> {toLocal(nextOne.publishAt)}</li>
+                  <li><strong>Type:</strong> {nextOne.type ?? "item"}</li>
+                  <li><strong>Title:</strong> {nextOne.title ?? "(untitled)"}</li>
+                </ul>
+              ) : (
+                <p>✅ upcoming scheduled items are none.</p>
+              )}
+            </div>
+          </div>
+
+          <div class="card">
+            <h2>Today</h2>
+            <p><strong>Items:</strong> {todayItems.length}</p>
+
+            {todayItems.length === 0 ? (
+              <p>✅ nothing scheduled today</p>
+            ) : (
+              <ul>
+                {todayItems.map((it) => (
+                  <li>
+                    <strong>[{it.type ?? "item"}]</strong>{" "}
+                    {toLocal(it.publishAt)} :: {it.title ?? "(untitled)"}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+
+          <div class="card">
+            <h2>Plan (todo)</h2>
+            <p><strong>Todo items:</strong> {todoCount}</p>
+
+            {todoCount === 0 ? (
+              <p>✅ nothing to do</p>
+            ) : (
+              <ul>
+                {todoItems.map((it) => (
+                  <li>
+                    <strong>[{it.type ?? it.kind ?? "item"}]</strong>{" "}
+                    {toLocal(it.publishAt ?? it.when ?? it.at ?? "")} ::{" "}
+                    {it.title ?? it.slug ?? "(untitled)"}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        </>
+      )}
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .container { max-width: 1000px; margin: 0 auto; padding: 24px; }
+  .hero-title { font-size: 42px; margin: 0 0 8px; }
+  .hero-subtitle { opacity: 0.8; margin: 0 0 24px; }
+  .grid { display: grid; grid-template-columns: 1fr; gap: 16px; margin-bottom: 16px; }
+  @media (min-width: 900px) { .grid { grid-template-columns: 1fr 1fr; } }
+  .card {
+    border: 1px solid rgba(255,255,255,0.12);
+    background: rgba(255,255,255,0.04);
+    border-radius: 16px;
+    padding: 16px;
+  }
+  code { background: rgba(0,0,0,0.35); padding: 2px 6px; border-radius: 6px; }
+  ul { margin: 10px 0 0; padding-left: 18px; }
+  li { margin: 6px 0; }
+</style>
