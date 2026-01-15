@@ -1,0 +1,57 @@
+name: CELESTIAL OS - Auto Cycle
+
+on:
+  workflow_dispatch: {}
+  schedule:
+    - cron: "10 * * * *"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: celestial-os-main
+  cancel-in-progress: false
+
+jobs:
+  cycle:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install
+        run: npm ci
+
+      - name: Doctor
+        run: npm run cel -- doctor
+
+      - name: Status
+        run: npm run cel -- status
+
+      - name: Export
+        run: npm run cel -- export
+
+      - name: Publish Plan
+        run: npm run cel -- publish
+
+      - name: Commit & Push (if changed)
+        run: |
+          if git diff --quiet; then
+            echo "No changes to commit."
+            exit 0
+          fi
+
+          git config user.name "celestial-os[bot]"
+          git config user.email "celestial-os[bot]@users.noreply.github.com"
+
+          git add -A
+          git commit -m "chore(os): auto cycle (export/publish)"
+          git push
