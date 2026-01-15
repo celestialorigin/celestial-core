@@ -3,6 +3,18 @@
     "type": "dialogue",
     "source": "internal",
     "title": "タイトル",
+    "slug": "タイトル_01",
+    "description": "",
+    "visibility": "public",
+    "publishAt": "2026-01-20T12:00:00.000Z",
+    "createdAt": "2026-01-15T11:17:28.000Z",
+    "path": "/home/runner/work/celestial-core/celestial-core/src/content/dialogues/2026-01-15_タイトル_01.md",
+    "excerpt": ""
+  },
+  {
+    "type": "dialogue",
+    "source": "internal",
+    "title": "タイトル",
     "slug": "タイトル",
     "description": "",
     "visibility": "public",
