@@ -14,14 +14,14 @@
   {
     "type": "dialogue",
     "source": "internal",
-    "title": "タイトル",
+    "title": "観測記録 0001――「器」が最初に生成された日",
     "slug": "タイトル_01",
-    "description": "",
+    "description": "CELESTIALが初めて“空間”を持った日の技術的観測ログ。",
     "visibility": "public",
-    "publishAt": "2026-01-20T12:00:00.000Z",
+    "publishAt": "2026-01-15T12:00:00.000Z",
     "createdAt": "2026-01-15T11:17:28.000Z",
     "path": "/home/runner/work/celestial-core/celestial-core/src/content/dialogues/2026-01-15_タイトル_01.md",
-    "excerpt": ""
+    "excerpt": "---"
   },
   {
     "type": "dialogue",

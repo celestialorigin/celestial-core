@@ -1,4 +1,15 @@
 {
-  "generatedAt": "2026-01-15T11:42:29.564Z",
-  "items": []
+  "generatedAt": "2026-01-15T13:54:23.811Z",
+  "items": [
+    {
+      "id": "dialogue:タイトル_01",
+      "kind": "post",
+      "source": "internal",
+      "title": "観測記録 0001――「器」が最初に生成された日",
+      "slug": "タイトル_01",
+      "publishAt": "2026-01-15T12:00:00.000Z",
+      "message": "【dialogue】観測記録 0001――「器」が最初に生成された日",
+      "ref": "/home/runner/work/celestial-core/celestial-core/src/content/dialogues/2026-01-15_タイトル_01.md"
+    }
+  ]
 }
