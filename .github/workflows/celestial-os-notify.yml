@@ -61,6 +61,12 @@ jobs:
             echo "$WEBHOOK"
             echo "EOF"
           } >> "$GITHUB_ENV"
+          
+      - name: Debug - show celestial.mjs head
+        run: |
+          echo "SHA=${GITHUB_SHA}"
+          node -v
+          sed -n '1,120p' scripts/celestial.mjs
 
       - name: Notify Discord (OS Status)
         env:
