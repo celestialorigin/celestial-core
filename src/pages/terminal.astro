@@ -2,6 +2,8 @@
 import Layout from "../layouts/Layout.astro";
 import { logs } from "../data/logs";
 
+const BASE = import.meta.env.BASE_URL;
+
 const safeLogs = (logs ?? []).filter(
   (log) => log && typeof log.internalId === "string" && log.internalId.length > 0
 );
@@ -17,6 +19,9 @@ const sortedLogs = [...safeLogs].sort((a, b) =>
       <h1>OBSERVATION TERMINAL</h1>
       <p class="status">CONNECTED // ENCRYPTED ACCESS</p>
     </header>
+     <div class="terminal-actions">
+      <a class="cmd-link" href={`${BASE}today/`}>TODAY // Command Room</a>
+    </div>
 
     <div class="log-grid">
       {sortedLogs.map(log => (
@@ -118,4 +123,29 @@ const sortedLogs = [...safeLogs].sort((a, b) =>
     opacity: 1;
     color: var(--c-accent);
   }
+.terminal-actions{
+  margin: 1.2rem 0 2.2rem;
+}
+
+.cmd-link{
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 255, 255, 0.25);
+  background: rgba(0, 255, 255, 0.06);
+  color: #dfffff;
+  text-decoration: none;
+  font-family: monospace;
+  font-size: 0.85rem;
+  letter-spacing: 0.06rem;
+  transition: all 0.25s ease;
+}
+
+.cmd-link:hover{
+  background: rgba(0, 255, 255, 0.12);
+  transform: translateX(4px);
+}
+
 </style>
