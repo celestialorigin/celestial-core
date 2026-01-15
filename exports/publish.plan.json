@@ -1,0 +1,76 @@
+{
+  "generatedAt": "2026-01-15T05:28:38.847Z",
+  "now": "2026-01-15T05:28:38.847Z",
+  "counts": {
+    "totalIndex": 10,
+    "candidates": 5,
+    "todo": 5
+  },
+  "todo": [
+    {
+      "id": "dialogue:cel-status復旧テスト",
+      "type": "dialogue",
+      "source": "internal",
+      "title": "cel-status復旧テスト",
+      "slug": "cel-status復旧テスト",
+      "publishAt": "2026-01-15T04:16:32.000Z",
+      "path": "E:/Lukia_Luciaアーカイブ/CELESTIAL/celestial_core/src/content/dialogues/2026-01-15_cel-status復旧テスト.md",
+      "actions": [
+        "site",
+        "x"
+      ]
+    },
+    {
+      "id": "dialogue:push再テスト",
+      "type": "dialogue",
+      "source": "internal",
+      "title": "push再テスト",
+      "slug": "push再テスト",
+      "publishAt": "2026-01-14T23:23:33.000Z",
+      "path": "E:/Lukia_Luciaアーカイブ/CELESTIAL/celestial_core/src/content/dialogues/2026-01-15_push再テスト.md",
+      "actions": [
+        "site",
+        "x"
+      ]
+    },
+    {
+      "id": "activity:配信ログ",
+      "type": "activity",
+      "source": "twitch",
+      "title": "配信ログ",
+      "slug": "配信ログ",
+      "publishAt": "2026-01-14T23:10:14.000Z",
+      "path": "E:/Lukia_Luciaアーカイブ/CELESTIAL/celestial_core/src/content/activities/2026-01-15_配信ログ.md",
+      "actions": [
+        "site",
+        "x"
+      ]
+    },
+    {
+      "id": "activity:celestial-os-起動",
+      "type": "activity",
+      "source": "internal",
+      "title": "CELESTIAL OS 起動",
+      "slug": "celestial-os-起動",
+      "publishAt": "2026-01-14T15:56:35.000Z",
+      "path": "E:/Lukia_Luciaアーカイブ/CELESTIAL/celestial_core/src/content/activities/2026-01-15_celestial-os-起動.md",
+      "actions": [
+        "site",
+        "x"
+      ]
+    },
+    {
+      "id": "dialogue:自動化テスト001",
+      "type": "dialogue",
+      "source": "internal",
+      "title": "自動化テスト001",
+      "slug": "自動化テスト001",
+      "publishAt": "2026-01-14T13:03:59.000Z",
+      "path": "E:/Lukia_Luciaアーカイブ/CELESTIAL/celestial_core/src/content/dialogues/2026-01-14_自動化テスト001.md",
+      "actions": [
+        "site",
+        "x"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "lastRunAt": "2026-01-15T05:28:38.847Z",
+  "processed": {
+    "dialogue:cel-status復旧テスト": {
+      "plannedAt": "2026-01-15T05:28:38.847Z",
+      "publishAt": "2026-01-15T04:16:32.000Z"
+    },
+    "dialogue:push再テスト": {
+      "plannedAt": "2026-01-15T05:28:38.847Z",
+      "publishAt": "2026-01-14T23:23:33.000Z"
+    },
+    "activity:配信ログ": {
+      "plannedAt": "2026-01-15T05:28:38.847Z",
+      "publishAt": "2026-01-14T23:10:14.000Z"
+    },
+    "activity:celestial-os-起動": {
+      "plannedAt": "2026-01-15T05:28:38.847Z",
+      "publishAt": "2026-01-14T15:56:35.000Z"
+    },
+    "dialogue:自動化テスト001": {
+      "plannedAt": "2026-01-15T05:28:38.847Z",
+      "publishAt": "2026-01-14T13:03:59.000Z"
+    }
+  }
+}
