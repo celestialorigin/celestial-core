@@ -1,0 +1,51 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { getCollection } from "astro:content";
+
+const BASE = import.meta.env.BASE_URL;
+const now = new Date();
+
+const allDialogues = await getCollection("dialogues");
+
+const dialogues = allDialogues
+  .filter((d) => d.data.publishAt && d.data.publishAt <= now && d.data.visibility !== "draft")
+  .sort((a, b) => b.data.publishAt.getTime() - a.data.publishAt.getTime());
+---
+
+<Layout showStars={true} starPattern="home" bodyClass="page-home">
+  <section style="max-width: 900px; margin: 0 auto; padding: 6rem 1rem;">
+    <h1 style="text-align:center; margin-bottom:4rem;">
+      CELESTIAL DIALOGUES
+    </h1>
+
+    {dialogues.length === 0 ? (
+      <p style="text-align:center; opacity:0.5;">
+        No dialogues observed.
+      </p>
+    ) : (
+      <ul style="list-style:none; padding:0; display:flex; flex-direction:column; gap:1.5rem;">
+        {dialogues.map((d) => (
+          <li>
+            <a href={`${BASE}dialogues/${d.slug}/`} style="text-decoration:none; color:inherit;">
+              <div style="border:1px solid rgba(255,255,255,0.1); padding:1.5rem; border-radius:8px;">
+                <div style="opacity:0.5; font-size:0.9rem;">
+                  {d.data.publishAt.toLocaleString("ja-JP")}
+                </div>
+
+                <div style="margin-top:0.5rem; font-size:1.2rem;">
+                  {d.data.title}
+                </div>
+
+                {d.data.description ? (
+                  <div style="margin-top:0.5rem; opacity:0.8;">
+                    {d.data.description}
+                  </div>
+                ) : null}
+              </div>
+            </a>
+          </li>
+        ))}
+      </ul>
+    )}
+  </section>
+</Layout>

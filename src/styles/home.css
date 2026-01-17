@@ -1,0 +1,439 @@
+/* Home-only styles
+   Scope: body.page-home
+*/
+
+.page-home .hero {
+  min-height: calc(100vh - var(--header-height));
+  display: block;
+  padding: 5rem 0 3rem;
+  position: relative;
+}
+
+/* ✅ Shi-chan position (head-top feel)
+   - Changed to relative flow to avoid logo overlap
+   - Centered above title
+*/
+.page-home .shiichan-link {
+  position: relative;
+  display: block;
+  width: 110px;
+  height: 110px;
+  margin: 120px auto 80px;
+  /* Bottom placement as a resident entity */
+  z-index: 6;
+  opacity: 0.85;
+}
+
+.page-home .shiichan-link img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 0 18px rgba(0, 255, 255, 0.18));
+}
+
+.page-home .shiichan-link:hover {
+  opacity: 1;
+  transform: scale(1.05);
+  /* Removed translateX because margin auto handles centering */
+}
+
+.page-home .hero-content {
+  max-width: 980px;
+  margin: 0 auto;
+}
+
+.page-home .hero-title {
+  margin: 0;
+  line-height: 1;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-align: center;
+  filter: drop-shadow(0 0 16px rgba(0, 255, 255, 0.18));
+}
+
+.page-home .hero-title-main {
+  display: block;
+  font-size: clamp(52px, 6.2vw, 92px);
+  font-weight: 800;
+}
+
+.page-home .hero-title-sub {
+  display: block;
+  font-size: clamp(40px, 4.8vw, 74px);
+  font-weight: 700;
+  opacity: 0.78;
+  margin-top: 10px;
+}
+
+.page-home .hero-kicker {
+  margin: 20px 0 0;
+  text-align: center;
+  opacity: 0.72;
+  letter-spacing: 0.18em;
+  font-size: 13px;
+}
+
+.page-home .hero-subtitle {
+  margin: 16px auto 0;
+  text-align: center;
+  opacity: 0.9;
+  line-height: 1.9;
+  max-width: 760px;
+}
+
+/* CTA */
+.page-home .cta-row {
+  margin-top: 26px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.page-home .cta-subrow {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.page-home .cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 18px;
+  border-radius: 999px;
+  text-decoration: none;
+  color: inherit;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.05);
+  transition: 0.15s ease;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: 12px;
+  min-width: 220px;
+}
+
+.page-home .cta:hover {
+  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(0, 255, 255, 0.22);
+  box-shadow: 0 0 18px rgba(0, 255, 255, 0.08);
+}
+
+.page-home .cta-primary {
+  min-width: 320px;
+  border-color: rgba(0, 255, 255, 0.22);
+  box-shadow: 0 0 18px rgba(0, 255, 255, 0.06);
+}
+
+.page-home .cta-ghost {
+  min-width: 180px;
+  opacity: 0.92;
+}
+
+/* Latest */
+.page-home .latest {
+  margin-top: 32px;
+  max-width: 760px;
+  margin-left: auto;
+  margin-right: auto;
+  width: min(100% - 40px, 760px);
+  /* Overflow protection */
+}
+
+.page-home .latest-title {
+  margin: 0 0 12px;
+  font-size: 13px;
+  letter-spacing: 0.18em;
+  opacity: 0.85;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.page-home .latest-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.page-home .latest-item {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  word-break: break-all;
+  /* Prevent overflow on long titles */
+}
+
+.page-home .latest-link {
+  text-decoration: none;
+  border-bottom: 1px dotted rgba(255, 255, 255, 0.25);
+}
+
+.page-home .latest-link:hover {
+  border-bottom-color: rgba(0, 255, 255, 0.7);
+}
+
+.page-home .latest-date {
+  opacity: 0.7;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+  .page-home .shiichan-link {
+    /* Removed top overrides, just resizing */
+    width: 92px;
+    height: 92px;
+    margin-bottom: 15px;
+  }
+
+  .page-home .cta {
+    min-width: 240px;
+  }
+
+  .page-home .cta-primary {
+    min-width: 260px;
+  }
+
+  .page-home .latest-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .page-home .latest-date {
+    opacity: 0.55;
+  }
+}
+
+.page-home .home-hub {
+  width: min(760px, 92vw);
+  margin: 22px auto 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.page-home .hub-card {
+  display: block;
+  padding: 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  background: rgba(255, 255, 255, 0.02);
+  box-shadow: 0 0 12px rgba(0, 255, 255, 0.04);
+  text-decoration: none;
+  color: inherit;
+  transition: transform .18s ease, border-color .18s ease, background .18s ease, box-shadow .18s ease;
+}
+
+.page-home .hub-card:hover {
+  transform: translateY(-1px);
+  background: rgba(0, 255, 255, 0.03);
+  border-color: rgba(0, 255, 255, 0.22);
+  box-shadow: 0 0 18px rgba(0, 255, 255, 0.08);
+}
+
+.page-home .hub-title {
+  letter-spacing: .14em;
+  font-size: 12px;
+  color: var(--c-accent);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.page-home .hub-desc {
+  opacity: 0.8;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+@media (max-width: 720px) {
+  .page-home .home-hub {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* New Hero Grid Styles */
+/* New Hero Grid Styles */
+/* PC: 4 cols top, 2 cols bottom (centered) -> Flexbox is easier for centering the overflow line */
+.page-home .hero-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
+  max-width: 900px;
+  margin: 40px auto 40px;
+  padding: 0 20px;
+}
+
+.page-home .hero-card {
+  /* Flex basis for 4 columns: (100% - (3 * 16px)) / 4 approx 23% */
+  /* Using calc safely */
+  width: calc(25% - 12px);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 24px 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  text-decoration: none;
+  color: #fff;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  backdrop-filter: blur(4px);
+  position: relative;
+  overflow: hidden;
+}
+
+.page-home .hero-card:hover {
+  transform: translateY(-8px);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--c-accent, cyan);
+  box-shadow: 0 10px 30px rgba(0, 243, 255, 0.15);
+}
+
+.page-home .card-icon {
+  font-size: 2.5rem;
+  margin-bottom: 12px;
+  display: block;
+  opacity: 0.9;
+  filter: drop-shadow(0 0 8px rgba(0, 255, 255, 0.4));
+}
+
+.page-home .card-title {
+  display: block;
+  font-size: 1.1rem;
+  letter-spacing: 0.1em;
+  font-weight: 700;
+  margin-bottom: 6px;
+  color: var(--c-accent, #fff);
+}
+
+.page-home .card-desc {
+  display: block;
+  font-size: 0.8rem;
+  opacity: 0.7;
+  line-height: 1.4;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .page-home .hero-grid {
+    /* Vertical stack on mobile */
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 30px;
+  }
+
+  .page-home .hero-card {
+    width: 100%;
+    /* Full width on mobile */
+  }
+
+  .page-home .card-icon {
+    font-size: 2rem;
+  }
+}
+/* =========================
+   Lukia / Lucia – World Residents (HOME)
+========================= */
+
+.page-home .hero {
+  position: relative;
+  overflow: visible; /* ← 脚が切れないようにする */
+}
+
+/* ドック（床） */
+.page-home .observers-dock {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -40px;     /* ← “床の高さ” ここで調整 */
+  height: 820px;     /* ← 脚まで入る十分な高さ */
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* 共通 */
+.page-home .observer {
+  position: absolute;
+  bottom: 0;
+  pointer-events: auto;
+}
+
+.page-home .observer img {
+  height: 720px;     /* ← でっかさ。脚まで映すなら700↑推奨 */
+  width: auto;
+  display: block;
+  filter: drop-shadow(0 0 28px rgba(120,255,255,0.35));
+}
+
+/* ✅ 左：Lukia */
+.page-home .observer-lukia {
+  left: 80px;        /* ← 左端からの距離 */
+}
+
+/* ✅ 右：Lucia */
+.page-home .observer-lucia {
+  right: 80px;       /* ← 右端からの距離 */
+}
+
+/* ===== FORCE OVERRIDE (HOME) ===== */
+.page-home .observers-dock{
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -40px;
+  height: 820px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.page-home a.observer{
+  position: absolute;
+  bottom: 0;
+  pointer-events: auto;
+}
+
+.page-home a.observer.observer-lukia{
+  left: 80px !important;
+  right: auto !important;
+  transform: none !important;
+}
+
+.page-home a.observer.observer-lucia{
+  right: 80px !important;
+  left: auto !important;
+  transform: none !important;
+}
+
+.page-home .observer img{
+  height: 800px;
+  width: auto;
+  display: block;
+  filter: none; /* ← まずボヤけ原因を潰す */
+}
+
+@media (max-width: 768px){
+  .page-home .observers-dock{ bottom: -120px; height: 70vh; }
+  .page-home .observer img{ height: min(62vh, 520px); }
+  .page-home a.observer.observer-lukia{ left: 12px !important; }
+  .page-home a.observer.observer-lucia{ right: 12px !important; }
+}
+
+/* HOMEは実体PNGを置くので、globalの疑似要素シルエットは殺す */
+.page-home .hero::before,
+.page-home .hero::after{
+  content: none !important;
+  display: none !important;
+}

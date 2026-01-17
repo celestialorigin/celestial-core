@@ -2,8 +2,9 @@
 import Layout from "../../layouts/Layout.astro";
 import { getCollection } from "astro:content";
 
-const BASE = import.meta.env.BASE_URL;
+const BASE = (import.meta.env.BASE_URL || "/").replace(/\/?$/, "/");
 const now = new Date();
+const toDate = (v: any) => (v instanceof Date ? v : new Date(v));
 
 export async function getStaticPaths() {
   const entries = await getCollection("dialogues");
@@ -15,15 +16,19 @@ export async function getStaticPaths() {
 
 const { entry } = Astro.props;
 
-const isFuture = !!(entry.data.publishAt && entry.data.publishAt > now);
-const { Content } = isFuture ? { Content: null } : await entry.render();
+// publishAt が Date / string どちらでも動くように
+const publishAt = entry?.data?.publishAt ? toDate(entry.data.publishAt) : null;
+const isFuture = !!(publishAt && publishAt > now);
 
-// SEO / OGP 用の値（未来ログは出さない）
+const rendered = isFuture ? { Content: null } : await entry.render();
+const Content = rendered.Content;
+
+// SEO / OGP（未来ログは出さない）
 const pageTitle = isFuture ? "CELESTIAL | UNOBSERVED" : `CELESTIAL | ${entry.data.title}`;
 const pageDesc =
   !isFuture && entry.data.description ? String(entry.data.description) : null;
 
-// ※ canonical は BASE_URL 配下でも崩れないように BASE を使う
+// canonical は BASE_URL 配下でも崩れないように BASE を使う
 const canonicalUrl = !isFuture
   ? new URL(`${BASE}dialogues/${entry.slug}/`, Astro.site ?? "http://localhost").toString()
   : null;
@@ -58,19 +63,23 @@ const canonicalUrl = !isFuture
         <p style="opacity:0.7; margin-top:0.75rem;">
           このログは、まだ観測可能ではありません。
         </p>
-        <p style="opacity:0.4; font-size:0.9rem; margin-top:1.25rem;">
-          Scheduled: {entry.data.publishAt.toLocaleString("ja-JP")}
-        </p>
+        {publishAt && (
+          <p style="opacity:0.4; font-size:0.9rem; margin-top:1.25rem;">
+            Scheduled: {publishAt.toLocaleString("ja-JP")}
+          </p>
+        )}
       </section>
     ) : (
       <>
         <h1>{entry.data.title}</h1>
-        <p style="opacity:0.7;">
-          {entry.data.publishAt.toLocaleString("ja-JP")}
-        </p>
+        {publishAt && (
+          <p style="opacity:0.7;">
+            {publishAt.toLocaleString("ja-JP")}
+          </p>
+        )}
 
         <section class="content">
-          <Content />
+          {Content ? <Content /> : null}
         </section>
       </>
     )}

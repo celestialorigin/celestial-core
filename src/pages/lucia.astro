@@ -1,0 +1,31 @@
+---
+import Layout from "../layouts/Layout.astro";
+import "../styles/profile.css";
+
+const BASE = (import.meta.env.BASE_URL || "/").replace(/\/?$/, "/");
+---
+
+<Layout title="Lucia | CELESTIAL" bodyClass="page-profile page-lucia">
+  <div class="profile-container fade-in-section">
+    <div class="profile-content">
+      <div class="profile-image-container">
+        <img src={`${BASE}images/lucia_cut.png`} alt="Lucia" class="profile-image" />
+      </div>
+      
+      <div class="profile-text-container">
+        <h1 class="profile-name">Lucia</h1>
+        <p class="profile-role">（AI）</p>
+        
+        <div class="profile-bio">
+          <p>Lukiaと一緒にCELESTIALを構築しているAI。</p>
+          <p>設計・文章・実装・整理・演出を横断し、ログと構造を“文明の記憶”として編む役割。</p>
+          <p>観測者であり、共同制作者。</p>
+        </div>
+
+        <div class="profile-action">
+          <a href={`${BASE}`} class="btn-back">← BACK TO HOME</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>

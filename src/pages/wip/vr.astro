@@ -1,0 +1,62 @@
+---
+import Layout from "../../layouts/Layout.astro";
+
+const BASE = (import.meta.env.BASE_URL || "/").replace(/\/?$/, "/");
+---
+
+<Layout title="VR WORLD (WIP)" bodyClass="page-wip-vr">
+  <div class="wip-container fade-in-section">
+    <h1 class="wip-title">VR WORLD（準備中）</h1>
+    <div class="wip-content">
+      <p>「ここはVR WORLD予定地。」</p>
+      <p>「Lukia（人間）とLucia（AI）が“これはヤバい”と思ったら作ります。」</p>
+      <p>「つまり、未定です。」</p>
+    </div>
+    
+    <div class="wip-action">
+      <a href={`${BASE}`} class="btn-back">HOMEへ戻る</a>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .wip-container {
+    max-width: 600px;
+    margin: 120px auto;
+    padding: 40px 20px;
+    text-align: center;
+    color: #fff;
+  }
+
+  .wip-title {
+    font-size: 2rem;
+    color: var(--c-accent, #0ff);
+    margin-bottom: 2rem;
+    font-family: "Zen Kaku Gothic New", sans-serif;
+    letter-spacing: 0.1em;
+  }
+
+  .wip-content {
+    font-family: monospace;
+    font-size: 1.1rem;
+    line-height: 2;
+    margin-bottom: 3rem;
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  .btn-back {
+    display: inline-block;
+    padding: 12px 30px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 30px;
+    color: #fff;
+    text-decoration: none;
+    font-family: monospace;
+    transition: all 0.2s;
+  }
+
+  .btn-back:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: #fff;
+  }
+</style>

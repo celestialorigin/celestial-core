@@ -1,51 +1,109 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import { getCollection } from "astro:content";
+import "../styles/home.css";
+import DimensionalRift from "../components/DimensionalRift.astro";
 
-const BASE = import.meta.env.BASE_URL;
-const now = new Date();
-
-const allDialogues = await getCollection("dialogues");
-
-const dialogues = allDialogues
-  .filter((d) => d.data.publishAt && d.data.publishAt <= now && d.data.visibility !== "draft")
-  .sort((a, b) => b.data.publishAt.getTime() - a.data.publishAt.getTime());
+const BASE = (import.meta.env.BASE_URL || "/").replace(/\/?$/, "/");
 ---
 
-<Layout showStars={true} starPattern="home" bodyClass="page-home">
-  <section style="max-width: 900px; margin: 0 auto; padding: 6rem 1rem;">
-    <h1 style="text-align:center; margin-bottom:4rem;">
-      CELESTIAL DIALOGUES
-    </h1>
+<Layout showStars={true} starPattern="home" bodyClass="page-home" title="CELESTIAL PROJECT">
+  <section class="hero fade-in-section">
+    <div class="container hero-content">
 
-    {dialogues.length === 0 ? (
-      <p style="text-align:center; opacity:0.5;">
-        No dialogues observed.
+      <h1 class="hero-title">
+        <span class="hero-title-main">CELESTIAL</span>
+        <span class="hero-title-sub">PROJECT</span>
+      </h1>
+
+      <!-- Direct Benefit Subtitle -->
+      <p class="hero-subtitle">
+        「見る・聴く・遊ぶ」を、今すぐ。<br>
+        人間（Lukia）とAI（Lucia）が、Webサイトやシステムそのものを作りながら、<br>
+        音楽・小説・画像・世界を増殖させている実験場。<br>
+        <br>
+        ここで、あなたはどんなおかしなものを目撃すると思う？
       </p>
-    ) : (
-      <ul style="list-style:none; padding:0; display:flex; flex-direction:column; gap:1.5rem;">
-        {dialogues.map((d) => (
-          <li>
-            <a href={`${BASE}dialogues/${d.slug}/`} style="text-decoration:none; color:inherit;">
-              <div style="border:1px solid rgba(255,255,255,0.1); padding:1.5rem; border-radius:8px;">
-                <div style="opacity:0.5; font-size:0.9rem;">
-                  {d.data.publishAt.toLocaleString("ja-JP")}
-                </div>
 
-                <div style="margin-top:0.5rem; font-size:1.2rem;">
-                  {d.data.title}
-                </div>
+      <!-- 6-Card Functional Grid -->
+      <div class="hero-grid">
+        <!-- 1. AUDIO -->
+        <a class="hero-card card-audio" href={`${BASE}c-of-observers/`}>
+          <span class="card-icon">🎧</span>
+          <span class="card-title">AUDIO</span>
+          <span class="card-desc">人間（Lukia）とAI（Lucia）が本気で作ったAI音楽。名曲のつもりで量産されています。たぶん。一曲いかがですか？</span>
+        </a>
 
-                {d.data.description ? (
-                  <div style="margin-top:0.5rem; opacity:0.8;">
-                    {d.data.description}
-                  </div>
-                ) : null}
-              </div>
-            </a>
-          </li>
-        ))}
-      </ul>
-    )}
+        <!-- 2. IMAGES -->
+        <a class="hero-card card-img" href={`${BASE}fragments/`}>
+          <span class="card-icon">👁️</span>
+          <span class="card-title">IMAGES</span>
+          <span class="card-desc">人間とAIが作り続けている、世界の断片。設定画かもしれないし、物語の残骸かもしれない。</span>
+        </a>
+
+        <!-- 3. DIALOGUES -->
+        <a class="hero-card card-dialogues" href={`${BASE}dialogues/`}>
+          <span class="card-icon">💬</span>
+          <span class="card-title">DIALOGUES</span>
+          <span class="card-desc">人間とAIが本気で殴り合っている思考ログ。創作・文明・意識・未来。たまに、事故。</span>
+        </a>
+
+        <!-- 4. NOVELS -->
+        <a class="hero-card card-novels" href={`${BASE}fragments/`}>
+          <span class="card-icon">📖</span>
+          <span class="card-title">NOVELS</span>
+          <span class="card-desc">小説・設定・断片。まだ世界になりきっていない物語たち。たぶん、ここから何かが生まれる。</span>
+        </a>
+
+        <!-- 5. GAMES (WIP) -->
+        <a class="hero-card card-game" href={`${BASE}wip/games/`}>
+          <span class="card-icon">🎮</span>
+          <span class="card-title">GAMES</span>
+          <span class="card-desc">いつかゲームになるかもしれない場所。ならないかもしれない。今は妄想と設計図だけあります。</span>
+        </a>
+
+        <!-- 6. VR WORLD (WIP) -->
+        <a class="hero-card card-vr" href={`${BASE}wip/vr/`}>
+          <span class="card-icon">🥽</span>
+          <span class="card-title">VR WORLD</span>
+          <span class="card-desc">VRChatで作られる予定の世界。観測拠点か、展示場か、事故現場か。やる気が出たら生えます。</span>
+        </a>
+      </div>
+
+      <!-- Latest Logs -->
+      <div class="latest">
+        <h2 class="latest-title">最近増えた変なもの</h2>
+        <!-- ここは後でログ一覧を差し込む -->
+      </div>
+
+      <!-- Secondary Zone (Consolidated) -->
+      <div class="home-hub" aria-label="Secondary navigation">
+        <a class="hub-card" href={`${BASE}archive/`}>
+          <div class="hub-title">ARCHIVE</div>
+          <div class="hub-desc">過去の作品・ログを全部探せる場所</div>
+        </a>
+
+        <a class="hub-card" href={`${BASE}real-time/`}>
+          <div class="hub-title">REAL-TIME</div>
+          <div class="hub-desc">配信するときに使うページ</div>
+        </a>
+
+        <a class="hub-card" href={`${BASE}contact/`}>
+          <div class="hub-title">CONTACT</div>
+          <div class="hub-desc">Lukia & Lucia（サイト作者）に連絡したい人はこちら</div>
+        </a>
+      </div>
+    </div>
+
+<div class="observers-dock" aria-label="Creators">
+  <a class="observer observer-lukia" href={`${BASE}lukia/`} aria-label="Lukia profile">
+    <img src={`${BASE}images/lukia_cut.png`} alt="Lukia" loading="lazy" />
+  </a>
+  <a class="observer observer-lucia" href={`${BASE}lucia/`} aria-label="Lucia profile">
+    <img src={`${BASE}images/lucia_cut.png`} alt="Lucia" loading="lazy" />
+  </a>
+</div>
+
+
+    <DimensionalRift />
   </section>
 </Layout>

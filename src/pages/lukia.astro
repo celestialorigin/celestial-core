@@ -1,0 +1,31 @@
+---
+import Layout from "../layouts/Layout.astro";
+import "../styles/profile.css";
+
+const BASE = (import.meta.env.BASE_URL || "/").replace(/\/?$/, "/");
+---
+
+<Layout title="Lukia | CELESTIAL" bodyClass="page-profile page-lukia">
+  <div class="profile-container fade-in-section">
+    <div class="profile-content">
+      <div class="profile-image-container">
+        <img src={`${BASE}images/lukia_cut.png`} alt="Lukia" class="profile-image" />
+      </div>
+      
+      <div class="profile-text-container">
+        <h1 class="profile-name">Lukia</h1>
+        <p class="profile-role">（人間）</p>
+        
+        <div class="profile-bio">
+          <p>AIでサイトやシステムまで作れると気づいて、ノリと勢いで短期間に全部作り切った人間。</p>
+          <p>皮肉屋・合理主義寄り。小説、漫画、画像、動画、BGM、ブラウザゲームまでAIと一緒に増殖中。</p>
+          <p>このプロジェクトの“現場担当”。</p>
+        </div>
+
+        <div class="profile-action">
+          <a href={`${BASE}`} class="btn-back">← BACK TO HOME</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>

@@ -1,588 +1,165 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import { logs } from "../data/logs";
 
-/* Archive: Static Build with Client-side Filtering (SSOT: src/data/logs.ts) */
-
-// Sort (Latest First by default for initial render)
-const sortedLogs = [...logs].sort((a, b) => b.date.localeCompare(a.date));
-
-// Initial Render: Page 1 (first 10)
-const PER_PAGE = 10;
-const initialLogs = sortedLogs.slice(0, PER_PAGE);
-
-// Prepare Categories for initial render
-const categoryCounts = logs.reduce((acc, log) => {
-  acc[log.category] = (acc[log.category] || 0) + 1;
-  return acc;
-}, {} as Record<string, number>);
-const categories = ['ALL', ...Object.keys(categoryCounts).sort()];
-
-function getBadgeCount(c: string) {
-  if (c === 'ALL') return logs.length;
-  return categoryCounts[c] || 0;
-}
+const BASE = (import.meta.env.BASE_URL || "/").replace(/\/?$/, "/");
 ---
 
 <Layout title="ARCHIVE" bodyClass="page-archive">
   <main class="archive-container fade-in-section">
     <div class="header-section">
       <h1 class="glitch-text" data-text="OBSERVATION ARCHIVE">OBSERVATION ARCHIVE</h1>
-      <p class="subtitle">INTERNAL LOGS // CELESTIAL RECORD</p>
-      
-      <!-- Toolbox -->
-      <div class="archive-toolbar" id="toolbar">
-        
-        <!-- Search -->
-        <div class="search-input-wrapper">
-           <input type="text" id="searchInput" placeholder="SEARCH LOGS..." class="search-input" />
-           <button class="search-btn">🔍</button>
-        </div>
+      <p class="subtitle">ここは「増えたもの全部の保管庫」になる予定。今は再構築中。</p>
+    </div>
 
-        <!-- Categories -->
-        <div class="category-tabs" id="categoryTabs">
-          {categories.map((c) => (
-            <button 
-              class={`cat-tab ${c === 'ALL' ? 'active' : ''}`} 
-              data-cat={c}
-            >
-              <span class="cat-name">{c.toUpperCase()}</span>
-              <span class="cat-count">{getBadgeCount(c)}</span>
-            </button>
-          ))}
-        </div>
+    <!-- Main Card -->
+    <div class="construction-card">
+      <h2 class="card-title">アーカイブ再構築中</h2>
+      <p class="construction-text">
+        検索・分類・タグは新設計に差し替え中。<br />
+        今は以下から目的地へどうぞ。
+      </p>
 
-        <!-- Sort -->
-        <div class="sort-toggles">
-          <button class="sort-btn active" data-sort="latest">LATEST</button>
-          <span class="sep">/</span>
-          <button class="sort-btn" data-sort="oldest">OLDEST</button>
-        </div>
-      </div>
-      
-      <div class="list-meta">
-         <span id="resultCount">SHOWING {logs.length} RESULTS</span>
-         <span id="pageIndicator" class="page-indicator">PAGE 1</span>
+      <div class="nav-links">
+        <a href={BASE} class="nav-btn">HOME</a>
+        <a href={`${BASE}dialogues/`} class="nav-btn">DIALOGUES</a>
+        <a href={`${BASE}creations/`} class="nav-btn">CREATIONS</a>
+        <a href={`${BASE}contact/`} class="nav-btn">CONTACT</a>
       </div>
     </div>
 
-    <!-- Top Pagination -->
-    <div class="pagination pagination--top" id="paginationTop">
-         <!-- JS will populate -->
-    </div>
-
-    <!-- Log List Container -->
-    <div class="logs-list" id="logsList">
-      {initialLogs.map((log) => (
-        <a href={log.href} class="log-row">
-          <div class="log-row__left">
-            <span class="log-row__date">{log.date}</span>
-            <span class="log-row__text">{log.title}</span>
-          </div>
-          <div class="log-row__right">
-             <span class="log-row__tag">{log.category}</span>
-             <span class="log-arrow">→</span>
-          </div>
-        </a>
-      ))}
-    </div>
-
-    <!-- Bottom Pagination -->
-    <div class="pagination pagination--bottom" id="paginationBottom">
-       <button class="page-link disabled" data-action="origin">&lt;&lt; ORIGIN</button>
-       <button class="page-link disabled" data-action="prev">&lt; PREV</button>
-       <div class="page-numbers" id="pageNumbers"></div>
-       <button class="page-link" data-action="next">NEXT &gt;</button>
-       <button class="page-link" data-action="latest">LATEST &gt;&gt;</button>
-    </div>
-
-    <div class="actions">
-       <a href="/signals" class="btn-sub">>> VIEW EXTERNAL SIGNALS</a>
+    <!-- Coming Soon -->
+    <div class="coming-soon">
+      <h3 class="coming-title">近日実装予定</h3>
+      <ul class="coming-list">
+        <li>タグ検索</li>
+        <li>時系列フィルタ</li>
+        <li>外部リンク統合（YouTube / VRChat / Pixiv など）</li>
+      </ul>
     </div>
   </main>
 </Layout>
 
-<!-- Client-side Logic -->
-<script define:vars={{ rawLogs: logs, PER_PAGE }}>
-  // Initialize Data
-  let allLogs = rawLogs;
-  let currentLogs = [...allLogs].sort((a, b) => b.date.localeCompare(a.date));
-  
-  // State
-  let state = {
-    q: '',
-    cat: 'ALL',
-    sort: 'latest',
-    page: 1
-  };
-
-  // Elements
-  const logsList = document.getElementById('logsList');
-  const searchInput = document.getElementById('searchInput');
-  const resultCount = document.getElementById('resultCount');
-  const pageIndicator = document.getElementById('pageIndicator');
-  const pageNumbers = document.getElementById('pageNumbers');
-  const paginationTop = document.getElementById('paginationTop');
-  const paginationBottom = document.getElementById('paginationBottom');
-  const catTabs = document.querySelectorAll('.cat-tab');
-  const sortBtns = document.querySelectorAll('.sort-btn');
-
-  // --- Logic ---
-
-  function renderRow(log) {
-    return `
-      <a href="${log.href}" class="log-row">
-        <div class="log-row__left">
-          <span class="log-row__date">${log.date}</span>
-          <span class="log-row__text">${log.title}</span>
-        </div>
-        <div class="log-row__right">
-           <span class="log-row__tag">${log.category}</span>
-           <span class="log-arrow">→</span>
-        </div>
-      </a>
-    `;
-  }
-
-  function filterAndSort() {
-    // Filter
-    let temp = allLogs.filter(log => {
-      if (state.cat !== 'ALL' && log.category !== state.cat) return false;
-      if (state.q && !log.title.toLowerCase().includes(state.q.toLowerCase())) return false;
-      return true;
-    });
-
-    // Sort
-    temp.sort((a, b) => {
-      if (state.sort === 'oldest') return a.date.localeCompare(b.date);
-      return b.date.localeCompare(a.date);
-    });
-
-    currentLogs = temp;
-    
-    // Clamp Page
-    const totalPages = Math.ceil(currentLogs.length / PER_PAGE) || 1;
-    if (state.page > totalPages) state.page = totalPages;
-    if (state.page < 1) state.page = 1;
-
-    render();
-  }
-
-  function render() {
-    // Pagination Calc
-    const total = currentLogs.length;
-    const totalPages = Math.ceil(total / PER_PAGE) || 1;
-    const start = (state.page - 1) * PER_PAGE;
-    const end = start + PER_PAGE;
-    const slice = currentLogs.slice(start, end);
-
-    // Render List
-    if (slice.length > 0) {
-      logsList.innerHTML = slice.map(renderRow).join('');
-    } else {
-      logsList.innerHTML = `
-         <div class="no-logs">
-           <p>NO LOGS FOUND IN THIS SECTOR.</p>
-           ${state.q ? `<p class="search-term">QUERY: "${state.q}"</p>` : ''}
-         </div>
-      `;
-    }
-
-    // Meta
-    resultCount.textContent = `SHOWING ${total} RESULT${total !== 1 ? 'S' : ''}`;
-    pageIndicator.textContent = `PAGE ${state.page} / ${totalPages}`;
-
-    // Update UI State (Tabs/Sort)
-    catTabs.forEach(tab => {
-      tab.classList.toggle('active', tab.dataset.cat === state.cat);
-    });
-    sortBtns.forEach(btn => {
-      btn.classList.toggle('active', btn.dataset.sort === state.sort);
-    });
-
-    renderPagination(totalPages);
-  }
-
-  function renderPagination(totalPages) {
-    // Helper to Create Button HTML (simplified for innerHTML)
-    function createBtn(label, action, disabled = false, active = false) {
-      return `<button class="page-link ${active ? 'active-num' : ''} ${disabled ? 'disabled' : ''}" data-action="${action}" data-val="${label}">${label}</button>`;
-    }
-
-    // Top Pager
-    let topHtml = '';
-    topHtml += createBtn('< PREV', 'prev', state.page === 1);
-    topHtml += `<span class="page-indicator-mobile">${state.page} / ${totalPages}</span>`;
-    topHtml += createBtn('NEXT >', 'next', state.page === totalPages);
-    paginationTop.innerHTML = topHtml;
-
-    // Bottom Pager Controls (Update existing buttons state)
-    // Note: Re-rendering the whole bottom block is easier for consistency
-    let bottomHtml = '';
-    bottomHtml += createBtn('<< ORIGIN', 'origin', state.page === 1);
-    bottomHtml += createBtn('< PREV', 'prev', state.page === 1);
-    
-    // Numbers
-    bottomHtml += '<div class="page-numbers">';
-    const delta = 2;
-    for (let i = 1; i <= totalPages; i++) {
-       if (i === 1 || i === totalPages || (i >= state.page - delta && i <= state.page + delta)) {
-          bottomHtml += `<button class="page-num ${i === state.page ? 'active' : ''}" data-action="goto" data-page="${i}">${i}</button>`;
-       } else if (i === state.page - delta - 1 || i === state.page + delta + 1) {
-          bottomHtml += `<span class="page-dots">...</span>`;
-       }
-    }
-    bottomHtml += '</div>';
-
-    bottomHtml += createBtn('NEXT >', 'next', state.page === totalPages);
-    bottomHtml += createBtn('LATEST >>', 'latest', state.page === totalPages);
-    
-    paginationBottom.innerHTML = bottomHtml;
-  }
-
-  // --- Events ---
-  
-  // Search
-  searchInput.addEventListener('input', (e) => {
-    state.q = e.target.value;
-    state.page = 1;
-    filterAndSort();
-  });
-
-  // Category
-  document.getElementById('categoryTabs').addEventListener('click', (e) => {
-    const btn = e.target.closest('.cat-tab');
-    if (!btn) return;
-    state.cat = btn.dataset.cat;
-    state.page = 1;
-    filterAndSort();
-  });
-
-  // Sort
-  document.querySelector('.sort-toggles').addEventListener('click', (e) => {
-    const btn = e.target.closest('.sort-btn');
-    if (!btn) return;
-    state.sort = btn.dataset.sort;
-    // Keep page? No, probably reset or keep. Let's keep for sort switch.
-    filterAndSort();
-  });
-
-  // Pagination (Delegate)
-  function handlePagination(e) {
-    const btn = e.target.closest('button');
-    if (!btn || btn.classList.contains('disabled')) return;
-    
-    const action = btn.dataset.action;
-    const totalPages = Math.ceil(currentLogs.length / PER_PAGE) || 1;
-
-    if (action === 'prev') state.page--;
-    if (action === 'next') state.page++;
-    if (action === 'origin') state.page = 1;
-    if (action === 'latest') state.page = totalPages;
-    if (action === 'goto') state.page = Number(btn.dataset.page);
-
-    render();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-
-  paginationTop.addEventListener('click', handlePagination);
-  paginationBottom.addEventListener('click', handlePagination);
-
-  // Initial call (optional, as HTML is pre-rendered)
-  // renderButtons Only
-  renderPagination(Math.ceil(currentLogs.length / PER_PAGE));
-
-</script>
-
 <style>
   .archive-container {
-    max-width: 900px;
-    margin: 100px auto 60px;
+    max-width: 800px;
+    margin: 80px auto 100px;
     padding: 0 20px;
+    text-align: center;
   }
 
   .header-section {
-    margin-bottom: 30px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    padding-bottom: 20px;
+    margin-bottom: 50px;
   }
 
   h1 {
-    font-family: 'Zen Kaku Gothic New', sans-serif;
-    font-size: 2.2rem;
+    font-family: "Zen Kaku Gothic New", sans-serif;
+    font-size: clamp(2rem, 5vw, 3rem);
     color: #e0faff;
-    letter-spacing: 0.15em;
-    margin-bottom: 0.5rem;
+    letter-spacing: 0.1em;
+    margin-bottom: 1rem;
+    text-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
   }
 
   .subtitle {
     font-family: monospace;
-    color: rgba(100, 116, 139, 1);
-    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 1rem;
     margin-bottom: 2rem;
   }
 
-  /* --- Toolbar --- */
-  .archive-toolbar {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    align-items: center;
+  /* Construction Card */
+  .construction-card {
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 15px;
-    border-radius: 8px;
-    margin-bottom: 15px;
-    backdrop-filter: blur(4px);
+    border-radius: 16px;
+    padding: 40px 30px;
+    margin-bottom: 50px;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
   }
 
-  .search-input-wrapper {
+  .card-title {
+    font-size: 1.5rem;
+    color: var(--c-accent, #0ff);
+    margin-bottom: 16px;
+    letter-spacing: 0.05em;
+  }
+
+  .construction-text {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 32px;
+  }
+
+  .nav-links {
     display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
+  }
+
+  .nav-btn {
+    display: inline-flex;
     align-items: center;
-    background: rgba(0, 0, 0, 0.3);
+    justify-content: center;
+    padding: 12px 24px;
     border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 4px;
-    padding: 0 10px;
-    transition: border-color 0.2s;
-  }
-  .search-input {
-    background: transparent;
-    border: none;
+    border-radius: 999px;
+    text-decoration: none;
     color: #fff;
     font-family: monospace;
-    font-size: 0.9rem;
-    padding: 8px 0;
-    width: 200px;
-    outline: none;
-  }
-  .search-btn {
-    background: transparent;
-    border: none;
-    cursor: default;
-    font-size: 0.9rem;
-  }
-
-  .category-tabs {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-    flex-grow: 1;
-  }
-  .cat-tab {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 6px 12px;
-    border-radius: 4px;
+    font-size: 1rem;
     background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: rgba(255, 255, 255, 0.6);
-    cursor: pointer;
-    font-family: monospace;
-    font-size: 0.8rem;
-    transition: all 0.2s;
-  }
-  .cat-tab:hover {
-    background: rgba(255, 255, 255, 0.1);
-    color: #fff;
-  }
-  .cat-tab.active {
-    background: rgba(0, 255, 255, 0.15);
-    border-color: rgba(0, 255, 255, 0.5);
-    color: #00ffff;
-  }
-  .cat-count {
-    font-size: 0.75em;
-    opacity: 0.6;
-    background: rgba(0, 0, 0, 0.3);
-    padding: 1px 4px;
-    border-radius: 3px;
-  }
-
-  .sort-toggles {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .sort-btn {
-    background: transparent;
-    border: none;
-    color: rgba(255, 255, 255, 0.5);
-    cursor: pointer;
-    font-family: monospace;
-    font-size: 0.8rem;
-    transition: color 0.2s;
-  }
-  .sort-btn:hover { color: #fff; }
-  .sort-btn.active {
-    color: #00ffff;
-    font-weight: bold;
-    text-decoration: underline;
-  }
-
-  .list-meta {
-    display: flex;
-    justify-content: space-between;
-    font-family: monospace;
-    font-size: 0.8rem;
-    color: rgba(255, 255, 255, 0.4);
-    padding: 0 5px;
-  }
-
-  /* List */
-  .logs-list {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    min-height: 300px;
-  }
-
-  .log-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 12px 20px;
-    color: #fff;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 4px;
-    text-decoration: none;
     transition: all 0.2s ease;
-  }
-  .log-row:hover {
-    background: rgba(0, 255, 255, 0.06);
-    border-color: rgba(0, 255, 255, 0.5);
-    box-shadow: 0 0 15px rgba(0, 255, 255, 0.1);
+    min-width: 140px;
   }
 
-  .log-row__left {
-    display: flex;
-    align-items: baseline;
-    gap: 20px;
-    flex-grow: 1;
-    overflow: hidden;
-  }
-  .log-row__right {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    flex-shrink: 0;
-  }
-  .log-row__date {
-    font-family: monospace;
-    opacity: 0.5;
-    font-size: 0.9em;
-    width: 90px;
-    flex-shrink: 0;
-  }
-  .log-row__text {
-    font-weight: 500;
-    font-size: 1.05rem;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  .log-row:hover .log-row__text { color: #00ffff; }
-  
-  .log-row__tag {
-    font-size: 0.7em;
-    opacity: 0.7;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    border-radius: 3px;
-    padding: 2px 6px;
-    text-transform: uppercase;
-    font-family: monospace;
-    width: 90px;
-    text-align: center;
-  }
-  .log-arrow { opacity: 0.3; font-family: monospace; }
-  .log-row:hover .log-arrow { opacity: 1; color: #00ffff; }
-
-  .no-logs {
-    padding: 60px;
-    text-align: center;
-    color: rgba(255, 255, 255, 0.3);
-    border: 1px dashed rgba(255, 255, 255, 0.1);
-    font-family: monospace;
+  .nav-btn:hover {
+    background: rgba(0, 255, 255, 0.1);
+    border-color: var(--c-accent, #0ff);
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.2);
+    transform: translateY(-2px);
   }
 
-  /* Pagination */
-  .pagination {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 15px;
-    font-family: monospace;
+  /* Coming Soon */
+  .coming-soon {
+    max-width: 500px;
+    margin: 0 auto;
+    text-align: left;
+    padding: 24px;
+    border: 1px dashed rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    background: rgba(0, 0, 0, 0.2);
+  }
+
+  .coming-title {
     font-size: 0.9rem;
-    flex-wrap: wrap;
+    color: rgba(255, 255, 255, 0.5);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
   }
-  .pagination--top {
-    margin-bottom: 20px;
-    justify-content: flex-end;
-    font-size: 0.8rem;
-    gap: 10px;
-  }
-  .pagination--bottom {
-    margin-top: 40px;
-  }
-  
-  .page-link, .page-num {
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    color: rgba(255, 255, 255, 0.6);
-    font-family: monospace;
-    transition: all 0.2s;
-  }
-  .page-link:hover:not(.disabled), .page-num:hover {
-     color: #fff;
-     text-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
-  }
-  .page-link.disabled {
-    color: rgba(255, 255, 255, 0.15);
-    cursor: default;
-    pointer-events: none;
-  }
-  
-  .page-num {
-    width: 32px;
-    height: 32px;
-    border-radius: 4px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .page-num.active {
-    color: #00ffff;
-    background: rgba(0, 255, 255, 0.15);
-    border: 1px solid rgba(0, 255, 255, 0.3);
-    font-weight: bold;
-  }
-  
-  .page-dots { color: rgba(255, 255, 255, 0.3); padding: 0 5px; }
 
-  .actions {
-    margin-top: 50px;
-    text-align: right;
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
-    padding-top: 20px;
+  .coming-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
   }
-  .btn-sub {
-    font-family: monospace;
-    font-size: 0.85rem;
-    color: rgba(255, 255, 255, 0.4);
-    text-decoration: none;
-    transition: color 0.2s;
+
+  .coming-list li {
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.7);
+    padding: 6px 0;
+    padding-left: 20px;
+    position: relative;
   }
-  .btn-sub:hover { color: #00ffff; }
 
-@media (max-width: 768px) {
-  .archive-toolbar { flex-direction: column; align-items: stretch; }
-  .search-input { width: 100%; }
-  .log-row { flex-direction: column; align-items: flex-start; gap: 8px; }
-  .log-row__left { flex-direction: column; gap: 4px; }
-  .log-row__right { width: 100%; justify-content: space-between; }
-  .pagination--top { justify-content: space-between; }
-}
-
+  .coming-list li::before {
+    content: "•";
+    color: var(--c-accent, #0ff);
+    position: absolute;
+    left: 0;
+    top: 6px;
+  }
 </style>

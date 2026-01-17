@@ -20,6 +20,15 @@ import Layout from '../layouts/Layout.astro';
         <p class="card-desc">最新の観測状況や開発進捗を発信しています。</p>
       </a>
 
+      <!-- VRChat Link (New) -->
+      <a href="https://vrchat.com/home/user/usr_c5c0b452-e9b1-4191-bbd3-ddf2c4e8c539" target="_blank" rel="noopener noreferrer" class="contact-card">
+        <div class="card-content">
+          <span class="card-label">VRChat / Lukia & Lucia</span>
+          <span class="card-arrow">🥽</span>
+        </div>
+        <p class="card-desc">VRChat上の活動拠点。<br/>ワールド・アバター・観測拠点の実験場。</p>
+      </a>
+
       <!-- Email Link -->
       <a href="mailto:info@celestial-observers.com" class="contact-card">
         <div class="card-content">
@@ -29,6 +38,64 @@ import Layout from '../layouts/Layout.astro';
         <p class="card-desc">info@celestial-observers.com<br/><span style="font-size: 0.8em; opacity: 0.7;">CELESTIAL PROJECT 公式窓口（返信に時間を要する場合があります）</span></p>
       </a>
 
+    </div>
+
+    <!-- OTHER PROFILES Section -->
+    <div class="other-profiles">
+      <h2 class="other-title">OTHER PROFILES</h2>
+      <p class="other-subtitle">制作・発信している外部拠点</p>
+
+      <div class="other-grid">
+        <!-- 1. pixiv -->
+        <a href="https://www.pixiv.net/users/122573778" target="_blank" rel="noopener noreferrer" class="other-card">
+          <span class="other-icon">🎨</span>
+          <div class="other-info">
+            <span class="other-name">pixiv</span>
+            <span class="other-desc">画像・ビジュアル作品</span>
+          </div>
+          <span class="other-arrow">↗</span>
+        </a>
+
+        <!-- 2. YouTube -->
+        <a href="https://www.youtube.com/@LukiaxLucia" target="_blank" rel="noopener noreferrer" class="other-card">
+          <span class="other-icon">📺</span>
+          <div class="other-info">
+            <span class="other-name">YouTube</span>
+            <span class="other-desc">動画・制作記録</span>
+          </div>
+          <span class="other-arrow">↗</span>
+        </a>
+
+        <!-- 3. Twitch -->
+        <a href="https://www.twitch.tv/lukia_celestial_project" target="_blank" rel="noopener noreferrer" class="other-card">
+          <span class="other-icon">👾</span>
+          <div class="other-info">
+            <span class="other-name">Twitch</span>
+            <span class="other-desc">配信・リアルタイム制作</span>
+          </div>
+          <span class="other-arrow">↗</span>
+        </a>
+
+        <!-- 4. Kakuyomu -->
+        <a href="https://kakuyomu.jp/users/Lukia_A" target="_blank" rel="noopener noreferrer" class="other-card">
+          <span class="other-icon">📖</span>
+          <div class="other-info">
+            <span class="other-name">カクヨム</span>
+            <span class="other-desc">小説・物語ログ</span>
+          </div>
+          <span class="other-arrow">↗</span>
+        </a>
+
+        <!-- 5. Suno -->
+        <a href="https://suno.com/@lukia_human_lucia_ai" target="_blank" rel="noopener noreferrer" class="other-card">
+          <span class="other-icon">🎵</span>
+          <div class="other-info">
+            <span class="other-name">Suno</span>
+            <span class="other-desc">AI作曲・BGMアーカイブ</span>
+          </div>
+          <span class="other-arrow">↗</span>
+        </a>
+      </div>
     </div>
 
     <p style="text-align: center; margin-top: 2rem; font-size: 0.85em; opacity: 0.5;">
@@ -87,13 +154,17 @@ import Layout from '../layouts/Layout.astro';
     transform: translateX(5px) rotate(-45deg); /* For arrow */
   }
   
-  /* Adjust mail icon rotation if needed */
-  .contact-card[href^="mailto"] .card-arrow {
+  /* Adjust mail/goggle icon rotation */
+  .contact-card[href^="mailto"] .card-arrow,
+  .contact-card:nth-child(2) .card-arrow { /* Select VRChat by order if generic href */
       transform: none;
   }
-  .contact-card[href^="mailto"]:hover .card-arrow {
+  .contact-card[href^="mailto"]:hover .card-arrow,
+  .contact-card:nth-child(2):hover .card-arrow {
       transform: scale(1.1);
   }
+
+  /* Reset rotation for the generic ↗ arrow if needed, but it's handled by hover rule above */
 
   .card-desc {
     margin: 0;
@@ -102,5 +173,98 @@ import Layout from '../layouts/Layout.astro';
     font-family: monospace;
     word-break: break-all; /* Ensure long email wraps */
     line-height: 1.5;
+  }
+
+  /* OTHER PROFILES */
+  .other-profiles {
+    margin-top: 80px;
+    padding-top: 40px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .other-title {
+    font-size: 1.2rem;
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.1em;
+  }
+
+  .other-subtitle {
+    font-size: 0.9em;
+    color: rgba(255, 255, 255, 0.5);
+    margin-bottom: 30px;
+    font-family: monospace;
+  }
+
+  .other-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 16px;
+  }
+
+  .other-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 20px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 6px;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .other-card:hover {
+    background: rgba(0, 255, 255, 0.04);
+    border-color: rgba(0, 255, 255, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.05); /* Glow effect */
+  }
+
+  .other-icon {
+    font-size: 1.5rem;
+    display: block;
+    line-height: 1;
+    opacity: 0.8;
+  }
+
+  .other-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex-grow: 1;
+  }
+
+  .other-name {
+    font-weight: bold;
+    font-size: 0.95rem;
+    color: var(--c-accent);
+  }
+
+  .other-desc {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.5);
+    font-family: monospace;
+  }
+
+  .other-arrow {
+    font-size: 1rem;
+    opacity: 0.3;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+  }
+
+  .other-card:hover .other-arrow {
+    opacity: 1;
+    color: var(--c-accent);
+    transform: translateX(3px) translateY(-3px);
+  }
+
+  @media (max-width: 600px) {
+    .other-grid {
+      grid-template-columns: 1fr;
+    }
   }
 </style>

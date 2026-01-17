@@ -170,34 +170,6 @@ body::after {
   position: relative;
 }
 
-:where(main)> :where(.container, .content, .page, .wrapper, .inner, article, section):not(.hero):not(.scanlines) {
-  width: min(1000px, 92vw);
-  margin: 28px auto;
-  padding: 22px;
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 14px;
-  box-shadow: 0 0 18px rgba(0, 255, 255, 0.04);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-}
-
-:where(article) {
-  width: min(1000px, 92vw);
-  margin: 28px auto;
-  padding: 26px;
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 14px;
-  box-shadow: 0 0 18px rgba(0, 255, 255, 0.04);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-}
-
-:where(article) h1 {
-  margin-top: 0;
-}
-
 /* =========================
    🛰 Hero / Silhouette
 ========================= */
@@ -229,48 +201,84 @@ body::after {
   filter: blur(0.5px);
 }
 
-.hero::before {
-  left: 8%;
-  background-image: url("/images/lukia_silhouette_front_alpha.png");
+/* =========================
+   🛰 Hero / Silhouette (FIX: left/right split)
+========================= */
+.hero {
+  position: relative;
+  overflow: hidden;
 }
 
+.hero .hero-content {
+  position: relative;
+  z-index: 2;
+}
+
+/* =========================
+   🛰 Hero / Silhouette (FIX: offset by element transform)
+========================= */
+.hero {
+  position: relative;
+  overflow: hidden;
+}
+
+.hero .hero-content {
+  position: relative;
+  z-index: 2;
+}
+
+/* 共通：サイズは“元の仕様”に戻す */
+.hero::before,
 .hero::after {
-  right: 8%;
-  background-image: url("/images/lucia_silhouette_front_alpha.png");
+  content: "";
+  position: absolute;
+
+  width: auto;
+  height: 520px;
+  max-height: 45vh;
+
+  bottom: 0;
+
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center bottom;
+
+  pointer-events: auto;
+  z-index: 1;
+  opacity: 1;
+  filter: none;
+  mix-blend-mode: normal;
 }
 
-/* --- Core Trigger Stability (Refined) --- */
-.core-trigger {
-  /* Reset to look like static text */
-  display: inline-block !important;
-  /* Required for transforms/animations */
-  background: none !important;
-  border: none !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  font: inherit !important;
-  line-height: inherit !important;
-  color: inherit !important;
-  text-decoration: none !important;
-  vertical-align: baseline !important;
-  cursor: pointer !important;
-  outline: none !important;
+/* Lukia = LEFT */
+.hero::before {
+  background-image: var(--lukia-sil);
+  right: 50%;
+  left: auto;
+  transform: translateX(-20px);
+}
 
-  /* Emergency Force-Visibility (Keep these) */
-  visibility: visible !important;
-  opacity: 1 !important;
-  -webkit-text-fill-color: currentColor !important;
-  position: relative !important;
-  z-index: 2 !important;
-  isolation: isolate !important;
-  mix-blend-mode: normal !important;
-  filter: none !important;
-  clip-path: none !important;
-  mask: none !important;
-  -webkit-mask: none !important;
-  overflow: visible !important;
-  transform-origin: center center;
-  transition: text-shadow 0.4s ease;
+/* Lucia = RIGHT */
+.hero::after {
+  background-image: var(--lucia-sil);
+  left: 50%;
+  right: auto;
+  transform: translateX(20px);
+}
+
+/* 画面が狭い時はズレ量を減らす（被り/見切れ対策） */
+@media (max-width: 560px) {
+  .hero::before {
+    transform: translateX(-10px) scale(0.85);
+    background-position: right bottom;
+    right: 55%;
+  }
+
+  .hero::after {
+    transform: translateX(10px) scale(0.85);
+    background-position: left bottom;
+    left: 55%;
+  }
 }
 
 .core-trigger:hover,
@@ -422,11 +430,7 @@ body::after {
   }
 }
 
-/* ✅ CTA（観測ログを見る）を確実に拾う
-   - aでもbuttonでも、クラス付きでもOK
-   - 外枠（border）を必ず復活
-*/
-.hero .hero-content :where(a, button, .btn, .button, .cta, .cta-button) {
+（border）を必ず復活 */ .page-home .hero .hero-content :where(a, button, .btn, .button, .cta, .cta-button) {
   display: inline-flex !important;
   align-items: center;
   justify-content: center;
@@ -1230,3 +1234,26 @@ body[data-stars="on"].page-home #home-secret-stars {
   opacity: .55;
   filter: blur(.2px);
 }
+/* =========================
+   Lukia / Lucia Standings (Dock)
+   ========================= */
+/* HOME以外に影響させない（※HOMEはhome.cssで制御する） */
+body:not(.page-home) .observers-dock{
+  position: fixed;
+  left: 50%;
+  bottom: 18px;
+  transform: translateX(-50%);
+  z-index: 999;
+  display: flex;
+  gap: 48px;
+  align-items: flex-end;
+  pointer-events: auto;
+}
+
+body:not(.page-home) .observers-dock img{
+  height: min(45vh, 520px);
+  width: auto;
+  display: block;
+  filter: drop-shadow(0 10px 30px rgba(0,0,0,0.55));
+}
+

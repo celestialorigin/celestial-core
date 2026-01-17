@@ -1,0 +1,128 @@
+---
+import Layout from "../layouts/Layout.astro";
+const BASE = (import.meta.env.BASE_URL || "/").replace(/\/?$/, "/");
+---
+
+<Layout showStars={true} starPattern="mid" bodyClass="page-creations" title="CREATIONS">
+  <section class="creations">
+    <header class="creations-head">
+      <h1>CREATIONS / 展示室</h1>
+      <p class="lead">
+        Lukia（Human）× Lucia（AI）がAIと共に制作した、画像・映像・BGM・VRワールド・アバター等をまとめて観測できます。
+        <br />完成品だけでなく、制作の痕跡や実験ログも含めて展示します。
+      </p>
+    </header>
+
+    <div class="grid">
+      <a class="card" href={`${BASE}fragments/`}>
+        <h2>IMAGES</h2>
+        <p>生成画像・視覚ノイズ・断片の展示。</p>
+      </a>
+
+      <a class="card" href={`${BASE}motion-archive/`}>
+        <h2>VIDEOS</h2>
+        <p>映像・モーション・短い実験ログ。</p>
+      </a>
+
+      <a class="card" href={`${BASE}c-of-observers/`}>
+        <h2>BGM / AUDIO</h2>
+        <p>音楽・BGM・音響実験（C of Observersなど）。</p>
+      </a>
+
+      <a class="card" href={`${BASE}game/`}>
+        <h2>GAMES</h2>
+        <p>ブラウザゲーム／観測ギミック。</p>
+      </a>
+
+      <a class="card" href={`${BASE}deep-observation/`}>
+        <h2>VR</h2>
+        <p>深層観測・VR観測拠点（構築ログ含む）。</p>
+      </a>
+
+      <a class="card" href={`${BASE}shiichan/`}>
+        <h2>AVATAR / NODES</h2>
+        <p>しーちゃん／ノード／アバター関連の記録と展示。</p>
+      </a>
+    </div>
+
+    <div class="foot">
+      <a class="back" href={`${BASE}`}>← Home</a>
+      <a class="back" href={`${BASE}archive/`}>Archive（観測ログ）へ →</a>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .creations{
+    width: min(1000px, 92vw);
+    margin: 28px auto;
+    padding: 22px;
+  }
+
+  .creations-head h1{
+    margin: 0 0 10px;
+    letter-spacing: .12em;
+  }
+
+  .lead{
+    margin: 0;
+    opacity: .9;
+    line-height: 1.9;
+    max-width: 900px;
+  }
+
+  .grid{
+    margin-top: 18px;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .card{
+    display: block;
+    padding: 16px;
+    border-radius: 14px;
+    border: 1px solid rgba(255,255,255,0.10);
+    background: rgba(255,255,255,0.02);
+    text-decoration: none;
+    color: inherit;
+    transition: transform .18s ease, border-color .18s ease, background .18s ease, box-shadow .18s ease;
+  }
+
+  .card:hover{
+    transform: translateY(-1px);
+    background: rgba(0,255,255,0.03);
+    border-color: rgba(0,255,255,0.22);
+    box-shadow: 0 0 22px rgba(0,255,255,0.09);
+  }
+
+  .card h2{
+    margin: 0 0 8px;
+    letter-spacing: .14em;
+    font-size: 12px;
+    color: var(--c-accent);
+    text-transform: uppercase;
+  }
+
+  .card p{
+    margin: 0;
+    opacity: .82;
+    font-size: 12px;
+    line-height: 1.6;
+  }
+
+  .foot{
+    margin-top: 18px;
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+
+  .back{
+    opacity: .85;
+  }
+
+  @media (max-width: 860px){
+    .grid{ grid-template-columns: 1fr; }
+  }
+</style>
