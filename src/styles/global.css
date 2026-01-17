@@ -1257,3 +1257,24 @@ body:not(.page-home) .observers-dock img{
   filter: drop-shadow(0 10px 30px rgba(0,0,0,0.55));
 }
 
+/* === Lukia/Lucia hover glow (force) === */
+.page-home .observers-dock .observer img{
+  transition: filter .18s ease, transform .18s ease !important;
+}
+
+.page-home .observers-dock .observer:hover img{
+  filter:
+    drop-shadow(0 0 18px rgba(0,255,255,.45))
+    drop-shadow(0 0 42px rgba(0,255,255,.22))
+    drop-shadow(0 0 70px rgba(0,255,255,.12))
+    !important;
+  transform: translateY(-2px) !important;
+}
+
+.page-home .observers-dock .observer:focus-visible img{
+  filter:
+    drop-shadow(0 0 18px rgba(0,255,255,.50))
+    drop-shadow(0 0 44px rgba(0,255,255,.24))
+    drop-shadow(0 0 72px rgba(0,255,255,.14))
+    !important;
+}
