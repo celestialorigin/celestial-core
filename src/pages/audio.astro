@@ -1,0 +1,777 @@
+---
+import Layout from '../layouts/Layout.astro';
+import LogHeader from '../components/LogHeader.astro';
+
+const categoryId = "SIGNAL PORT";
+const internalId = "CIV-PORT-AUDIO";
+const BASE = (import.meta.env.BASE_URL || "/").replace(/\/?$/, "/");
+const tracks = [
+  { title: "Pixel Coffee Chat ver2", file: `${BASE}audio/01-Pixel Coffee Chat ver2.mp3` },
+  { title: "Let's walk again / また歩こう", file: `${BASE}audio/02-Let's walk again~また歩こう~.mp3` },
+  { title: "もふもふ大行進", file: `${BASE}audio/03-MofuMofu Daikousin!!~もふもふだいこうしんっ！！.mp3` },
+  { title: "I want to look at the same sky / 同じ空を見ていたい", file: `${BASE}audio/04-I want to look at the same sky~同じ空を見ていたい~.mp3` },
+  { title: "Pixel Rain Desk ver2", file: `${BASE}audio/05-Pixel Rain Desk ver2.mp3` },
+];
+---
+
+<Layout title="AUDIO | CELESTIAL" bodyClass="page-audio">
+  <article class="category-page container fade-in-section">
+    <div class="glass-panel main-content">
+      <LogHeader 
+        displayId={categoryId}
+        internalId={internalId}
+        type="SIGNAL"
+        status="ACTIVE"
+      />
+      
+      <div class="category-body">
+              <!-- TOP 5: Instant Playback -->
+        <section class="top-tracks">
+          <h2 class="section-title top-title">TOP AUDIO TRACES</h2>
+
+          <div class="track-list">
+            {tracks.map((t, i) => (
+              <div class="track-card" data-track>
+                <button class="play-btn" type="button" data-action="toggle" aria-label="Play">
+                  <span class="icon-play">▶</span>
+                  <span class="icon-pause">||</span>
+                </button>
+
+                <div class="track-center">
+                  <div class="track-meta">
+                    <span class="track-no">{String(i + 1).padStart(2, "0")}</span>
+                    <span class="track-name">{t.title}</span>
+                  </div>
+                  <div class="seek-container">
+                    <input 
+                      type="range" 
+                      class="seek-bar" 
+                      min="0" 
+                      value="0" 
+                      step="0.1" 
+                      aria-label="Seek" 
+                    />
+                    <div class="seek-progress-fill"></div>
+                  </div>
+                </div>
+
+                <div class="track-right">
+                  <div class="vol-group">
+                    <button class="vol-btn" type="button" data-action="mute" aria-label="Mute" aria-pressed="false">
+                      <span class="v-icon v-on">🔊</span>
+                      <span class="v-icon v-off">🔇</span>
+                    </button>
+                    <input 
+                      type="range" 
+                      class="vol-slider" 
+                      min="0" 
+                      max="1" 
+                      step="0.01" 
+                      value="0.7" 
+                      aria-label="Volume" 
+                    />
+                  </div>
+
+                  <span class="time-display">0:00 / 0:00</span>
+                  
+                  <button class="loop-btn" type="button" data-action="loop" aria-label="Toggle Loop" aria-pressed="false">
+                    ↻
+                  </button>
+                </div>
+
+                <audio preload="metadata" src={t.file}></audio>
+              </div>
+            ))}
+          </div>
+
+          <p class="top-hint">
+            まずはここで5曲だけ“直聴き”。気に入ったら下の外部チャンネルへ。
+          </p>
+        </section>
+
+        <div class="external-stack">
+          <a href="https://suno.com/@lukia_human_lucia_ai" target="_blank" rel="noopener noreferrer" class="channel-card suno">
+            <span class="channel-type">PRIMARY SOURCE</span>
+            <span class="channel-name">Suno</span>
+            <span class="channel-desc">Main Audio Core / Experimental Tracks</span>
+            <span class="link-arrow">↗</span>
+          </a>
+
+          <a href="https://www.youtube.com/@LukiaxLucia" target="_blank" rel="noopener noreferrer" class="channel-card youtube">
+            <span class="channel-type">ARCHIVE</span>
+            <span class="channel-name">YouTube</span>
+            <span class="channel-desc">Visual / Audio Logs</span>
+            <span class="link-arrow">↗</span>
+          </a>
+        </div>
+
+        <div class="logs-section">
+          <h2 class="section-title">AUDIO OBSERVATION LOGS</h2>
+          <p class="placeholder-text">
+            Scanning for internal resonance...<br>
+            <span class="faint">No internal audio logs cached.</span>
+          </p>
+        </div>
+        
+        <div class="stardust-layer"></div>
+      </div>
+
+      <div class="footer-nav">
+        <a class="back-link" href={BASE}>
+          ← Return to Observation Base
+        </a>
+      </div>
+    </div>
+  </article>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const trackCards = Array.from(document.querySelectorAll("[data-track]"));
+      
+      // -- GLOBAL AUDIO STATE --
+      // Default: 70% volume, not muted
+      let globalVol = parseFloat(localStorage.getItem("celestial_audio_volume") || "0.7");
+      let globalMuted = localStorage.getItem("celestial_audio_muted") === "true";
+
+      // Helper: Save state
+      const saveState = () => {
+        localStorage.setItem("celestial_audio_volume", globalVol);
+        localStorage.setItem("celestial_audio_muted", globalMuted);
+      };
+
+      // Helper: Format time
+      function fmtTime(s) {
+        if (!s || isNaN(s)) return "0:00";
+        const m = Math.floor(s / 60);
+        const sec = Math.floor(s % 60);
+        return `${m}:${String(sec).padStart(2, "0")}`;
+      }
+
+      function stopAll(exceptAudio) {
+        trackCards.forEach(card => {
+          const audio = card.querySelector("audio");
+          if (audio && audio !== exceptAudio) {
+            audio.pause();
+            audio.currentTime = 0; 
+            card.classList.remove("playing");
+          }
+        });
+      }
+
+      // Apply global volume to ALL tracks (UI + Audio)
+      function syncVolumeUI() {
+        trackCards.forEach(card => {
+          const audio = card.querySelector("audio");
+          const volSlider = card.querySelector(".vol-slider");
+          const muteBtn = card.querySelector('[data-action="mute"]');
+          
+          if (!audio) return;
+
+          // Apply to Audio Element
+          audio.volume = globalVol;
+          audio.muted = globalMuted;
+
+          // Apply to UI
+          if (volSlider) {
+             volSlider.value = globalVol;
+             // Visual quirk: when muted, maybe dim slider? 
+             // We'll handle visual dimming via CSS based on parent class or attribute later if needed.
+             // But for logical value, it remains the "unmuted target volume".
+             if (globalMuted) volSlider.classList.add("muted-state");
+             else volSlider.classList.remove("muted-state");
+          }
+
+          if (muteBtn) {
+            muteBtn.setAttribute("aria-pressed", String(globalMuted));
+          }
+        });
+      }
+
+      // Initial Sync
+      syncVolumeUI();
+
+      trackCards.forEach(card => {
+        const audio = card.querySelector("audio");
+        const playBtn = card.querySelector('[data-action="toggle"]');
+        const loopBtn = card.querySelector('[data-action="loop"]');
+        const seekBar = card.querySelector('.seek-bar');
+        const timeDisplay = card.querySelector('.time-display');
+        const progressFill = card.querySelector('.seek-progress-fill');
+        
+        // Volume Controls
+        const volSlider = card.querySelector(".vol-slider");
+        const muteBtn = card.querySelector('[data-action="mute"]');
+
+        if (!audio) return;
+
+        // Init UI
+        timeDisplay.textContent = "0:00 / 0:00";
+
+        // --- PLAYBACK ---
+        playBtn.addEventListener("click", () => {
+          if (audio.paused) {
+            stopAll(audio);
+            // Re-apply volume just in case
+            audio.volume = globalVol;
+            audio.muted = globalMuted;
+            
+            audio.play().then(() => {
+              card.classList.add("playing");
+            }).catch(e => console.error(e));
+          } else {
+            audio.pause();
+            card.classList.remove("playing");
+          }
+        });
+
+        loopBtn.addEventListener("click", () => {
+          audio.loop = !audio.loop;
+          loopBtn.setAttribute("aria-pressed", String(audio.loop));
+        });
+
+        // --- VOLUME ---
+        volSlider.addEventListener("input", (e) => {
+          const val = parseFloat(e.target.value);
+          globalVol = val;
+          if (val > 0 && globalMuted) {
+             // Dragging slider unmutes automatically
+             globalMuted = false;
+          }
+          saveState();
+          syncVolumeUI();
+        });
+
+        muteBtn.addEventListener("click", () => {
+          globalMuted = !globalMuted;
+          saveState();
+          syncVolumeUI();
+        });
+
+        // --- SEEK / PROGRESS ---
+        let isSeeking = false;
+        seekBar.disabled = true; // Disable until ready
+
+        const updateSeekMax = () => {
+          const dur = audio.duration;
+          if (dur && !isNaN(dur) && dur !== Infinity) {
+             seekBar.max = dur;
+             timeDisplay.textContent = `${fmtTime(audio.currentTime)} / ${fmtTime(dur)}`;
+          }
+        };
+
+        const enableSeek = () => {
+          // readyState >= 2 (HAVE_CURRENT_DATA) or better
+          if (audio.readyState >= 1) { // loadedmetadata gives duration, good enough to set max
+             updateSeekMax();
+          }
+          if (audio.readyState >= 2) {
+             seekBar.disabled = false;
+          }
+        };
+
+        // Metadata loaded: set basic duration
+        audio.addEventListener("loadedmetadata", () => {
+           updateSeekMax();
+           enableSeek();
+        });
+        
+        // VBR fix: duration might change later
+        audio.addEventListener("durationchange", updateSeekMax);
+
+        // Events that might indicate readiness
+        audio.addEventListener("canplay", enableSeek);
+        audio.addEventListener("loadeddata", enableSeek);
+
+        audio.addEventListener("timeupdate", () => {
+          // Only update slider if user is NOT dragging it
+          if (!isSeeking) {
+             seekBar.value = audio.currentTime;
+             const dur = audio.duration || 0;
+             const percent = (dur > 0) ? (audio.currentTime / dur) * 100 : 0;
+             if (progressFill) progressFill.style.width = `${percent}%`;
+          }
+          // Always update time text
+          timeDisplay.textContent = `${fmtTime(audio.currentTime)} / ${fmtTime(audio.duration)}`;
+        });
+
+        audio.addEventListener("ended", () => {
+          card.classList.remove("playing");
+          audio.currentTime = 0;
+          if (progressFill) progressFill.style.width = "0%";
+        });
+
+        // Seeking Logic (Pointer Events for robust drag detection)
+        const onSeekInput = (val) => {
+           const dur = audio.duration || 1; 
+           // Calculate percent based on current value (seconds) vs duration
+           const percent = (val / dur) * 100;
+           if (progressFill) progressFill.style.width = `${percent}%`;
+           timeDisplay.textContent = `${fmtTime(val)} / ${fmtTime(dur)}`;
+        };
+
+        // Start seeking
+        const startSeek = () => {
+          if (seekBar.disabled) return;
+          isSeeking = true;
+          seekBar.classList.add("seeking");
+        };
+
+        // End seeking (commit change)
+        const endSeek = () => {
+          if (isSeeking) {
+            const targetTime = parseFloat(seekBar.value);
+            
+            // Prefer fastSeek if available
+            if (Number.isFinite(targetTime)) {
+              if ('fastSeek' in audio) {
+                audio.fastSeek(targetTime);
+              } else {
+                audio.currentTime = targetTime;
+              }
+            }
+            
+            isSeeking = false;
+            seekBar.classList.remove("seeking");
+          }
+        };
+
+        // Mouse/Touch Down -> Start
+        seekBar.addEventListener("mousedown", startSeek);
+        seekBar.addEventListener("touchstart", startSeek, { passive: true });
+
+        // Input -> Update visual (while dragging)
+        seekBar.addEventListener("input", (e) => onSeekInput(e.target.value));
+        
+        // Change -> Commit (sometimes fires on drop)
+        seekBar.addEventListener("change", (e) => {
+           // We handle commit in endSeek via pointerup/touchend, 
+           // but 'change' can also fire. To allow keyboard usage etc, we can trigger sync here too if not dragging?
+           // Actually, 'change' alone is often enough for click-jumps. 
+           // But fastSeek logic inside endSeek better handles dragging release.
+           // Let's ensure simple "click on bar" also updates:
+           if (!isSeeking) {
+              const targetTime = parseFloat(e.target.value);
+              if ('fastSeek' in audio) audio.fastSeek(targetTime);
+              else audio.currentTime = targetTime;
+           }
+        });
+        
+        // Mouse/Touch Up -> End
+        seekBar.addEventListener("mouseup", endSeek);
+        seekBar.addEventListener("touchend", endSeek);
+
+        // Safety: if mouse leaves element while dragging? 
+        seekBar.addEventListener("mouseleave", () => {
+           // Optional: commit if they leave? Or just let them drag outside like standard range?
+           // Standard range allows dragging outside. We do nothing here.
+        });
+    });
+    
+  });  
+  </script>
+
+</Layout>
+
+<style>
+  .category-page {
+    max-width: 900px;
+    margin: 4rem auto;
+    padding: 0 20px;
+    position: relative;
+    z-index: 10;
+  }
+
+  .main-content {
+    background: rgba(10, 20, 30, 0.4);
+    border: 1px solid rgba(0, 255, 255, 0.08);
+    backdrop-filter: blur(12px);
+    border-radius: 12px;
+    padding: 3rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Removed role-declaration styles */
+
+  .external-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-top: 1.5rem; /* Reduced gap from top-tracks */
+    margin-bottom: 4rem;
+  }
+
+  .channel-card {
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .channel-card:hover {
+    background: rgba(0, 255, 255, 0.06);
+    border-color: rgba(0, 255, 255, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(0, 255, 255, 0.1);
+  }
+
+  .channel-type {
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    color: rgba(0, 255, 255, 0.7);
+    margin-bottom: 0.5rem;
+  }
+
+  .channel-name {
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: #fff;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+  }
+
+  .channel-desc {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 1rem;
+  }
+
+  .link-arrow {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 1.2rem;
+    transition: transform 0.3s ease;
+  }
+
+  .channel-card:hover .link-arrow {
+    color: #0ff;
+    transform: translate(2px, -2px);
+  }
+
+  .logs-section {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    text-align: center;
+  }
+
+  .section-title {
+    font-size: 0.8rem;
+    letter-spacing: 0.2em;
+    color: rgba(255, 255, 255, 0.4);
+    margin-bottom: 1.5rem;
+  }
+
+  .placeholder-text {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.9rem;
+    font-family: monospace;
+  }
+
+  .faint {
+    display: block;
+    font-size: 0.75rem;
+    opacity: 0.5;
+    margin-top: 0.5rem;
+  }
+
+  .stardust-layer {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.3;
+    background-image: radial-gradient(1px 1px at 50% 50%, rgba(255,255,255,0.8), transparent); 
+    background-size: 100px 100px;
+    mix-blend-mode: screen;
+  }
+
+  .footer-nav {
+    margin-top: 3rem;
+    text-align: center;
+  }
+
+  .back-link {
+    color: rgba(255, 255, 255, 0.6);
+    text-decoration: none;
+    font-size: 0.9rem;
+    letter-spacing: 0.05em;
+    transition: color 0.3s ease;
+  }
+
+  .back-link:hover {
+    color: #fff;
+  }
+  /* ===== TOP AUDIO TRACES ===== */
+  .top-tracks {
+    margin-bottom: 0; /* Let external-stack handle the gap */
+    padding: 1.8rem;
+    background: rgba(0, 255, 255, 0.03);
+    border: 1px solid rgba(0, 255, 255, 0.14);
+    border-radius: 10px;
+    position: relative;
+  }
+
+  .top-title {
+    margin-bottom: 1rem;
+    opacity: 0.7;
+  }
+
+  .track-list {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .track-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    transition: all 0.25s ease;
+  }
+
+  .track-card.playing {
+    border-color: rgba(0, 255, 255, 0.35);
+    background: rgba(0, 255, 255, 0.05);
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.08);
+  }
+
+  /* Play Button */
+  .play-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.05);
+    color: #fff;
+    font-size: 0.9rem; /* Icon size */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+  }
+
+  .play-btn:hover {
+    border-color: #0ff;
+    color: #0ff;
+    background: rgba(0, 255, 255, 0.1);
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.2);
+  }
+
+  .icon-play, .icon-pause { display: none; line-height: 1; }
+  .track-card:not(.playing) .icon-play { display: block; padding-left: 2px; /* optical center */ }
+  .track-card.playing .icon-pause { display: block; font-weight: bold; font-family: monospace; }
+  
+  /* Center Area (Meta + Seek) */
+  .track-center {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 0;
+  }
+
+  .track-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-bottom: 6px;
+  }
+
+  .track-no {
+    font-family: monospace;
+    color: rgba(0, 255, 255, 0.7);
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+  }
+
+  .track-name {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.9);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Seek Bar Customization */
+  .seek-container {
+    position: relative;
+    width: 100%;
+    height: 4px; /* Touchable area can be larger via padding on input */
+    display: flex;
+    align-items: center;
+  }
+
+  .seek-bar {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 2px;
+    outline: none;
+    cursor: pointer;
+    z-index: 2; /* Clickable */
+  }
+
+  .seek-bar::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #0ff;
+    cursor: pointer;
+    opacity: 0; /* Hidden normally like YouTube? Or visible? Let's make visible on hover or dragging */
+    transition: opacity 0.2s, transform 0.2s;
+  }
+
+  .track-card:hover .seek-bar::-webkit-slider-thumb,
+  .seek-bar:active::-webkit-slider-thumb {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+
+  /* Progress Fill (Visual overlay) */
+  .seek-progress-fill {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 4px;
+    background: #0ff;
+    border-radius: 2px;
+    pointer-events: none;
+    width: 0%;
+    z-index: 1;
+    box-shadow: 0 0 6px rgba(0, 255, 255, 0.6);
+  }
+
+  /* Right Side incl Volume */
+  .track-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-shrink: 0;
+  }
+
+  /* Volume Controls */
+  .vol-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-right: 0.5rem;
+  }
+
+  .vol-btn {
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.6);
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 0;
+    line-height: 1;
+    transition: color 0.2s;
+  }
+  .vol-btn:hover { color: #fff; }
+  
+  .v-icon { display: none; }
+  .vol-btn[aria-pressed="false"] .v-on { display: inline; }
+  .vol-btn[aria-pressed="true"] .v-off { display: inline; color: #ff6b6b; } /* Red mute icon */
+
+  .vol-slider {
+    -webkit-appearance: none;
+    width: 60px;
+    height: 3px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 2px;
+    outline: none;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+  
+  /* Dim slider when muted */
+  .vol-slider.muted-state {
+    opacity: 0.3;
+    pointer-events: none; /* Optional: prevent sliding when strictly muted by button? User requested "visually 0 or dimmed" */
+  }
+
+  .vol-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #fff;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+  .vol-slider:hover::-webkit-slider-thumb {
+    transform: scale(1.2);
+    background: #0ff;
+  }
+
+  .time-display {
+    font-family: monospace;
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.5);
+    min-width: 80px;
+    text-align: right;
+  }
+
+  .loop-btn {
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.3);
+    cursor: pointer;
+    font-size: 1.1rem;
+    transition: color 0.2s;
+    line-height: 1;
+  }
+
+  .loop-btn:hover { color: #fff; }
+  .loop-btn[aria-pressed="true"] {
+    color: #0ff;
+    text-shadow: 0 0 8px rgba(0, 255, 255, 0.4);
+  }
+
+  .top-hint {
+    margin-top: 1rem;
+    font-family: monospace;
+    color: rgba(255, 255, 255, 0.55);
+    font-size: 0.85rem;
+    text-align: center;
+  }
+
+  /* Responsive Logic */
+  @media (max-width: 600px) {
+    .track-card {
+      flex-wrap: wrap; /* Allow wrapping */
+      gap: 0.8rem;
+    }
+    
+    .track-right {
+      width: 100%;
+      justify-content: space-between;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      padding-top: 0.5rem;
+      margin-top: 0.2rem;
+    }
+    
+    .vol-slider {
+      width: 50px; /* Slightly smaller on mobile */
+    }
+  }
+
+</style>
+
+

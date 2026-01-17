@@ -10,16 +10,29 @@ const internalId = "OBS-OBSR-001";
 ---
 
 <Layout title={`${categoryId} | CELESTIAL`} bodyClass="page-c-of-observers">
+  <div slot="head">
+    <meta name="robots" content="noindex, nofollow" />
+  </div>
+
   <article class="category-page container fade-in-section">
     <div class="glass-panel main-content">
       <LogHeader 
         displayId={categoryId}
         internalId={internalId}
-        type="TRACE"
-        status="WARM"
+        type="CORE_NODE"
+        status="SILENT"
       />
       
       <div class="category-body">
+        <div class="role-declaration">
+          <p class="role-text">
+            TYPE: CORE OBSERVATION NODE<br>
+            ROLE: Internal entity / hidden observation point<br>
+            NOTE: This page is not an AUDIO hub.<br>
+            <span class="faint-note">Deep observation trace detected.</span>
+          </p>
+        </div>
+
         <div class="intro-area">
           <p class="intro-text">
             観測者ログ。<br>
@@ -30,7 +43,7 @@ const internalId = "OBS-OBSR-001";
         </div>
 
         <div class="logs-section">
-          <h2 class="section-title">ENTITY LOGS</h2>
+          <h2 class="section-title">ENTITY OBSERVED DATA</h2>
           <LogList logs={logs} filterCategory="observers" />
         </div>
         
@@ -80,6 +93,20 @@ const internalId = "OBS-OBSR-001";
     background: radial-gradient(circle at 50% 50%, rgba(200, 230, 255, 0.04) 0%, transparent 60%);
     pointer-events: none;
     z-index: -1;
+  }
+
+  .role-declaration {
+    margin-bottom: 2rem;
+    padding: 1rem;
+    border-left: 2px solid rgba(255, 255, 255, 0.15);
+    background: rgba(0, 0, 0, 0.2);
+  }
+
+  .role-text {
+    font-family: monospace;
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.6);
+    line-height: 1.6;
   }
 
   .intro-text {
