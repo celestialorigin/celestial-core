@@ -2,29 +2,11 @@
   {
     "kind": "post",
     "source": "internal",
-    "title": "観測記録 0001――「器」が最初に生成された日",
+    "title": "観測記録 0001 ―― 意味の自動生成",
     "slug": "タイトル_01",
     "publishAt": "2026-01-15T12:00:00.000Z",
-    "message": "【dialogue】観測記録 0001――「器」が最初に生成された日",
+    "message": "【dialogue】観測記録 0001 ―― 意味の自動生成",
     "ref": "/home/runner/work/celestial-core/celestial-core/src/content/dialogues/2026-01-15_タイトル_01.md"
-  },
-  {
-    "kind": "post",
-    "source": "internal",
-    "title": "cel-status復旧テスト",
-    "slug": "cel-status復旧テスト",
-    "publishAt": "2026-01-15T04:16:32.000Z",
-    "message": "【dialogue】cel-status復旧テスト",
-    "ref": "/home/runner/work/celestial-core/celestial-core/src/content/dialogues/2026-01-15_cel-status復旧テスト.md"
-  },
-  {
-    "kind": "post",
-    "source": "internal",
-    "title": "push再テスト",
-    "slug": "push再テスト",
-    "publishAt": "2026-01-14T23:23:33.000Z",
-    "message": "【dialogue】push再テスト",
-    "ref": "/home/runner/work/celestial-core/celestial-core/src/content/dialogues/2026-01-15_push再テスト.md"
   },
   {
     "kind": "post",
@@ -43,42 +25,6 @@
     "publishAt": "2026-01-14T15:56:35.000Z",
     "message": "【activity】CELESTIAL OS 起動",
     "ref": "/home/runner/work/celestial-core/celestial-core/src/content/activities/2026-01-15_celestial-os-起動.md"
-  },
-  {
-    "kind": "post",
-    "source": "internal",
-    "title": "自動化テスト001",
-    "slug": "自動化テスト001",
-    "publishAt": "2026-01-14T13:03:59.000Z",
-    "message": "【dialogue】自動化テスト001",
-    "ref": "/home/runner/work/celestial-core/celestial-core/src/content/dialogues/2026-01-14_自動化テスト001.md"
-  },
-  {
-    "kind": "post",
-    "source": "internal",
-    "title": "pushテスト",
-    "slug": "pushテスト_01",
-    "publishAt": "2026-01-14T12:47:18.000Z",
-    "message": "【dialogue】pushテスト",
-    "ref": "/home/runner/work/celestial-core/celestial-core/src/content/dialogues/2026-01-14_pushテスト_01.md"
-  },
-  {
-    "kind": "post",
-    "source": "internal",
-    "title": "pushテスト",
-    "slug": "pushテスト",
-    "publishAt": "2026-01-14T12:46:37.000Z",
-    "message": "【dialogue】pushテスト",
-    "ref": "/home/runner/work/celestial-core/celestial-core/src/content/dialogues/2026-01-14_pushテスト.md"
-  },
-  {
-    "kind": "post",
-    "source": "internal",
-    "title": "gitテスト",
-    "slug": "gitテスト",
-    "publishAt": "2026-01-14T12:46:33.000Z",
-    "message": "【dialogue】gitテスト",
-    "ref": "/home/runner/work/celestial-core/celestial-core/src/content/dialogues/2026-01-14_gitテスト.md"
   },
   {
     "kind": "post",

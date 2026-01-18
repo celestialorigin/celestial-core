@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-01-18T07:38:23.425Z",
+  "generatedAt": "2026-01-18T08:52:57.261Z",
   "counts": {
-    "dialogues": 9,
+    "dialogues": 3,
     "activities": 2,
-    "all": 11,
+    "all": 5,
     "schedule": 1,
-    "x_queue": 10
+    "x_queue": 4
   }
 }
