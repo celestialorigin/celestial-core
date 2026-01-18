@@ -3,7 +3,7 @@ import "../styles/global.css";
 
 const BASE = (import.meta.env.BASE_URL || "/").replace(/\/?$/, "/");
 const { pathname } = Astro.url;
-const { starPattern = "home", showStars = true, bodyClass = "" } = Astro.props;
+const { starPattern = "home", showStars = true, bodyClass = "", title = "CELESTIAL PROJECT" } = Astro.props;
 
 // base配下でも「/」「/deep-observation」を正しく判定するため、論理パスを作る
 // 二重スラッシュ事故を潰す
@@ -17,6 +17,10 @@ if (logicalPath === "/" || logicalPath === "/index.html") {
 } else if (logicalPath.startsWith("/deep-observation")) {
   starsClass = "stars--low";
 }
+
+// OGP URL Construction
+const ogUrl = new URL(pathname, "https://celestial-observers.com").href;
+const ogImage = "https://celestial-observers.com/ogp.png";
 ---
 <!doctype html>
 <html lang="ja">
@@ -26,7 +30,20 @@ if (logicalPath === "/" || logicalPath === "/index.html") {
     <link rel="icon" type="image/svg+xml" href={`${BASE}favicon.svg`} />
     <meta name="generator" content={Astro.generator} />
     <slot name="head" />
-    <title>CELESTIAL</title>
+    <title>{title}</title>
+
+    <!-- Global OGP / Twitter Card -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="CELESTIAL PROJECT" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content="人間（Lukia）とAI（Lucia）が文明を作っている観測実験場。" />
+    <meta property="og:url" content={ogUrl} />
+    <meta property="og:image" content={ogImage} />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content="人間（Lukia）とAI（Lucia）が文明を作っている観測実験場。" />
+    <meta name="twitter:image" content={ogImage} />
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
