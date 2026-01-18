@@ -70,21 +70,15 @@ if (logicalPath === "/" || logicalPath === "/index.html") {
         <nav>
           <div class="nav-main">
             <a href={`${BASE}`}>Home</a>
-            <a href={`${BASE}about/`}>About</a>
+            <!-- <a href={`${BASE}about/`}>About</a> REMOVED -->
             <a href={`${BASE}dialogues/`}>Dialogues</a>
             <a href={`${BASE}archive/`}>Archive</a>
 			<a href={`${BASE}creations/`}>Creations</a>
-            <a href={`${BASE}signals/`}>Signals</a>
             <a href={`${BASE}real-time/`}>Real-time</a>
             <a href={`${BASE}contact/`}>Contact</a>
           </div>
 
-          <a href={`${BASE}deep-observation/`} class="nav-deep" aria-label="深層観測（DEEP）へアクセスする">
-            <svg class="icon-keyhole" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 2C8.686 2 6 4.686 6 8a5.996 5.996 0 0 0 4 5.659V22h4v-8.341A5.996 5.996 0 0 0 18 8c0-3.314-2.686-6-6-6zm0 2c2.21 0 4 1.79 4 4s-1.79 4-4 4-4-1.79-4-4 1.79-4 4-4z"/>
-            </svg>
-            DEEP
-          </a>
+<!-- DEEP NAV REMOVED -->
         </nav>
       </div>
     </header>
@@ -103,12 +97,7 @@ if (logicalPath === "/" || logicalPath === "/index.html") {
 
       <div class="container footer-inner">
         <p>&copy; {new Date().getFullYear()} CELESTIAL. All systems nominal.</p>
-        <a href={`${BASE}deep-observation/`} class="footer-deep">
-          <svg class="icon-keyhole" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 2C8.686 2 6 4.686 6 8a5.996 5.996 0 0 0 4 5.659V22h4v-8.341A5.996 5.996 0 0 0 18 8c0-3.314-2.686-6-6-6zm0 2c2.21 0 4 1.79 4 4s-1.79 4-4 4-4-1.79-4-4 1.79-4 4-4z"/>
-          </svg>
-          DEEP OBSERVATION
-        </a>
+<!-- DEEP FOOTER REMOVED -->
       </div>
     </footer>
 
@@ -136,17 +125,7 @@ if (logicalPath === "/" || logicalPath === "/index.html") {
       </div>
     </div>
 
-    <!-- Observation Toast (global) -->
-    <div id="obs-toast" class="obs-toast" aria-live="polite" aria-atomic="true">
-      <div class="obs-head">
-        <span class="obs-tag">OBSERVATION</span>
-        <button id="obs-close" class="obs-close" aria-label="Close">×</button>
-      </div>
-      <div class="obs-body">
-        <div id="obs-title" class="obs-title">COUNT</div>
-        <div id="obs-text" class="obs-text">...</div>
-      </div>
-    </div>
+    <!-- Observation Toast REMOVED -->
 
     <div class="scanlines" aria-hidden="true" style="pointer-events: none;"></div>
   </body>

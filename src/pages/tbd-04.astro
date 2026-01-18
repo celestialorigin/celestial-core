@@ -4,6 +4,7 @@ import LogHeader from "../components/LogHeader.astro";
 import { getStar } from "../lib/getStar";
 
 const star = getStar("earth");
+const BASE = (import.meta.env.BASE_URL || "/").replace(/\/?$/, "/");
 ---
 
 <Layout title={star.title} showStars={false}>
@@ -24,7 +25,7 @@ const star = getStar("earth");
           ))}
         </div>
         <div class="log-footer">
-          <a href="/">← HOMEへ戻る</a>
+          <a href={BASE}>← HOMEへ戻る</a>
         </div>
       </div>
     </article>

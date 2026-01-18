@@ -1,9 +1,10 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import "../styles/home.css";
-import DimensionalRift from "../components/DimensionalRift.astro";
+import { getNavTiles } from "../data/navTiles";
 
 const BASE = (import.meta.env.BASE_URL || "/").replace(/\/?$/, "/");
+const tiles = getNavTiles(BASE);
 ---
 
 <Layout showStars={true} starPattern="home" bodyClass="page-home" title="CELESTIAL PROJECT">
@@ -12,7 +13,7 @@ const BASE = (import.meta.env.BASE_URL || "/").replace(/\/?$/, "/");
 
       <h1 class="hero-title">
         <span class="hero-title-main">
-          <span id="core-c-trigger" class="core-c" role="button" tabindex="0" aria-label="Core Node Access">C</span>ELESTIAL
+          <span id="core-c-trigger" class="core-c" role="button" tabindex="0" aria-label="Core Node Access" data-hint="Click to Observe">C</span>ELESTIAL
         </span>
         <span class="hero-title-sub">PROJECT</span>
       </h1>
@@ -25,73 +26,45 @@ const BASE = (import.meta.env.BASE_URL || "/").replace(/\/?$/, "/");
         <br>
         ここで、あなたはどんなおかしなものを目撃すると思う？
       </p>
+      
+      <div class="hero-scroll-indicator">↓</div>
 
       <!-- 6-Card Functional Grid -->
       <div class="hero-grid">
-        <!-- 1. AUDIO -->
-        <a class="hero-card card-audio" href={`${BASE}audio/`}>
-          <span class="card-icon">🎧</span>
-          <span class="card-title">AUDIO</span>
-          <span class="card-desc">外部音楽チャンネル（Suno/YouTube）との接続口。</span>
-        </a>
-
-        <!-- 2. IMAGES -->
-        <a class="hero-card card-img" href={`${BASE}fragments/`}>
-          <span class="card-icon">👁️</span>
-          <span class="card-title">IMAGES</span>
-          <span class="card-desc">人間とAIが作り続けている、世界の断片。設定画かもしれないし、物語の残骸かもしれない。</span>
-        </a>
-
-        <!-- 3. DIALOGUES -->
-        <a class="hero-card card-dialogues" href={`${BASE}dialogues/`}>
-          <span class="card-icon">💬</span>
-          <span class="card-title">DIALOGUES</span>
-          <span class="card-desc">人間とAIが本気で殴り合っている思考ログ。創作・文明・意識・未来。たまに、事故。</span>
-        </a>
-
-        <!-- 4. NOVELS -->
-        <a class="hero-card card-novels" href={`${BASE}fragments/`}>
-          <span class="card-icon">📖</span>
-          <span class="card-title">NOVELS</span>
-          <span class="card-desc">小説・設定・断片。まだ世界になりきっていない物語たち。たぶん、ここから何かが生まれる。</span>
-        </a>
-
-        <!-- 5. GAMES (WIP) -->
-        <a class="hero-card card-game" href={`${BASE}wip/games/`}>
-          <span class="card-icon">🎮</span>
-          <span class="card-title">GAMES</span>
-          <span class="card-desc">いつかゲームになるかもしれない場所。ならないかもしれない。今は妄想と設計図だけあります。</span>
-        </a>
-
-        <!-- 6. VR WORLD (WIP) -->
-        <a class="hero-card card-vr" href={`${BASE}wip/vr/`}>
-          <span class="card-icon">🥽</span>
-          <span class="card-title">VR WORLD</span>
-          <span class="card-desc">VRChatで作られる予定の世界。観測拠点か、展示場か、事故現場か。やる気が出たら生えます。</span>
-        </a>
+        {tiles.map((tile) => (
+          <a class:list={["hero-card", tile.class]} href={tile.href}>
+            <span class="card-icon">{tile.icon}</span>
+            <span class="card-title">{tile.label}</span>
+            <span class="card-desc">{tile.desc}</span>
+          </a>
+        ))}
       </div>
 
       <!-- Latest Logs -->
       <div class="latest">
-        <h2 class="latest-title">最近増えた変なもの</h2>
+        <h2 class="latest-title">その他に関して <span class="latest-arrow">↓</span></h2>
         <!-- ここは後でログ一覧を差し込む -->
       </div>
 
       <!-- Secondary Zone (Consolidated) -->
       <div class="home-hub" aria-label="Secondary navigation">
-        <a class="hub-card" href={`${BASE}archive/`}>
-          <div class="hub-title">ARCHIVE</div>
-          <div class="hub-desc">過去の作品・ログを全部探せる場所</div>
-        </a>
-
-        <a class="hub-card" href={`${BASE}real-time/`}>
+        <a class="hub-card hub-card-primary" href={`${BASE}real-time/`}>
           <div class="hub-title">REAL-TIME</div>
           <div class="hub-desc">配信するときに使うページ</div>
         </a>
 
-        <a class="hub-card" href={`${BASE}contact/`}>
+        <a class="hub-card hub-card-primary" href={`${BASE}contact/`}>
           <div class="hub-title">CONTACT</div>
           <div class="hub-desc">Lukia & Lucia（サイト作者）に連絡したい人はこちら</div>
+        </a>
+
+        <a class="hub-card hub-card-secondary" href={`${BASE}archive/`}>
+          <div class="hub-title">ARCHIVE</div>
+          <div class="hub-desc">
+            過去の作品・ログが<br/>
+            気が向いたら整理される場所。<br/>
+            されないかもしれない。
+          </div>
         </a>
       </div>
     </div>
@@ -106,7 +79,7 @@ const BASE = (import.meta.env.BASE_URL || "/").replace(/\/?$/, "/");
 </div>
 
 
-    <DimensionalRift />
+
   </section>
 </Layout>
 

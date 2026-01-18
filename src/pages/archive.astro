@@ -8,15 +8,17 @@ const BASE = (import.meta.env.BASE_URL || "/").replace(/\/?$/, "/");
   <main class="archive-container fade-in-section">
     <div class="header-section">
       <h1 class="glitch-text" data-text="OBSERVATION ARCHIVE">OBSERVATION ARCHIVE</h1>
-      <p class="subtitle">ここは「増えたもの全部の保管庫」になる予定。今は再構築中。</p>
+
     </div>
 
     <!-- Main Card -->
     <div class="construction-card">
-      <h2 class="card-title">アーカイブ再構築中</h2>
+      <h2 class="card-title">アーカイブ状態：未定義</h2>
       <p class="construction-text">
-        検索・分類・タグは新設計に差し替え中。<br />
-        今は以下から目的地へどうぞ。
+        データは増えている。<br />
+        整理されるかは、観測者次第。<br /><br />
+        ここが完成する確率は、<br />
+        今日あなたがここを見た確率と同じくらい。
       </p>
 
       <div class="nav-links">
@@ -29,12 +31,17 @@ const BASE = (import.meta.env.BASE_URL || "/").replace(/\/?$/, "/");
 
     <!-- Coming Soon -->
     <div class="coming-soon">
-      <h3 class="coming-title">近日実装予定</h3>
+      <h3 class="coming-title">将来やるかもしれないこと</h3>
       <ul class="coming-list">
-        <li>タグ検索</li>
-        <li>時系列フィルタ</li>
-        <li>外部リンク統合（YouTube / VRChat / Pixiv など）</li>
+        <li>分類</li>
+        <li>整理</li>
+        <li>統合</li>
+        <li>何もしない</li>
       </ul>
+    </div>
+
+    <div class="back-home-link">
+      <a href={BASE}>← HOMEへ戻る</a>
     </div>
   </main>
 </Layout>
@@ -161,5 +168,28 @@ const BASE = (import.meta.env.BASE_URL || "/").replace(/\/?$/, "/");
     position: absolute;
     left: 0;
     top: 6px;
+  }
+
+  /* Back Home Link (Matched to Fragments/Real-time) */
+  .back-home-link {
+    margin-top: 4rem;
+    text-align: center;
+  }
+
+  .back-home-link a {
+    opacity: 0.8;
+    text-decoration: none;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #fff;
+    transition: all 0.3s ease;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+  }
+  .back-home-link a:hover {
+    opacity: 1;
+    color: var(--c-accent);
+    background: rgba(255, 255, 255, 0.05);
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.2);
   }
 </style>

@@ -2,10 +2,6 @@
 import Layout from "../../layouts/Layout.astro";
 import { getCollection } from "astro:content";
 
-const BASE = (import.meta.env.BASE_URL || "/").replace(/\/?$/, "/");
-const now = new Date();
-const toDate = (v: any) => (v instanceof Date ? v : new Date(v));
-
 export async function getStaticPaths() {
   const entries = await getCollection("dialogues");
   return entries.map((entry) => ({
@@ -15,6 +11,10 @@ export async function getStaticPaths() {
 }
 
 const { entry } = Astro.props;
+
+const BASE = (import.meta.env.BASE_URL || "/").replace(/\/?$/, "/");
+const now = new Date();
+const toDate = (v: any) => (v instanceof Date ? v : new Date(v));
 
 // publishAt が Date / string どちらでも動くように
 const publishAt = entry?.data?.publishAt ? toDate(entry.data.publishAt) : null;

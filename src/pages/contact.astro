@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+const BASE = (import.meta.env.BASE_URL || "/").replace(/\/?$/, "/");
 ---
 
 <Layout title="CONTACT | CELESTIAL">
@@ -76,16 +77,6 @@ import Layout from '../layouts/Layout.astro';
           <span class="other-arrow">↗</span>
         </a>
 
-        <!-- 4. Kakuyomu -->
-        <a href="https://kakuyomu.jp/users/Lukia_A" target="_blank" rel="noopener noreferrer" class="other-card">
-          <span class="other-icon">📖</span>
-          <div class="other-info">
-            <span class="other-name">カクヨム</span>
-            <span class="other-desc">小説・物語ログ</span>
-          </div>
-          <span class="other-arrow">↗</span>
-        </a>
-
         <!-- 5. Suno -->
         <a href="https://suno.com/@lukia_human_lucia_ai" target="_blank" rel="noopener noreferrer" class="other-card">
           <span class="other-icon">🎵</span>
@@ -95,15 +86,48 @@ import Layout from '../layouts/Layout.astro';
           </div>
           <span class="other-arrow">↗</span>
         </a>
+
+        <!-- 6. KAKUYOMU -->
+        <a href="https://kakuyomu.jp/users/Lukia_A" target="_blank" rel="noopener noreferrer" class="other-card">
+          <span class="other-icon">📖</span>
+          <div class="other-info">
+            <span class="other-name">KAKUYOMU</span>
+            <span class="other-desc">小説・物語ログ</span>
+          </div>
+          <span class="other-arrow">↗</span>
+        </a>
+
+        <!-- 7. NOTE -->
+        <a href="https://note.com/lukia_lucia" target="_blank" rel="noopener noreferrer" class="other-card">
+          <span class="other-icon">📝</span>
+          <div class="other-info">
+            <span class="other-name">NOTE</span>
+            <span class="other-desc">対話・思考ログ</span>
+          </div>
+          <span class="other-arrow">↗</span>
+        </a>
       </div>
+
+      <!-- BOOTH Link (Distribution Node) -->
+      <a href="https://celestialcore.booth.pm/" target="_blank" rel="noopener noreferrer" class="contact-card booth-node">
+        <div class="card-content">
+          <span class="card-label">CELESTIAL CORE / Distribution</span>
+          <span class="card-arrow">📦</span>
+        </div>
+        <p class="card-desc">
+          <span class="booth-subtitle">BOOTH（配布・販売拠点）</span><br/>
+          CELESTIAL PROJECTで制作されたデータ・素材・BGM・VRChat向け成果物の配布・販売拠点です。<br/>
+          物質層に転送された成果物は、すべてここに集約されます。
+        </p>
+      </a>
     </div>
 
     <p style="text-align: center; margin-top: 2rem; font-size: 0.85em; opacity: 0.5;">
       ※ 応答には時間を要する場合があります。
     </p>
 
-    <div style="margin-top: 60px; text-align: center;">
-      <a href="/" style="opacity: 0.6; text-decoration: none; font-size: 0.9em; transition: opacity 0.2s;">← HOMEへ戻る</a>
+    <div class="back-home-link" style="margin-top: 60px; text-align: center;">
+      <a href={BASE} style="opacity: 0.6; text-decoration: none; font-size: 0.9em; transition: opacity 0.2s;">← HOMEへ戻る</a>
     </div>
   </div>
 </Layout>
@@ -127,6 +151,32 @@ import Layout from '../layouts/Layout.astro';
     border-color: var(--c-accent);
     box-shadow: 0 0 15px rgba(0, 255, 255, 0.1);
     transform: translateY(-2px);
+  }
+
+  /* BOOTH Special Node Styles */
+  .booth-node {
+    margin-top: 24px;
+    border-color: rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.04);
+  }
+  
+  .booth-node:hover {
+    background: rgba(255, 200, 220, 0.03); /* Subtle warm shift */
+    border-color: #ffaa99; /* Soft coral/booth accent */
+    box-shadow: 0 0 20px rgba(255, 170, 153, 0.15);
+  }
+
+  .booth-node .card-label {
+    color: #ffd0c0; /* Pale warm accent */
+    text-shadow: 0 0 8px rgba(255, 100, 80, 0.2);
+  }
+
+  .booth-subtitle {
+    display: inline-block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+    color: #fff;
+    font-size: 1.05em;
   }
 
   .card-content {
@@ -154,13 +204,15 @@ import Layout from '../layouts/Layout.astro';
     transform: translateX(5px) rotate(-45deg); /* For arrow */
   }
   
-  /* Adjust mail/goggle icon rotation */
+  /* Adjust mail/goggle/booth icon rotation */
   .contact-card[href^="mailto"] .card-arrow,
-  .contact-card:nth-child(2) .card-arrow { /* Select VRChat by order if generic href */
+  .contact-card:nth-child(2) .card-arrow,
+  .booth-node .card-arrow {
       transform: none;
   }
   .contact-card[href^="mailto"]:hover .card-arrow,
-  .contact-card:nth-child(2):hover .card-arrow {
+  .contact-card:nth-child(2):hover .card-arrow,
+  .booth-node:hover .card-arrow {
       transform: scale(1.1);
   }
 
@@ -188,7 +240,7 @@ import Layout from '../layouts/Layout.astro';
     margin-bottom: 0.5rem;
     letter-spacing: 0.1em;
   }
-
+  
   .other-subtitle {
     font-size: 0.9em;
     color: rgba(255, 255, 255, 0.5);

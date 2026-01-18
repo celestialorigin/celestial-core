@@ -1,549 +1,61 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import "../styles/profile.css";
 
+const BASE = (import.meta.env.BASE_URL || "/").replace(/\/?$/, "/");
 ---
 
-<Layout title="SHI-CHAN" showStars={false} starPattern="none" bodyClass="page-shiichan">
-  <main class="shiichan-world fade-in-section">
-    <div class="content-wrapper">
-      <!-- Character Container -->
-      <div class="character-container">
-        <div id="shiichan-interaction" class="shiichan-wrapper" role="button" tabindex="0" aria-label="Shi-chan">
-          <img src="/images/しーちゃん_正面.png" alt="Shi-chan" class="shiichan-img" />
-          <div id="bubble" class="chat-bubble hidden">しぃ！</div>
+<Layout title="SHI-CHAN | CELESTIAL" bodyClass="page-profile page-shiichan">
+  <div class="profile-container fade-in-section">
+    <div class="profile-content">
+      <div class="profile-image-container">
+        <img src={`${BASE}images/しーちゃん_正面.png`} alt="Shi-chan" class="profile-image floating-img" />
+      </div>
+      
+      <div class="profile-text-container">
+        <h1 class="profile-name">
+          しぃちゃん
+          <span class="profile-name-sub">(NODE / Observation Support)</span>
+        </h1>
+        
+        <div class="profile-bio">
+          <p>CELESTIALの観測拠点に常駐する存在。<br>触れると反応し、音を鳴らし、静かに観測者を迎える。</p>
+          <p>彼女（She）は案内役であり、記録装置であり、<br>この世界で最初に“観測”される存在。</p>
+          <p>VRChat世界「OBS-NODE 00」に存在するノード。<br>CELESTIALにおける“入口”。</p>
+        </div>
+
+        <div class="profile-action">
+          <a href={`${BASE}`} class="btn-back">← BACK TO HOME</a>
         </div>
       </div>
-
-      <!-- Navigation / Footer -->
-      <nav class="shiichan-nav">
-        <a href="/" id="return-observer" class="observer-return">
-          RETURN TO OBSERVATION POINT
-        </a>
-
-        <button id="shiichan-audio-toggle" class="shiichan-audio-toggle" aria-label="Toggle signal">
-          <span class="sig-icon">⟡</span>
-          <span class="sig-text">SIGNAL</span>
-        </button>
-      </nav>
-      <!-- SHI-CHAN BGM -->
-      <audio id="shiichan-audio" src="/audio/MofuMofu Daikousin!!~もふもふだいこうしんっ！！~BGMのみver~.m4a" preload="auto" loop></audio>
-
-      <div id="shiichan-audio-gate" class="shiichan-audio-gate hidden" role="button" tabindex="0">
-        TAP TO CONNECT SIGNAL
-      </div>
     </div>
-  </main>
+  </div>
 </Layout>
 
-<script>
-  const shiichan = document.getElementById('shiichan-interaction');
-  const bubble = document.getElementById('bubble');
-
-  if (shiichan && bubble) {
-    const showBubble = () => {
-      // Reset animation
-      bubble.classList.remove('pop-in');
-      void bubble.offsetWidth; // Trigger reflow
-      
-      bubble.classList.remove('hidden');
-      bubble.classList.add('pop-in');
-
-      // Hide after a few seconds
-      setTimeout(() => {
-        bubble.classList.add('fade-out');
-        setTimeout(() => {
-          bubble.classList.add('hidden');
-          bubble.classList.remove('pop-in', 'fade-out');
-        }, 500);
-      }, 2000);
-    };
-
-    shiichan.addEventListener('click', showBubble);
-    shiichan.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        showBubble();
-      }
-    });
-  }
-</script>
-
-<script>
-  const audio = document.getElementById("shiichan-audio");
-  const toggle = document.getElementById("shiichan-audio-toggle");
-  const gate = document.getElementById("shiichan-audio-gate");
-
-  const shiichanEl = document.querySelector(".shiichan-img");
-
-  function setState(on) {
-    if (!toggle) return;
-    toggle.dataset.state = on ? "on" : "off";
-
-    const textEl = toggle.querySelector(".sig-text");
-    const iconEl = toggle.querySelector(".sig-icon");
-
-    if (textEl) textEl.textContent = on ? "BGM SIGNAL : ON" : "BGM SIGNAL : OFF";
-    if (iconEl) iconEl.textContent = on ? "⟡" : "⋯";
-  }
-
-  function setDancing(on) {
-    if (!shiichanEl) return;
-    shiichanEl.classList.toggle("is-dancing", !!on);
-    // Toggle image source
-    shiichanEl.src = !!on 
-      ? "/images/しぃちゃん笑顔.png" 
-      : "/images/しーちゃん_正面.png";
-  }
-
-  function syncDanceState() {
-    if (!audio) return;
-    const playing = !audio.paused && !audio.ended;
-    setDancing(playing);
-  }
-
-  async function tryPlay() {
-    if (!audio || !gate) return false;
-    try {
-      await audio.play();
-      setState(true);
-      syncDanceState();
-      gate.classList.add("hidden");
-      return true;
-    } catch (e) {
-      setState(false);
-      syncDanceState();
-      gate.classList.remove("hidden");
-      return false;
-    }
-  }
-
-  async function toggleAudio() {
-    if (!audio) return;
-    if (audio.paused) {
-      await tryPlay();
-    } else {
-      audio.pause();
-      setState(false);
-      syncDanceState();
-    }
-  }
-
-  window.addEventListener("load", async () => {
-    const pref = localStorage.getItem("shiichan_audio");
-    if (pref === "off") {
-      setState(false);
-      syncDanceState();
-      return;
-    }
-    await tryPlay();
-  });
-
-  if (toggle) {
-    toggle.addEventListener("click", async () => {
-      await toggleAudio();
-      if (audio) localStorage.setItem("shiichan_audio", audio.paused ? "off" : "on");
-    });
-  }
-
-  if (gate) {
-    gate.addEventListener("click", async () => {
-      await tryPlay();
-      localStorage.setItem("shiichan_audio", "on");
-    });
-  }
-
-  if (audio) {
-    audio.addEventListener("play", syncDanceState);
-    audio.addEventListener("playing", syncDanceState);
-    audio.addEventListener("pause", syncDanceState);
-    audio.addEventListener("ended", syncDanceState);
-  }
-</script>
-
-<script>
-  const returnBtn = document.getElementById("return-observer");
-  const bgm = document.querySelector("audio");
-
-  if (returnBtn && bgm) {
-    returnBtn.addEventListener("click", (e) => {
-      e.preventDefault();
-
-      bgm.pause();
-      bgm.currentTime = 0;
-
-      document.body.style.transition = "opacity 0.8s ease";
-      document.body.style.opacity = "0";
-
-      setTimeout(() => {
-        window.location.href = "/";
-      }, 800);
-    });
-  }
-</script>
-
 <style>
-  /* Page Theme Overrides */
-  /* Page Theme Overrides - Dreamy White / Anime ED Style */
-  :global(body.page-shiichan) {
-    /* Base: White -> Pale Blue -> Pale Pink */
-    background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
-    background-size: 400% 400%;
-    animation: dream-flow 40s ease-in-out infinite;
-    overflow: hidden;
-    position: relative;
-  }
-
-  /* Floating Light Orbs */
-  :global(body.page-shiichan)::before,
-  :global(body.page-shiichan)::after {
-    content: '';
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(80px); /* Heavy blur for soft dreamy look */
+  .profile-name-sub {
+    display: block;
+    font-size: 0.4em;
     opacity: 0.6;
-    z-index: 0;
-    pointer-events: none;
-    animation: float-orb 25s ease-in-out infinite alternate;
+    margin-top: 5px;
+    letter-spacing: 0.05em;
+    font-weight: 400;
   }
 
-  :global(body.page-shiichan)::before {
-    top: -10%;
-    left: -10%;
-    width: 60vw;
-    height: 60vw;
-    background: radial-gradient(circle, rgba(200, 240, 255, 0.4) 0%, transparent 70%);
+  /* Floating Animation & Glow */
+  .floating-img {
+    animation: float-glow 6s ease-in-out infinite;
+    filter: drop-shadow(0 0 20px rgba(100, 200, 255, 0.2));
   }
 
-  :global(body.page-shiichan)::after {
-    bottom: -10%;
-    right: -10%;
-    width: 70vw;
-    height: 70vw;
-    background: radial-gradient(circle, rgba(255, 230, 240, 0.4) 0%, transparent 70%);
-    animation-delay: -12s;
-  }
-
-  @keyframes dream-flow {
-    0% { background-position: 0% 50%; background-color: #fdfbfb; }
-    25% { background-color: #f0f8ff; } /* AliceBlue */
-    50% { background-position: 100% 50%; background-color: #fff0f5; } /* LavenderBlush */
-    75% { background-color: #f0ffff; } /* Azure */
-    100% { background-position: 0% 50%; background-color: #fdfbfb; }
-  }
-
-  @keyframes float-orb {
-    0% { transform: translate(0, 0) scale(1); opacity: 0.6; }
-    50% { transform: translate(30px, 30px) scale(1.1); opacity: 0.8; }
-    100% { transform: translate(-20px, -20px) scale(0.95); opacity: 0.6; }
-  }
-
-  /* Main Container */
-  .shiichan-world {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    /* ヘッダー分ちょい下げ */
-    padding-top: 70px;
-    box-sizing: border-box;
-    position: relative;
-    z-index: 1;
-  }
-
-  .content-wrapper {
-    text-align: center;
-    position: relative;
-    z-index: 10;
-  }
-
-  /* Character & Float Animation */
-  .character-container {
-    position: relative;
-    margin-bottom: 3rem;
-  }
-
-  .shiichan-wrapper {
-    display: inline-block;
-    position: relative;
-    cursor: pointer;
-    transition: transform 0.2s ease;
-    animation: floating 5s ease-in-out infinite;
-    outline: none;
-  }
-
-  .shiichan-wrapper:active {
-    transform: scale(0.95);
-  }
-
-  .shiichan-img {
-    width: min(300px, 60vw);
-    height: auto;
-    filter: drop-shadow(0 0 15px rgba(100, 200, 255, 0.3));
-    user-select: none;
-    -webkit-user-drag: none;
-
-    /* Dance Props */
-    will-change: transform, filter;
-    transform-origin: 50% 85%;
-  }
-
-  /* BGM Playing Dance */
-  .shiichan-img.is-dancing {
-    animation:
-      shi-bounce 0.58s ease-in-out infinite,
-      shi-sway   1.16s ease-in-out infinite,
-      shi-wiggle 2.4s  ease-in-out infinite;
-    filter: drop-shadow(0 10px 25px rgba(0,0,0,0.18));
-  }
-
-  @keyframes shi-bounce {
-    0%, 100% { transform: translateY(0) scaleY(1); }
-    50%      { transform: translateY(-10px) scaleY(0.98); }
-  }
-
-  @keyframes shi-sway {
-    0%, 100% { transform: translateX(0) translateY(0) rotate(0deg); }
-    25%      { transform: translateX(-6px) translateY(-2px) rotate(-2deg); }
-    75%      { transform: translateX(6px)  translateY(-2px) rotate(2deg); }
-  }
-
-  @keyframes shi-wiggle {
-    0%, 100% { filter: drop-shadow(0 10px 25px rgba(0,0,0,0.18)); }
-    50%      { filter: drop-shadow(0 14px 34px rgba(0,0,0,0.22)); }
-  }
-
-  /* Reduce Motion */
-  @media (prefers-reduced-motion: reduce) {
-    .shiichan-img.is-dancing { animation: none !important; }
-  }
-
-  @keyframes floating {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-18px); }
-  }
-
-  /* Chat Bubble */
-  /* Chat Bubble */
-  .chat-bubble {
-    position: absolute;
-    top: -22px;
-    left: 62%;
-    transform: translateX(0);
-    padding: 10px 14px;
-    border-radius: 16px;
-    background: rgba(10, 12, 20, 0.78);
-    color: rgba(255, 255, 255, 0.95);
-    border: 1px solid rgba(0, 255, 255, 0.25);
-    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.22), 0 0 18px rgba(0, 255, 255, 0.12);
-    backdrop-filter: blur(10px);
-    font-weight: 700;
-    font-size: 1.05rem;
-    z-index: 50;
-    
-    /* Default Hidden State */
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-    
-    white-space: nowrap;
-    font-family: 'Inter', sans-serif;
-  }
-
-  /* Manga Tail (Inner Dark) */
-  .chat-bubble::after {
-    content: "";
-    position: absolute;
-    left: 18px;
-    bottom: -10px;
-    width: 0;
-    height: 0;
-    border: 10px solid transparent;
-    border-top-color: rgba(10, 12, 20, 0.78);
-    filter: drop-shadow(0 2px 0 rgba(0, 255, 255, 0.18));
-  }
-
-  /* Manga Tail (Outer Glow/Border) */
-  .chat-bubble::before {
-    content: "";
-    position: absolute;
-    left: 17px;
-    bottom: -12px;
-    width: 0;
-    height: 0;
-    border: 11px solid transparent;
-    border-top-color: rgba(0, 255, 255, 0.22);
-    opacity: 0.55;
-  }
-
-  .chat-bubble.hidden {
-    opacity: 0;
-    visibility: hidden;
-    display: block !important; /* Override potential global display:none */
-  }
-
-  .chat-bubble.pop-in {
-    opacity: 1;
-    visibility: visible;
-    animation: popIn 0.18s ease-out forwards;
-  }
-
-  .chat-bubble.fade-out {
-    animation: fadeOut 0.5s ease forwards;
-  }
-
-  @keyframes popIn {
-    0% { opacity: 0; transform: scale(0.5) translateY(10px); }
-    100% { opacity: 1; transform: scale(1) translateY(0); }
-  }
-
-  @keyframes fadeOut {
-    to { opacity: 0; transform: translateY(-10px); }
-  }
-
-  /* Navigation */
-  .shiichan-nav {
-    margin-top: 28px;
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    align-items: center;
-  }
-
-  .nav-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    padding: 12px 24px;
-    border-radius: 50px;
-    color: #fff;
-    text-decoration: none;
-    font-weight: 500;
-    transition: all 0.3s ease;
-    box-shadow: 0 0 15px rgba(0, 255, 255, 0.1);
-  }
-
-  .nav-btn:hover {
-    background: rgba(255, 255, 255, 0.2);
-    box-shadow: 0 0 25px rgba(0, 255, 255, 0.3);
-    transform: translateY(-2px);
-  }
-
-
-
-  /* Audio Controls */
-  /* Audio Controls: Signal Toggle */
-  .shiichan-audio-toggle {
-    /* Position moved to nav container */
-    position: relative;
-    z-index: 10;
-    margin-top: 10px;
-
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-
-    /* Observational Terminal Style */
-    appearance: none;
-    -webkit-appearance: none;
-    
-    color: rgba(180, 240, 255, 0.9);
-    border: 1px solid rgba(120, 220, 255, 0.35);
-    background: rgba(20, 40, 60, 0.4);
-    backdrop-filter: blur(6px);
-    
-    padding: 8px 16px; 
-    border-radius: 999px;
-    
-    font-family: ui-monospace, monospace;
-    font-size: 11px;
-    letter-spacing: 0.18em;
-    text-decoration: none;
-    
-    cursor: pointer;
-    outline: none;
-    user-select: none;
-    -webkit-tap-highlight-color: transparent;
-
-    transition: all 0.25s ease;
-  }
-
-  /* Active / ON State */
-  .shiichan-audio-toggle[data-state="on"],
-  .shiichan-audio-toggle:active {
-    color: #eaffff !important;
-    border-color: rgba(140, 255, 255, 0.8) !important;
-    box-shadow: 0 0 12px rgba(120, 255, 255, 0.4);
-    background: rgba(40, 80, 110, 0.55) !important;
-  }
-
-  /* Hover Glow */
-  .shiichan-audio-toggle:hover {
-    color: #eaffff;
-    border-color: rgba(140, 255, 255, 0.6);
-    box-shadow: 0 0 16px rgba(120, 255, 255, 0.25);
-    transform: translateY(-1px);
-  }
-
-  /* Focus Safety */
-  .shiichan-audio-toggle:focus,
-  .shiichan-audio-toggle:focus-visible {
-    outline: none;
-    box-shadow: 0 0 0 2px rgba(120, 255, 255, 0.3);
-  }
-
-  .shiichan-audio-gate {
-    position: fixed;
-    left: 50%;
-    top: 70%;
-    transform: translateX(-50%);
-    z-index: 90;
-
-    padding: 10px 18px;
-    border-radius: 10px;
-    border: 1px solid rgba(0,255,255,0.2);
-    background: rgba(8,10,20,0.65);
-    color: rgba(0,255,255,0.95);
-
-    font-family: ui-monospace, monospace;
-    font-size: 12px;
-    letter-spacing: 0.15em;
-
-    backdrop-filter: blur(12px);
-    box-shadow: 0 0 30px rgba(0,255,255,0.12);
-    cursor: pointer;
-  }
-
-  .hidden { display: none; }
-
-  /* Observer Return Button */
-  .observer-return {
-    display: inline-block;
-    margin-top: 2rem;
-    font-family: monospace;
-    font-size: 0.7rem;
-    letter-spacing: 0.3em;
-    color: rgba(180, 255, 255, 0.7);
-    text-decoration: none;
-    border: 1px solid rgba(120, 255, 255, 0.25);
-    padding: 10px 18px;
-    border-radius: 999px;
-    background: rgba(0, 20, 30, 0.4);
-    box-shadow: 0 0 12px rgba(120, 255, 255, 0.15);
-    backdrop-filter: blur(6px);
-    transition: all 0.3s ease;
-  }
-
-  .observer-return:hover {
-    color: #eaffff;
-    border-color: rgba(120, 255, 255, 0.6);
-    box-shadow: 
-      0 0 12px rgba(120,255,255,0.4),
-      0 0 30px rgba(120,255,255,0.15);
-    letter-spacing: 0.35em;
-    transform: translateY(-1px);
+  @keyframes float-glow {
+    0%, 100% {
+      transform: translateY(0);
+      filter: drop-shadow(0 0 20px rgba(100, 200, 255, 0.2));
+    }
+    50% {
+      transform: translateY(-15px);
+      filter: drop-shadow(0 0 35px rgba(100, 255, 255, 0.4));
+    }
   }
 </style>

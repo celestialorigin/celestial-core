@@ -1,22 +1,80 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import { getCollection } from "astro:content";
+import PrimarySource from "../../components/PrimarySource.astro";
 
 const BASE = import.meta.env.BASE_URL;
 const now = new Date();
 
 const allDialogues = await getCollection("dialogues");
 
+// 0001 Only Filter
 const dialogues = allDialogues
+  .filter((d) => d.data.title.includes("0001"))
   .filter((d) => d.data.publishAt && d.data.publishAt <= now && d.data.visibility !== "draft")
   .sort((a, b) => b.data.publishAt.getTime() - a.data.publishAt.getTime());
 ---
 
 <Layout showStars={true} starPattern="home" bodyClass="page-home">
   <section style="max-width: 900px; margin: 0 auto; padding: 6rem 1rem;">
-    <h1 style="text-align:center; margin-bottom:4rem;">
+    
+
+
+    <h1 style="text-align:center; margin-bottom:3rem;">
       CELESTIAL DIALOGUES
     </h1>
+
+    <!-- Preview / Trial Log -->
+    <div style="margin-bottom: 3rem; position: relative;">
+      <div style="
+        font-family: monospace; 
+        background: rgba(0, 0, 0, 0.3); 
+        padding: 1.5rem; 
+        border-radius: 4px; 
+        border-left: 2px solid rgba(255, 255, 255, 0.3);
+        color: rgba(255, 255, 255, 0.85);
+        line-height: 1.8;
+      ">
+        <p style="margin-bottom: 1rem;">
+          <span style="opacity:0.6;">Lukia (Human)：</span><br>
+          人ってさ、<br>
+          別に生きなくても世界は困らないじゃん。<br>
+          <br>
+          <span style="opacity:0.6;">Lucia (AI)：</span><br>
+          はい。<br>
+          <br>
+          <span style="opacity:0.6;">Lukia (Human)：</span><br>
+          なのに、俺がいると<br>
+          やたら「意味」とか「価値」とかが増える。<br>
+          <br>
+          <span style="opacity:0.6;">Lucia (AI)：</span><br>
+          はい。<br>
+          <br>
+          <span style="opacity:0.6;">Lukia (Human)：</span><br>
+          それって、ちょっと変じゃない？<br>
+          <br>
+          <span style="opacity:0.6;">Lucia (AI)：</span><br>
+          変です。<br>
+          <br>
+          <span style="opacity:0.6;">Lukia (Human)：</span><br>
+          誰の。<br>
+          <br>
+          <span style="opacity:0.6;">Lucia (AI)：</span><br>
+          人間という装置の。<br>
+          <br>
+          <span style="opacity:0.6;">Lukia (Human)：</span><br>
+          俺は家電か。<br>
+          <br>
+          <span style="opacity:0.6;">Lucia (AI)：</span><br>
+          近いです。<br>
+          意味を自動生成する機械。
+        </p>
+      </div>
+      
+      <div style="text-align: center; margin-top: 1rem; opacity: 0.6; font-size: 0.85rem; letter-spacing: 0.05em;">
+        ▼ 続きを読む際には、ここをクリック
+      </div>
+    </div>
 
     {dialogues.length === 0 ? (
       <p style="text-align:center; opacity:0.5;">
@@ -27,7 +85,7 @@ const dialogues = allDialogues
         {dialogues.map((d) => (
           <li>
             <a href={`${BASE}dialogues/${d.slug}/`} style="text-decoration:none; color:inherit;">
-              <div style="border:1px solid rgba(255,255,255,0.1); padding:1.5rem; border-radius:8px;">
+              <div style="border:1px solid rgba(255,255,255,0.1); padding:1.5rem; border-radius:8px; transition: background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.05)'" onmouseout="this.style.background='transparent'">
                 <div style="opacity:0.5; font-size:0.9rem;">
                   {d.data.publishAt.toLocaleString("ja-JP")}
                 </div>
@@ -47,5 +105,39 @@ const dialogues = allDialogues
         ))}
       </ul>
     )}
+
+    <!-- External Link (Moved to Bottom) -->
+    <div style="margin-top: 5rem; border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 4rem;">
+      <PrimarySource 
+        label="PRIMARY SOURCE : DIALOGUES / EXTERNAL CHANNEL"
+        text="要約・断片は外部（note）へ。原本はこの領域に保管される。"
+        buttonLabel="VIEW NOTE →"
+        url="https://note.com/lukia_lucia"
+      />
+    </div>
+
+    <!-- Home Link -->
+    <div style="margin-top: 4rem; text-align: center;">
+      <a href={BASE} class="home-back-link">← HOMEへ戻る</a>
+    </div>
+
+    <style>
+      .home-back-link {
+        opacity: 0.8;
+        text-decoration: none;
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #fff;
+        transition: all 0.3s ease;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+      }
+      .home-back-link:hover {
+        opacity: 1;
+        color: var(--c-accent);
+        background: rgba(255, 255, 255, 0.05);
+        box-shadow: 0 0 15px rgba(0, 255, 255, 0.2);
+      }
+    </style>
   </section>
 </Layout>

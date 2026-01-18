@@ -1,18 +1,17 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import PrimarySource from "../components/PrimarySource.astro";
 
-// v0: Check for Environment Variable for manual live embed
-// In production, this would be set via GitHub Secrets/Vars or Vercel Env
 const LIVE_EMBED_URL = import.meta.env.PUBLIC_LIVE_EMBED_URL;
 const isLive = !!LIVE_EMBED_URL;
+const BASE = (import.meta.env.BASE_URL || "/").replace(/\/?$/, "/");
 ---
 
-<Layout title="LIVE MONITOR" bodyClass="page-realtime">
+<Layout title="REAL-TIME" bodyClass="page-realtime">
   <main class="console-container fade-in-section">
     <div class="header-section">
       <div>
-        <a href="/" class="live-return">← RETURN</a>
-        <h1 class="glitch-text" data-text="LIVE OBSERVATION">LIVE OBSERVATION</h1>
+        <h1 class="glitch-text" data-text="REAL-TIME">REAL-TIME</h1>
       </div>
       <p class="subtitle">REAL-TIME STREAM MONITORING</p>
     </div>
@@ -38,15 +37,32 @@ const isLive = !!LIVE_EMBED_URL;
       )}
     </div>
 
-    <div class="actions">
-      <a href="/signals" class="btn-secondary">>> CHECK SIGNAL LOGS</a>
+    <!-- External Links (Twitch / YouTube) -->
+    <div class="external-area">
+      <PrimarySource 
+        label="TWITCH" 
+        text="ライブ配信（アーカイブなし / 突発的観測）" 
+        buttonLabel="WATCH TWITCH →" 
+        url="https://twitch.tv/"
+      />
+      
+      <PrimarySource 
+        label="YOUTUBE" 
+        text="メイン配信・アーカイブ保管庫" 
+        buttonLabel="WATCH YOUTUBE →" 
+        url="https://youtube.com/"
+      />
+    </div>
+
+    <div class="back-home-link">
+      <a href={BASE}>← HOMEへ戻る</a>
     </div>
   </main>
 </Layout>
 
 <style>
   .console-container {
-    max-width: 1100px;
+    max-width: 900px; /* Aligned with fragments/creations max-width */
     margin: 120px auto 40px;
     padding: 0 20px;
   }
@@ -85,6 +101,7 @@ const isLive = !!LIVE_EMBED_URL;
     position: relative;
     overflow: hidden;
     box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+    margin-bottom: 3rem;
   }
 
   .monitor-frame::after {
@@ -138,43 +155,36 @@ const isLive = !!LIVE_EMBED_URL;
     50% { opacity: 0.5; }
   }
 
-  /* Actions */
-  .actions {
-    margin-top: 30px;
-    text-align: right;
+  /* External Area (Copied styling logic for spacing) */
+  .external-area {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
   }
 
-  .btn-secondary {
-    display: inline-block;
-    padding: 10px 24px;
-    border: 1px solid rgba(0, 255, 255, 0.3);
-    color: rgba(0, 255, 255, 0.8);
+  /* Back Home Link (Matched to Fragments) */
+  .back-home-link {
+    margin-top: 4rem;
+    text-align: center;
+  }
+
+  .back-home-link a {
+    opacity: 0.8;
     text-decoration: none;
-    font-family: monospace;
-    transition: all 0.3s;
-    background: rgba(0, 20, 30, 0.6);
-  }
-
-  .btn-secondary:hover {
-    background: rgba(0, 255, 255, 0.15);
+    font-size: 1.1rem;
+    font-weight: 700;
     color: #fff;
-    border-color: rgba(0, 255, 255, 0.8);
-  }
-
-  /* Return Link */
-  .live-return {
-    display: inline-block;
-    font-family: monospace;
-    font-size: 0.75rem;
-    letter-spacing: 0.15em;
-    color: rgba(0, 255, 255, 0.5);
-    text-decoration: none;
-    margin-bottom: 0.5rem;
     transition: all 0.3s ease;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
   }
-
-  .live-return:hover {
-    color: rgba(0, 255, 255, 1);
-    text-shadow: 0 0 8px rgba(0, 255, 255, 0.6);
-    transform: translateX(-2px);
+  .back-home-link a:hover {
+    opacity: 1;
+    color: var(--c-accent);
+    background: rgba(255, 255, 255, 0.05);
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.2);
   }
+</style>

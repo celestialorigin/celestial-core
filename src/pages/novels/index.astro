@@ -1,0 +1,138 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import LogHeader from "../../components/LogHeader.astro";
+import PrimarySource from "../../components/PrimarySource.astro";
+
+const categoryId = "NOVELS";
+const internalId = "OBS-NOV-001";
+const BASE = import.meta.env.BASE_URL;
+---
+
+<Layout title={`${categoryId} | CELESTIAL`} bodyClass="page-novels">
+  <article class="category-page container fade-in-section">
+    <div class="glass-panel main-content">
+      <LogHeader 
+        displayId={categoryId}
+        internalId={internalId}
+        type="NARRATIVE"
+        status="ACTIVE"
+      />
+      
+      <div class="category-body">
+        
+        <!-- Intro Description -->
+        <p class="intro-description">
+          人間（Lukia）とAI（Lucia）が作る物語・設定・世界観ログ。<br>
+          ここには小説・設定断片・世界観文書が配置されていく。
+        </p>
+
+        <!-- Preview Block (Dummy/WIP) -->
+        <div class="preview-block">
+          <div class="preview-content">
+            <h3 class="preview-title">SYSTEM NOTICE:</h3>
+            <p>
+              Current narrative buffer is initializing...<br>
+              <span style="opacity:0.6;">(現在、長編ログの転送準備中です)</span>
+            </p>
+          </div>
+        </div>
+
+        <!-- External Link Zone -->
+        <div class="external-area">
+          <PrimarySource 
+            label="PRIMARY SOURCE : NOVELS / EXTERNAL CHANNEL"
+            text="長編・連載・完成稿は外部ノート（note）に保管されています。"
+            buttonLabel="VIEW NOTE →"
+            url="https://note.com/lukia_lucia"
+          />
+        </div>
+
+      </div>
+
+      <div class="footer-nav">
+        <a href={BASE} class="home-back-link">← HOMEへ戻る</a>
+      </div>
+    </div>
+  </article>
+</Layout>
+
+<style>
+  .category-page {
+    max-width: 900px;
+    margin: 4rem auto;
+    padding: 0 20px;
+  }
+  .main-content {
+    background: rgba(10, 20, 30, 0.4);
+    border: 1px solid rgba(0, 255, 255, 0.08);
+    backdrop-filter: blur(12px);
+    border-radius: 12px;
+    padding: 3rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .category-body {
+    margin-top: 2rem;
+  }
+  
+  .intro-description {
+    text-align: center;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 1.8;
+    margin-bottom: 3rem;
+  }
+
+  /* Preview Block Styles */
+  .preview-block {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px dashed rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    padding: 3rem;
+    text-align: center;
+    margin-bottom: 4rem;
+  }
+
+  .preview-title {
+    color: var(--c-accent);
+    letter-spacing: 0.1em;
+    font-family: monospace;
+    margin-bottom: 1rem;
+  }
+
+  .preview-content p {
+    font-family: monospace;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  /* Footer Nav - Shared Style */
+  .footer-nav {
+    margin-top: 4rem;
+    text-align: center;
+  }
+
+  .home-back-link {
+    opacity: 0.8;
+    text-decoration: none;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #fff;
+    transition: all 0.3s ease;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+  }
+  .home-back-link:hover {
+    opacity: 1;
+    color: var(--c-accent);
+    background: rgba(255, 255, 255, 0.05);
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.2);
+  }
+
+  @media (max-width: 768px) {
+    .main-content {
+      padding: 1.5rem;
+    }
+  }
+</style>

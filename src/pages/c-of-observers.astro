@@ -1,12 +1,11 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import LogHeader from '../components/LogHeader.astro';
-import LogList from '../components/LogList.astro';
-import DimensionalRift from '../components/DimensionalRift.astro';
-import { logs } from '../data/logs';
+
 
 const categoryId = "C OF OBSERVER";
 const internalId = "OBS-OBSR-001";
+const BASE = (import.meta.env.BASE_URL || "/").replace(/\/?$/, "/");
 ---
 
 <Layout title={`${categoryId} | CELESTIAL`} bodyClass="page-c-of-observers">
@@ -42,23 +41,18 @@ const internalId = "OBS-OBSR-001";
           </p>
         </div>
 
-        <div class="logs-section">
-          <h2 class="section-title">ENTITY OBSERVED DATA</h2>
-          <LogList logs={logs} filterCategory="observers" />
-        </div>
+
         
         <div class="stardust-layer"></div>
       </div>
 
-      <div class="footer-nav">
-        <a class="analyze-footer-link" href="/" aria-label="Return to Observation Base">
-          ← 観測拠点に戻る
-        </a>
+      <div class="back-home-link">
+        <a href={BASE}>← HOMEへもどる</a>
       </div>
     </div>
   </article>
   
-  <DimensionalRift position="right" href="/rift" variant="past" />
+
 </Layout>
 
 <style>
@@ -163,25 +157,6 @@ const internalId = "OBS-OBSR-001";
     to { background-position: 0 -400px; }
   }
 
-  .footer-nav {
-    margin-top: 5rem;
-    text-align: center;
-  }
-  
-  .back-link {
-    opacity: 0.4;
-    text-decoration: none;
-    font-size: 0.85rem;
-    letter-spacing: 0.1em;
-    color: rgba(255, 255, 255, 0.6);
-    transition: all 0.4s ease;
-  }
-  .back-link:hover {
-    opacity: 0.9;
-    color: rgba(220, 240, 255, 1);
-    text-shadow: 0 0 10px rgba(220, 240, 255, 0.4);
-  }
-
   /* Soften global accent overrides for this page */
   :global(.page-c-of-observers .log-item) {
     border-color: rgba(255, 255, 255, 0.05) !important;
@@ -214,40 +189,25 @@ const internalId = "OBS-OBSR-001";
   :global(.page-c-of-observers .log-date) { opacity: 0.5 !important; }
   :global(.page-c-of-observers .log-title) { color: rgba(240, 245, 255, 0.9) !important; }
 
-  /* Analyze Data Link Micro-interaction */
-  /* Analyze Footer Link - Replaces analyze-link */
-  .analyze-footer-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-top: 18px;
-    color: rgba(170, 220, 255, 0.70);
-    font-size: 12px;
-    letter-spacing: 0.22em;
+  /* Back Home Link (Matched to other pages) */
+  .back-home-link {
+    margin-top: 4rem;
+    text-align: center;
+  }
+
+  .back-home-link a {
+    opacity: 0.8;
     text-decoration: none;
-    opacity: 0.55;
-    transition: all 0.35s ease;
-    position: relative;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #fff;
+    transition: all 0.3s ease;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
   }
-
-  .analyze-footer-link::before {
-    content:"";
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: rgba(120,200,255,0.35);
-    box-shadow: 0 0 10px rgba(120,200,255,0.35);
-  }
-
-  .analyze-footer-link:hover {
+  .back-home-link a:hover {
     opacity: 1;
-    color: #c8f4ff;
-    text-shadow: 0 0 10px rgba(140,220,255,0.55);
+    color: var(--c-accent);
+    background: rgba(255, 255, 255, 0.05);
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.2);
   }
-
-  .analyze-footer-link:hover::before {
-    background: #c8f4ff;
-    box-shadow: 0 0 6px rgba(160,230,255,0.8),
-                0 0 14px rgba(120,200,255,0.6);
-  }
-</style>

@@ -2,11 +2,20 @@
 import Layout from '../layouts/Layout.astro';
 import LogHeader from '../components/LogHeader.astro';
 import PrimarySource from '../components/PrimarySource.astro';
-import LogList from '../components/LogList.astro';
-import { logs } from '../data/logs';
+
 
 const categoryId = "FRAGMENTS";
 const internalId = "OBS-FRAG-001";
+const BASE = import.meta.env.BASE_URL;
+
+const galleryImages = [
+  { src: `${BASE}images/sample01.png`, alt: "sample01", caption: "Fragment 01" },
+  { src: `${BASE}images/sample02.png`, alt: "sample02", caption: "Fragment 02" },
+  { src: `${BASE}images/sample03.png`, alt: "sample03", caption: "Fragment 03" },
+  { src: `${BASE}images/sample04.png`, alt: "sample04", caption: "Fragment 04" },
+  { src: `${BASE}images/sample05.png`, alt: "sample05", caption: "Fragment 05" },
+  { src: `${BASE}images/sample06.png`, alt: "sample06", caption: "Fragment 06" },
+];
 ---
 
 <Layout title={`${categoryId} | CELESTIAL`}>
@@ -20,21 +29,57 @@ const internalId = "OBS-FRAG-001";
       />
       
       <div class="category-body">
-        <PrimarySource 
-          label="PRIMARY SOURCE : FRAGMENTS / EXTERNAL VISUAL CHANNEL"
-          text="断片記録リポジトリ：画像データや視覚化されたノイズの集積。外部メディア（pixiv）にて高精細データを公開中。"
-          buttonLabel="VIEW REPOSITORY →"
-          url="https://www.pixiv.net/users/122573778"
-        />
+        
+        <!-- Simplified Top Description -->
+        <p class="intro-description">
+          ここに展示しているのは、代表的な画像のサンプルです。<br>
+          すべての作品・高解像度アーカイブは、外部チャンネル（pixiv）にて公開しています。
+        </p>
 
-        <div class="logs-section">
-          <h2 class="section-title">OBSERVATION LOGS</h2>
-          <LogList logs={logs} filterCategory="fragments" />
+        <!-- Mini Gallery -->
+        <div class="mini-gallery">
+          {galleryImages.map(img => (
+            <a href={img.src} target="_blank" rel="noopener noreferrer" class="gallery-item" title={img.alt}>
+              <img src={img.src} alt={img.alt} loading="lazy" />
+              <div class="caption">{img.caption}</div>
+            </a>
+          ))}
         </div>
+
+        <!-- External Link (Moved to Bottom) -->
+        <div class="external-area">
+          <PrimarySource 
+            label="EXTERNAL VISUAL ARCHIVE"
+            text="現在、すべての断片はpixivに保管されています。"
+            buttonLabel="VIEW PIXIV →"
+            url="https://www.pixiv.net/users/122573778"
+          />
+        </div>
+
       </div>
 
+      <section class="hub-wide-links" aria-label="External Links">
+        <a class="hub-wide-card" href="https://vrchat.com/home/user/usr_c5c0b452-e9b1-4191-bbd3-ddf2c4e8c539" target="_blank" rel="noopener noreferrer">
+          <div class="hub-wide-icon" aria-hidden="true">🛰️</div>
+          <div class="hub-wide-body">
+            <div class="hub-wide-title">VRCHAT</div>
+            <div class="hub-wide-desc">プロフィール（ワールド / アバター / 活動拠点）</div>
+          </div>
+          <div class="hub-wide-arrow" aria-hidden="true">↗</div>
+        </a>
+
+        <a class="hub-wide-card" href="https://celestialcore.booth.pm/" target="_blank" rel="noopener noreferrer">
+          <div class="hub-wide-icon" aria-hidden="true">📦</div>
+          <div class="hub-wide-body">
+            <div class="hub-wide-title">BOOTH</div>
+            <div class="hub-wide-desc">VRChatで使えるもの・制作物の配布 / 販売拠点（CELESTIAL CORE）</div>
+          </div>
+          <div class="hub-wide-arrow" aria-hidden="true">↗</div>
+        </a>
+      </section>
+
       <div class="footer-nav">
-        <a href="/archive" class="back-link">← VIEW MASTER ARCHIVE</a>
+        <a href={BASE} class="back-link">← HOMEへ戻る</a>
       </div>
     </div>
   </article>
@@ -51,39 +96,111 @@ const internalId = "OBS-FRAG-001";
     border-radius: 12px;
   }
   .category-body {
-    margin-top: 3rem;
+    margin-top: 2rem;
   }
-  .logs-section {
-    margin-top: 6rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    padding-top: 4rem;
-  }
-  .section-title {
-    font-size: 0.9rem;
-    letter-spacing: 0.3em;
-    opacity: 0.4;
-    margin-bottom: 2.5rem;
-    font-weight: bold;
+  
+  .intro-description {
     text-align: center;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 1.8;
+    margin-bottom: 3rem;
   }
-  .empty-msg {
+
+  /* Mini Gallery */
+  .mini-gallery {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 4rem;
+  }
+
+  .gallery-item {
+    display: block;
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+    aspect-ratio: 3/4; /* Consistent aspect ratio */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+  }
+
+  .gallery-item:hover {
+    border-color: rgba(0, 255, 255, 0.4);
+    transform: translateY(-4px);
+    box-shadow: 0 5px 15px rgba(0, 255, 255, 0.1);
+  }
+
+  .gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+
+  .gallery-item:hover img {
+    transform: scale(1.05);
+  }
+
+  .caption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+    padding: 1rem 0.8rem 0.5rem;
+    font-size: 0.75rem;
+    color: #fff;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.3s ease;
     text-align: center;
-    opacity: 0.3;
     font-family: monospace;
-    padding: 4rem;
   }
+
+  .gallery-item:hover .caption {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* External Area */
+  .external-area {
+    margin-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 3rem;
+  }
+
   .footer-nav {
-    margin-top: 5rem;
+    margin-top: 4rem;
     text-align: center;
   }
+
   .back-link {
-    opacity: 0.4;
+    opacity: 0.8;
     text-decoration: none;
-    font-size: 0.9rem;
-    transition: opacity 0.3s;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #fff;
+    transition: all 0.3s ease;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
   }
   .back-link:hover {
     opacity: 1;
     color: var(--c-accent);
+    background: rgba(255, 255, 255, 0.05);
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.2);
+  }
+
+  @media (max-width: 768px) {
+    .mini-gallery {
+      grid-template-columns: 1fr; /* 1 col on mobile */
+      gap: 2rem;
+    }
+    .main-content {
+      padding: 1.5rem;
+    }
   }
 </style>

@@ -65,6 +65,67 @@
   margin-top: 10px;
 }
 
+/* Core C Trigger Visuals */
+#core-c-trigger {
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-block;
+  position: relative;
+}
+
+#core-c-trigger:hover,
+#core-c-trigger:focus {
+  color: var(--c-accent);
+  text-shadow: 0 0 20px var(--c-accent-glow), 0 0 40px var(--c-accent);
+  animation: c-pulse 1.6s infinite ease-in-out;
+  outline: none;
+}
+
+@keyframes c-pulse {
+
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+    filter: brightness(1);
+  }
+
+  50% {
+    transform: scale(1.05);
+    filter: brightness(1.3);
+    text-shadow: 0 0 25px var(--c-accent-glow);
+  }
+}
+
+/* Tooltip */
+#core-c-trigger::after {
+  content: attr(data-hint);
+  position: absolute;
+  bottom: 110%;
+  /* Above the letter */
+  left: 50%;
+  transform: translateX(-50%) translateY(10px);
+  opacity: 0;
+  pointer-events: none;
+  background: rgba(0, 10, 16, 0.9);
+  border: 1px solid var(--c-accent);
+  color: var(--c-accent);
+  font-size: 10px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+  letter-spacing: 0.1em;
+  transition: all 0.2s ease;
+  font-family: monospace;
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.2);
+}
+
+#core-c-trigger:hover::after,
+#core-c-trigger:focus::after {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
 .page-home .hero-kicker {
   margin: 20px 0 0;
   text-align: center;
@@ -215,15 +276,17 @@
 
 .page-home .home-hub {
   width: min(760px, 92vw);
-  margin: 22px auto 0;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
+  margin: 32px auto 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
 }
 
 .page-home .hub-card {
   display: block;
-  padding: 14px;
+  width: 100%;
+  padding: 18px 24px;
   border-radius: 12px;
   border: 1px solid rgba(255, 255, 255, 0.10);
   background: rgba(255, 255, 255, 0.02);
@@ -231,6 +294,7 @@
   text-decoration: none;
   color: inherit;
   transition: transform .18s ease, border-color .18s ease, background .18s ease, box-shadow .18s ease;
+  text-align: left;
 }
 
 .page-home .hub-card:hover {
@@ -242,10 +306,11 @@
 
 .page-home .hub-title {
   letter-spacing: .14em;
-  font-size: 12px;
+  font-size: 13px;
   color: var(--c-accent);
   text-transform: uppercase;
   margin-bottom: 6px;
+  font-weight: 700;
 }
 
 .page-home .hub-desc {
@@ -254,11 +319,30 @@
   line-height: 1.4;
 }
 
-@media (max-width: 720px) {
-  .page-home .home-hub {
-    grid-template-columns: 1fr;
-  }
+
+/* Primary Cards (REAL-TIME, CONTACT) */
+.page-home .hub-card-primary {
+  border-color: rgba(0, 255, 255, 0.15);
 }
+
+/* Secondary Card (ARCHIVE) */
+.page-home .hub-card-secondary {
+  width: min(100%, 420px);
+  padding: 12px 18px;
+  margin-top: 8px;
+  opacity: 0.75;
+  text-align: center;
+  border-color: rgba(255, 255, 255, 0.06);
+}
+
+.page-home .hub-card-secondary:hover {
+  opacity: 1;
+  border-color: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.04);
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.05);
+}
+
+
 
 /* New Hero Grid Styles */
 /* New Hero Grid Styles */
@@ -344,13 +428,15 @@
     font-size: 2rem;
   }
 }
+
 /* =========================
    Lukia / Lucia – World Residents (HOME)
 ========================= */
 
 .page-home .hero {
   position: relative;
-  overflow: visible; /* ← 脚が切れないようにする */
+  overflow: visible;
+  /* ← 脚が切れないようにする */
 }
 
 /* ドック（床） */
@@ -358,8 +444,10 @@
   position: absolute;
   left: 0;
   right: 0;
-  bottom: -40px;     /* ← “床の高さ” ここで調整 */
-  height: 820px;     /* ← 脚まで入る十分な高さ */
+  bottom: -40px;
+  /* ← “床の高さ” ここで調整 */
+  height: 820px;
+  /* ← 脚まで入る十分な高さ */
   pointer-events: none;
   z-index: 1;
 }
@@ -372,24 +460,27 @@
 }
 
 .page-home .observer img {
-  height: 720px;     /* ← でっかさ。脚まで映すなら700↑推奨 */
+  height: 720px;
+  /* ← でっかさ。脚まで映すなら700↑推奨 */
   width: auto;
   display: block;
-  filter: drop-shadow(0 0 28px rgba(120,255,255,0.35));
+  filter: drop-shadow(0 0 28px rgba(120, 255, 255, 0.35));
 }
 
 /* ✅ 左：Lukia */
 .page-home .observer-lukia {
-  left: 80px;        /* ← 左端からの距離 */
+  left: 80px;
+  /* ← 左端からの距離 */
 }
 
 /* ✅ 右：Lucia */
 .page-home .observer-lucia {
-  right: 80px;       /* ← 右端からの距離 */
+  right: 80px;
+  /* ← 右端からの距離 */
 }
 
 /* ===== FORCE OVERRIDE (HOME) ===== */
-.page-home .observers-dock{
+.page-home .observers-dock {
   position: absolute;
   left: 0;
   right: 0;
@@ -399,41 +490,91 @@
   z-index: 1;
 }
 
-.page-home a.observer{
+.page-home a.observer {
   position: absolute;
   bottom: 0;
   pointer-events: auto;
 }
 
-.page-home a.observer.observer-lukia{
+.page-home a.observer.observer-lukia {
   left: 80px !important;
   right: auto !important;
   transform: none !important;
 }
 
-.page-home a.observer.observer-lucia{
+.page-home a.observer.observer-lucia {
   right: 80px !important;
   left: auto !important;
   transform: none !important;
 }
 
-.page-home .observer img{
+.page-home .observer img {
   height: 800px;
   width: auto;
   display: block;
-  filter: none; /* ← まずボヤけ原因を潰す */
+  filter: none;
+  /* ← まずボヤけ原因を潰す */
 }
 
-@media (max-width: 768px){
-  .page-home .observers-dock{ bottom: -120px; height: 70vh; }
-  .page-home .observer img{ height: min(62vh, 520px); }
-  .page-home a.observer.observer-lukia{ left: 12px !important; }
-  .page-home a.observer.observer-lucia{ right: 12px !important; }
+@media (max-width: 768px) {
+  .page-home .observers-dock {
+    bottom: -120px;
+    height: 70vh;
+  }
+
+  .page-home .observer img {
+    height: min(62vh, 520px);
+  }
+
+  .page-home a.observer.observer-lukia {
+    left: 12px !important;
+  }
+
+  .page-home a.observer.observer-lucia {
+    right: 12px !important;
+  }
 }
 
 /* HOMEは実体PNGを置くので、globalの疑似要素シルエットは殺す */
 .page-home .hero::before,
-.page-home .hero::after{
+.page-home .hero::after {
   content: none !important;
   display: none !important;
+}
+
+/* Visual Guidance Animations */
+@keyframes pulse-down {
+
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.8;
+  }
+
+  50% {
+    transform: translateY(6px);
+    opacity: 1;
+    text-shadow: 0 0 15px var(--c-accent-glow);
+  }
+}
+
+.hero-scroll-indicator {
+  text-align: center;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--c-accent);
+  margin: 16px auto 0;
+  animation: pulse-down 2s infinite ease-in-out;
+  line-height: 1;
+  text-shadow: 0 0 10px rgba(0, 255, 255, 0.4);
+  cursor: default;
+}
+
+.latest-arrow {
+  display: inline-block;
+  font-size: 0.9em;
+  color: var(--c-accent);
+  margin-left: 8px;
+  animation: pulse-down 3s infinite ease-in-out;
+  vertical-align: middle;
 }

@@ -1,6 +1,9 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import { getNavTiles } from "../data/navTiles";
+
 const BASE = (import.meta.env.BASE_URL || "/").replace(/\/?$/, "/");
+const tiles = getNavTiles(BASE);
 ---
 
 <Layout showStars={true} starPattern="mid" bodyClass="page-creations" title="CREATIONS">
@@ -13,43 +16,18 @@ const BASE = (import.meta.env.BASE_URL || "/").replace(/\/?$/, "/");
       </p>
     </header>
 
-    <div class="grid">
-      <a class="card" href={`${BASE}fragments/`}>
-        <h2>IMAGES</h2>
-        <p>生成画像・視覚ノイズ・断片の展示。</p>
-      </a>
-
-      <a class="card" href={`${BASE}motion-archive/`}>
-        <h2>VIDEOS</h2>
-        <p>映像・モーション・短い実験ログ。</p>
-      </a>
-
-
-
-      <a class="card" href={`${BASE}game/`}>
-        <h2>GAMES</h2>
-        <p>ブラウザゲーム／観測ギミック。</p>
-      </a>
-
-      <a class="card" href={`${BASE}deep-observation/`}>
-        <h2>VR</h2>
-        <p>深層観測・VR観測拠点（構築ログ含む）。</p>
-      </a>
-
-      <a class="card" href={`${BASE}audio/`}>
-        <h2>AUDIO / SIGNAL PORT</h2>
-        <p>外部音楽チャンネル（Suno/YouTube）との接続口。</p>
-      </a>
-
-      <a class="card" href={`${BASE}shiichan/`}>
-        <h2>AVATAR / NODES</h2>
-        <p>しーちゃん／ノード／アバター関連の記録と展示。</p>
-      </a>
+    <div class="grid hero-grid">
+      {tiles.map((tile) => (
+        <a class={"hero-card " + tile.class} href={tile.href}>
+          <span class="card-icon">{tile.icon}</span>
+          <span class="card-title">{tile.label}</span>
+          <span class="card-desc">{tile.desc}</span>
+        </a>
+      ))}
     </div>
 
-    <div class="foot">
-      <a class="back" href={`${BASE}`}>← Home</a>
-      <a class="back" href={`${BASE}archive/`}>Archive（観測ログ）へ →</a>
+    <div class="back-home-link">
+      <a href={BASE}>← HOMEへ戻る</a>
     </div>
   </section>
 </Layout>
@@ -73,58 +51,89 @@ const BASE = (import.meta.env.BASE_URL || "/").replace(/\/?$/, "/");
     max-width: 900px;
   }
 
-  .grid{
-    margin-top: 18px;
+  /* Shared Card Styles from home.css */
+  .hero-grid {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 12px;
-  }
-
-  .card{
-    display: block;
-    padding: 16px;
-    border-radius: 14px;
-    border: 1px solid rgba(255,255,255,0.10);
-    background: rgba(255,255,255,0.02);
-    text-decoration: none;
-    color: inherit;
-    transition: transform .18s ease, border-color .18s ease, background .18s ease, box-shadow .18s ease;
-  }
-
-  .card:hover{
-    transform: translateY(-1px);
-    background: rgba(0,255,255,0.03);
-    border-color: rgba(0,255,255,0.22);
-    box-shadow: 0 0 22px rgba(0,255,255,0.09);
-  }
-
-  .card h2{
-    margin: 0 0 8px;
-    letter-spacing: .14em;
-    font-size: 12px;
-    color: var(--c-accent);
-    text-transform: uppercase;
-  }
-
-  .card p{
-    margin: 0;
-    opacity: .82;
-    font-size: 12px;
-    line-height: 1.6;
-  }
-
-  .foot{
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
     margin-top: 18px;
+  }
+
+  .hero-card {
     display: flex;
-    gap: 14px;
-    flex-wrap: wrap;
+    flex-direction: column;
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    height: 100%;
+    min-height: 160px;
+    position: relative;
+    overflow: hidden;
   }
 
-  .back{
-    opacity: .85;
+  .hero-card:hover {
+    background: rgba(0, 255, 255, 0.05);
+    border-color: rgba(0, 255, 255, 0.3);
+    transform: translateY(-4px);
+    box-shadow: 0 4px 20px rgba(0, 255, 255, 0.1);
   }
 
-  @media (max-width: 860px){
-    .grid{ grid-template-columns: 1fr; }
+  /* Card ID Colors (from home.css) */
+  .card-audio:hover { border-color: rgba(255, 100, 255, 0.5); box-shadow: 0 4px 20px rgba(255, 100, 255, 0.15); }
+  .card-img:hover { border-color: rgba(0, 255, 255, 0.5); box-shadow: 0 4px 20px rgba(0, 255, 255, 0.15); }
+  .card-dialogues:hover { border-color: rgba(100, 255, 100, 0.5); box-shadow: 0 4px 20px rgba(100, 255, 100, 0.15); }
+  .card-novels:hover { border-color: rgba(255, 255, 100, 0.5); box-shadow: 0 4px 20px rgba(255, 255, 100, 0.15); }
+  .card-game:hover { border-color: rgba(255, 100, 100, 0.5); box-shadow: 0 4px 20px rgba(255, 100, 100, 0.15); }
+  .card-vr:hover { border-color: rgba(180, 100, 255, 0.5); box-shadow: 0 4px 20px rgba(180, 100, 255, 0.15); }
+
+  .card-icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    opacity: 0.9;
+  }
+
+  .card-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.05em;
+  }
+
+  .card-desc {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.5;
+  }
+
+  @media (max-width: 768px) {
+    .hero-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .back-home-link {
+    margin-top: 4rem;
+    text-align: center;
+  }
+
+  .back-home-link a {
+    opacity: 0.8;
+    text-decoration: none;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #fff;
+    transition: all 0.3s ease;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+  }
+  .back-home-link a:hover {
+    opacity: 1;
+    color: var(--c-accent);
+    background: rgba(255, 255, 255, 0.05);
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.2);
   }
 </style>

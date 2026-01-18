@@ -799,6 +799,224 @@ body[data-stars="on"].page-home #home-secret-stars {
   left: 12%;
 }
 
+/* =========================
+   🔗 Hub Wide Links (Shared External Links)
+   Used in /wip/vr/ and /fragments/
+========================= */
+.hub-wide-links {
+  margin-top: 28px;
+  display: grid;
+  gap: 14px;
+  text-align: left;
+  /* Ensure text alignment */
+  max-width: 500px;
+  /* Limit width */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.hub-wide-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 18px;
+  border-radius: 14px;
+  text-decoration: none;
+  color: inherit;
+
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(0, 255, 255, 0.14);
+  box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease, background .18s ease;
+}
+
+.hub-wide-card:hover {
+  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 0.055);
+  border-color: rgba(0, 255, 255, 0.28);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+}
+
+.hub-wide-icon {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  background: rgba(0, 255, 255, 0.08);
+  border: 1px solid rgba(0, 255, 255, 0.18);
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.hub-wide-body {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+
+.hub-wide-title {
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--c-accent);
+  font-size: 1rem;
+}
+
+.hub-wide-desc {
+  opacity: 0.85;
+  font-size: 0.92rem;
+  line-height: 1.4;
+}
+
+.hub-wide-arrow {
+  margin-left: auto;
+  opacity: 0.75;
+  font-size: 14px;
+}
+
+
+/* 
+  External Card Link (Clickable Box)
+  Replaces .external-link-block and .primary-source
+*/
+.external-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+
+  margin-bottom: 4rem;
+  padding: 2.5rem;
+  background: rgba(var(--c-accent-rgb), 0.03);
+  border: 1px solid rgba(var(--c-accent-rgb), 0.15);
+  border-left: 4px solid var(--c-accent);
+  border-radius: 4px;
+  /* Optional slight roundness */
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.external-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg, transparent, rgba(var(--c-accent-rgb), 0.05), transparent);
+  pointer-events: none;
+}
+
+.external-card:hover {
+  transform: translateY(-1px);
+  background: rgba(var(--c-accent-rgb), 0.06);
+  border-color: rgba(var(--c-accent-rgb), 0.3);
+  box-shadow: 0 4px 20px rgba(0, 255, 255, 0.1);
+}
+
+.external-card:focus-visible {
+  outline: 2px solid var(--c-accent);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+.external-card__left {
+  flex: 1;
+}
+
+.external-card__label {
+  font-size: 0.7rem;
+  font-weight: bold;
+  color: var(--c-accent);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  opacity: 0.8;
+  margin-bottom: 0.75rem;
+}
+
+.external-card__desc {
+  font-size: 1.1rem;
+  opacity: 0.9;
+  letter-spacing: 0.02em;
+  line-height: 1.6;
+}
+
+.external-card__right {
+  flex-shrink: 0;
+}
+
+.external-card__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.9rem 2.2rem;
+  border: 1px solid var(--c-accent);
+  border-radius: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--c-accent);
+  background: rgba(var(--c-accent-rgb), 0.1);
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.external-card:hover .external-card__btn {
+  background: var(--c-accent);
+  color: #000;
+  box-shadow: 0 0 18px rgba(0, 255, 255, 0.25);
+  transform: translateY(-1px);
+}
+
+@media (max-width: 768px) {
+  .external-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.5rem;
+  }
+
+  .external-card__right {
+    width: 100%;
+  }
+
+  .external-card__btn {
+    width: 100%;
+  }
+}
+
+/* 
+  Old footer styles (Back Home)
+*/
+
+.back-home a {
+  opacity: 0.8;
+  text-decoration: none;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #fff;
+  transition: all 0.3s ease;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+}
+
+.back-home a:hover {
+  opacity: 1;
+  color: var(--c-accent);
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.2);
+}
+
+@media (max-width: 768px) {
+  .external-link-button {
+    width: 100%;
+    text-align: center;
+    box-sizing: border-box;
+  }
+}
+
 .s2 {
   /* 火 / Red (tbd-02) */
   --star-color: #f87171;
@@ -1234,11 +1452,12 @@ body[data-stars="on"].page-home #home-secret-stars {
   opacity: .55;
   filter: blur(.2px);
 }
+
 /* =========================
    Lukia / Lucia Standings (Dock)
    ========================= */
 /* HOME以外に影響させない（※HOMEはhome.cssで制御する） */
-body:not(.page-home) .observers-dock{
+body:not(.page-home) .observers-dock {
   position: fixed;
   left: 50%;
   bottom: 18px;
@@ -1250,31 +1469,25 @@ body:not(.page-home) .observers-dock{
   pointer-events: auto;
 }
 
-body:not(.page-home) .observers-dock img{
+body:not(.page-home) .observers-dock img {
   height: min(45vh, 520px);
   width: auto;
   display: block;
-  filter: drop-shadow(0 10px 30px rgba(0,0,0,0.55));
+  filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.55));
 }
 
 /* === Lukia/Lucia hover glow (force) === */
-.page-home .observers-dock .observer img{
+.page-home .observers-dock .observer img {
   transition: filter .18s ease, transform .18s ease !important;
 }
 
-.page-home .observers-dock .observer:hover img{
+.page-home .observers-dock .observer:hover img {
   filter:
-    drop-shadow(0 0 18px rgba(0,255,255,.45))
-    drop-shadow(0 0 42px rgba(0,255,255,.22))
-    drop-shadow(0 0 70px rgba(0,255,255,.12))
-    !important;
+    drop-shadow(0 0 18px rgba(0, 255, 255, .45)) drop-shadow(0 0 42px rgba(0, 255, 255, .22)) drop-shadow(0 0 70px rgba(0, 255, 255, .12)) !important;
   transform: translateY(-2px) !important;
 }
 
-.page-home .observers-dock .observer:focus-visible img{
+.page-home .observers-dock .observer:focus-visible img {
   filter:
-    drop-shadow(0 0 18px rgba(0,255,255,.50))
-    drop-shadow(0 0 44px rgba(0,255,255,.24))
-    drop-shadow(0 0 72px rgba(0,255,255,.14))
-    !important;
+    drop-shadow(0 0 18px rgba(0, 255, 255, .50)) drop-shadow(0 0 44px rgba(0, 255, 255, .24)) drop-shadow(0 0 72px rgba(0, 255, 255, .14)) !important;
 }
