@@ -885,6 +885,15 @@
         "todo": 0
       },
       "marked": []
+    },
+    {
+      "at": "2026-01-20T07:42:12.751Z",
+      "counts": {
+        "totalIndex": 5,
+        "candidates": 4,
+        "todo": 0
+      },
+      "marked": []
     }
   ]
 }
