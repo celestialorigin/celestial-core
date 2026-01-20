@@ -1,0 +1,396 @@
+---
+import Layout from "../../../../layouts/Layout.astro";
+import slotsData from "../../../../data/slots.json";
+
+const BASE = (import.meta.env.BASE_URL || "/").replace(/\/$/, "");
+const CONTACT_HREF = `${BASE}/contact/`;
+
+// Filter Public Slots (live or comingSoon)
+const publicSlots = slotsData.filter((s) => s.status === "live" || s.status === "comingSoon");
+---
+
+<Layout title="CELESTIAL SLOT LIST" bodyClass="page-slot-list">
+  <div class="slot-list-container fade-in-section">
+    <h1 class="page-title">CELESTIAL SLOT</h1>
+    
+    <!-- Intro Text -->
+    <div class="page-intro">
+      <p>
+        Lukia（人間）と Lucia（AI）で、参加者モチーフの<br class="sp-br"/>
+        オリジナル曲・オリジナルのシンプルスロットを制作中。<br>
+        さらに、コラボ参加者には<br class="sp-br"/>
+        「その人のためだけに作ったオリジナル曲」をプレゼント。
+      </p>
+      <p class="intro-last">
+        あなたも、この世に足跡を残してみませんか？
+      </p>
+
+      <!-- Contact CTA -->
+      <a
+        class="slot-contact-cta"
+        href={CONTACT_HREF}
+        aria-label="CONTACTへ"
+      >
+        <span class="slot-contact-label">ご連絡はこちらまで →</span>
+        <span class="slot-contact-btn">CONTACT</span>
+      </a>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="search-section">
+      <input type="text" id="slot-search" placeholder="名前 / ID / 掲載者 / タグで検索" />
+    </div>
+
+    <!-- Trial Slots Section -->
+    <section class="slot-section" id="trial-slots">
+      <h2 class="section-title">TRIAL SLOTS</h2>
+      <div class="slot-grid" id="grid-trial">
+        {publicSlots.filter(s => s.type === 'trial').map(slot => (
+           <div class="slot-card" 
+                data-name={slot.displayName} 
+                data-id={slot.id} 
+                data-owner={slot.ownerName} 
+                data-kana={slot.kana} 
+                data-aliases={slot.aliases.join(',')} 
+                data-tags={JSON.stringify(slot.tags)}
+           >
+            <div class="card-thumb">
+               {/* Placeholder for now if thumb doesn't exist */}
+               <div class="thumb-placeholder">{slot.id}</div>
+            </div>
+            <div class="card-info">
+              <h3 class="card-title">{slot.displayName}</h3>
+              <p class="owner-line">by {slot.ownerName}</p>
+              <p class="card-desc">{slot.description}</p>
+              <div class="card-tags">
+                {slot.tags.mood && slot.tags.mood.map(t => <span class="tag">#{t}</span>)}
+              </div>
+              <a href={`${BASE}${slot.playUrl.endsWith('/') ? slot.playUrl + 'index.html' : slot.playUrl}`} target="_blank" rel="noopener noreferrer" class="btn-play">PLAY SLOT</a>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- Collab Slots Section -->
+    <section class="slot-section" id="section-collab">
+      <h2 class="section-title">COLLAB SLOTS</h2>
+      <div class="slot-grid" id="grid-collab">
+        {publicSlots.filter(s => s.type === 'collab').map((slot) => (
+           <div class="slot-card" 
+                data-name={slot.displayName} 
+                data-id={slot.id} 
+                data-owner={slot.ownerName} 
+                data-kana={slot.kana} 
+                data-aliases={slot.aliases.join(',')} 
+                data-tags={JSON.stringify(slot.tags)}
+           >
+            <div class="card-thumb">
+               <div class="thumb-placeholder">{slot.id}</div>
+            </div>
+            <div class="card-info">
+              <h3 class="card-title">{slot.displayName}</h3>
+              <p class="owner-line">by {slot.ownerName}</p>
+              <p class="card-desc">{slot.description}</p>
+              <div class="card-tags">
+                 {slot.tags.mood && slot.tags.mood.map(t => <span class="tag">#{t}</span>)}
+              </div>
+              <a href={`${BASE}${slot.playUrl.endsWith('/') ? slot.playUrl + 'index.html' : slot.playUrl}`} target="_blank" rel="noopener noreferrer" class="btn-play">PLAY SLOT</a>
+            </div>
+          </div>
+        ))}
+      </div>
+      <p id="no-collab-msg" style="display:none; color:#666; font-size:0.9rem;">No matching slots found.</p>
+    </section>
+
+    <div class="back-link">
+       <a href="#trial-slots" class="back-trial">← Trial Slot一覧へ</a>
+    </div>
+
+    <!-- Fragments-style Footer -->
+    <div class="footer-nav">
+      <a href={import.meta.env.BASE_URL} class="home-return-link">← HOMEへ戻る</a>
+    </div>
+
+  </div>
+</Layout>
+
+<script>
+  // Client-side Search Logic
+  const searchInput = document.getElementById('slot-search') as HTMLInputElement;
+  const cards = document.querySelectorAll('.slot-card');
+
+  if (searchInput) {
+    searchInput.addEventListener('input', (e) => {
+      const term = (e.target as HTMLInputElement).value.toLowerCase().trim();
+      
+      cards.forEach((card) => {
+        const el = card as HTMLElement;
+        const name = (el.dataset.name || '').toLowerCase();
+        const id = (el.dataset.id || '').toLowerCase(); // Added ID search
+        const owner = (el.dataset.owner || '').toLowerCase();
+        const kana = (el.dataset.kana || '').toLowerCase();
+        const aliases = (el.dataset.aliases || '').toLowerCase();
+        const tags = (el.dataset.tags || '').toLowerCase();
+        
+        const content = `${name} ${id} ${owner} ${kana} ${aliases} ${tags}`;
+        
+        if (content.includes(term)) {
+          el.style.display = 'block';
+        } else {
+          el.style.display = 'none';
+        }
+      });
+    });
+  }
+</script>
+
+<style>
+  .slot-list-container {
+    max-width: 900px;
+    margin: 60px auto 100px; /* Reduced top margin to move title up */
+    padding: 20px;
+    color: #fff;
+  }
+
+  .page-title {
+    font-family: "Zen Kaku Gothic New", sans-serif;
+    color: var(--c-accent, #0ff);
+    text-align: center;
+    margin-bottom: 24px;
+    letter-spacing: 0.1em;
+  }
+
+  /* Intro Text */
+  .page-intro {
+    text-align: center;
+    margin-bottom: 40px;
+    line-height: 1.8;
+    font-size: 0.95rem;
+    color: rgba(0, 255, 255, 0.85);
+    font-weight: 500;
+  }
+  .page-intro p {
+    margin: 0 0 16px;
+  }
+  .sp-br {
+    display: none;
+  }
+  @media (max-width: 600px) {
+    .sp-br { display: inline; }
+  }
+
+  .intro-last {
+    color: #ff4fd8;
+    font-weight: 700;
+    margin-top: 8px;
+    text-shadow: 0 0 8px rgba(255, 79, 216, 0.3);
+  }
+
+  /* Intro Contact CTA (Refined) */
+  .slot-contact-cta{
+    margin: 14px auto 18px;
+    width: min(720px, 92%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    text-decoration: none;
+    padding: 10px 14px;
+    border-radius: 14px;
+    cursor: pointer;
+    border: 1px solid rgba(255,79,216,.18);
+    background: rgba(255,255,255,.02);
+    transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+  }
+
+  .slot-contact-label{
+    color: rgba(255,255,255,.75);
+    font-size: 14px;
+    letter-spacing: .02em;
+    white-space: nowrap;
+  }
+
+  .slot-contact-btn{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 140px;
+    padding: 10px 18px;
+    border-radius: 999px;
+    font-weight: 800;
+    letter-spacing: .08em;
+    color: #ff4fd8;
+    border: 1px solid rgba(255,79,216,.55);
+    background: rgba(255,79,216,.08);
+    box-shadow: 0 0 18px rgba(255,79,216,.20);
+  }
+
+  .slot-contact-cta:hover{
+    transform: translateY(-1px);
+    border-color: rgba(255,79,216,.35);
+    box-shadow: 0 0 18px rgba(255,79,216,.12);
+  }
+
+  .slot-contact-cta:hover .slot-contact-btn{
+    border-color: rgba(255,79,216,.85);
+    box-shadow: 0 0 26px rgba(255,79,216,.32);
+  }
+
+  /* Search */
+  .search-section {
+    text-align: center;
+    margin-bottom: 50px;
+  }
+  #slot-search {
+    width: 100%;
+    max-width: 400px;
+    padding: 12px 20px;
+    border-radius: 30px;
+    border: 1px solid #333;
+    background: rgba(0,0,0,0.5);
+    color: #fff;
+    font-size: 1rem;
+    outline: none;
+    transition: border 0.2s;
+  }
+  #slot-search:focus {
+    border-color: var(--c-accent, #0ff);
+  }
+
+  /* Section */
+  .slot-section {
+    margin-bottom: 60px;
+  }
+  .section-title {
+    font-size: 1.2rem;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    color: #ccc;
+    font-family: "Segoe UI", sans-serif;
+    letter-spacing: 2px;
+  }
+
+  /* Grid */
+  .slot-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+  }
+
+  /* Card */
+  .slot-card {
+    background: rgba(20, 20, 25, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .slot-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    border-color: rgba(255, 255, 255, 0.3);
+  }
+
+  .card-thumb {
+    width: 100%;
+    height: 160px;
+    background: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  .thumb-placeholder {
+    color: #333;
+    font-weight: bold;
+    font-size: 1.5rem;
+  }
+
+  .card-info {
+    padding: 15px;
+  }
+
+  .card-title {
+    margin: 0 0 5px 0;
+    font-size: 1.1rem;
+    color: #fff;
+  }
+  .card-desc {
+    font-size: 0.85rem;
+    color: #aaa;
+    margin-bottom: 10px;
+    line-height: 1.4;
+    height: 2.8em; /* 2 lines approx */
+    overflow: hidden;
+  }
+  
+  .card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-bottom: 15px;
+  }
+  .tag {
+    font-size: 0.7rem;
+    color: #888;
+    background: rgba(255,255,255,0.05);
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+
+  .btn-play {
+    display: block;
+    text-align: center;
+    background: var(--c-accent, #00ffff);
+    color: #000;
+    font-weight: bold;
+    text-decoration: none;
+    padding: 8px 0;
+    border-radius: 4px;
+    transition: opacity 0.2s;
+  }
+  .btn-play:hover {
+    opacity: 0.8;
+  }
+
+  .back-link {
+    text-align: center;
+    margin-top: 40px;
+  }
+  
+  .back-trial{
+    color: #ff4fd8;
+    font-weight: 600;
+    text-decoration: none;
+    text-shadow: 0 0 12px rgba(255,79,216,.35);
+    transition: all 0.2s ease;
+  }
+  .back-trial:hover{
+    text-shadow: 0 0 18px rgba(255,79,216,.6);
+  }
+
+  /* Fragments-style Home Link */
+  .footer-nav {
+    margin-top: 5rem;
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  .home-return-link {
+    opacity: 0.8;
+    text-decoration: none;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #fff;
+    transition: all 0.3s ease;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+  }
+  .home-return-link:hover {
+    opacity: 1;
+    color: var(--c-accent, #0ff);
+    background: rgba(255, 255, 255, 0.05);
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.2);
+  }
+</style>

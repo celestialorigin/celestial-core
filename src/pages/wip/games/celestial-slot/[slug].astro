@@ -1,0 +1,292 @@
+---
+import Layout from "../../../../layouts/Layout.astro";
+import slotsData from "../../../../data/slots.json";
+
+export async function getStaticPaths() {
+  // Sort by ID to ensure correct navigation order
+  const sortedSlots = slotsData.sort((a, b) => a.id.localeCompare(b.id));
+  
+  return sortedSlots.map((slot, index) => ({
+    params: { slug: slot.slug },
+    props: { 
+      slot,
+      prevSlot: index > 0 ? sortedSlots[index - 1] : null,
+      nextSlot: index < sortedSlots.length - 1 ? sortedSlots[index + 1] : null
+    },
+  }));
+}
+
+const { slot, prevSlot, nextSlot } = Astro.props;
+const BASE = (import.meta.env.BASE_URL || "/").replace(/\/$/, "");
+
+// URL Normalization Helper
+const normalizePlayUrl = (url: string) => {
+  return url.endsWith("/") ? url + "index.html" : url;
+};
+
+const playLink = `${BASE}${normalizePlayUrl(slot.playUrl)}`;
+---
+
+<Layout title={`${slot.displayName} | CELESTIAL SLOT`} bodyClass="page-slot-detail">
+  <div class="detail-container fade-in-section">
+    <div class="breadcrumb">
+      <a href={`${BASE}/wip/games/`}>GAMES</a> &gt; 
+      <a href={`${BASE}/wip/games/celestial-slot/`}>LIST</a> &gt; 
+      <span>{slot.displayName}</span>
+    </div>
+
+    <div class="slot-header">
+      <h1 class="slot-title">{slot.displayName}</h1>
+      <div class="slot-meta">
+        <span class={`status-badge status-${slot.status}`}>{slot.status.toUpperCase()}</span>
+        <span class={`type-badge type-${slot.type}`}>{slot.type.toUpperCase()}</span>
+      </div>
+    </div>
+
+    <div class="slot-content">
+      <div class="visual-area">
+        {/* Placeholder for visual/thumb if needed, currently just using ID */}
+        <div class="visual-placeholder">
+          {slot.displayName} <br/> 
+          <span style="font-size:0.8rem; opacity:0.7;">({slot.id})</span>
+        </div>
+      </div>
+
+      <div class="info-area">
+        <p class="description">{slot.description}</p>
+        
+        <div class="tags-area">
+          {slot.tags.mood && slot.tags.mood.map(t => <span class="tag">#{t}</span>)}
+          {slot.tags.world && slot.tags.world.map(t => <span class="tag">#{t}</span>)}
+        </div>
+
+        <div class="action-area">
+          <a href={playLink} target="_blank" class="btn-play-large">
+            <span class="btn-text">PLAY NOW</span>
+            <span class="btn-sub">{slot.id}</span>
+          </a>
+        </div>
+        
+        <div class="owner-info">
+            <p>Owner: {slot.ownerName} <span class="kana">({slot.kana})</span></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="slot-nav">
+      {prevSlot ? (
+        <a href={`${BASE}/wip/games/celestial-slot/${prevSlot.slug}/`} class="nav-prev">
+           &lt; {prevSlot.displayName}
+        </a>
+      ) : (
+        <span class="nav-disabled">&lt; PREV</span>
+      )}
+      
+      <a href={`${BASE}/wip/games/celestial-slot/`} class="nav-list">LIST</a>
+
+      {nextSlot ? (
+        <a href={`${BASE}/wip/games/celestial-slot/${nextSlot.slug}/`} class="nav-next">
+           {nextSlot.displayName} &gt;
+        </a>
+      ) : (
+        <span class="nav-disabled">NEXT &gt;</span>
+      )}
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .detail-container {
+    max-width: 800px;
+    margin: 80px auto;
+    padding: 20px;
+    color: #fff;
+  }
+
+  /* Breadcrumb */
+  .breadcrumb {
+    font-size: 0.9rem;
+    color: #888;
+    margin-bottom: 30px;
+    font-family: monospace;
+  }
+  .breadcrumb a {
+    color: #aaa;
+    text-decoration: none;
+  }
+  .breadcrumb a:hover {
+    color: #fff;
+  }
+
+  /* Header */
+  .slot-header {
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    padding-bottom: 20px;
+    margin-bottom: 30px;
+    text-align: center;
+  }
+
+  .slot-title {
+    font-size: 2.5rem;
+    color: var(--c-accent, #0ff);
+    margin: 0 0 15px 0;
+    font-family: "Zen Kaku Gothic New", sans-serif;
+    letter-spacing: 0.1em;
+    text-shadow: 0 0 10px rgba(0,255,255,0.3);
+  }
+
+  .slot-meta {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .status-badge, .type-badge {
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  
+  .status-live { background: rgba(0, 255, 100, 0.2); color: #0f8; border: 1px solid #0f8; }
+  .status-wip { background: rgba(255, 200, 0, 0.2); color: #fb0; border: 1px solid #fb0; }
+  .status-comingSoon { background: rgba(100, 100, 100, 0.2); color: #ccc; border: 1px solid #ccc; }
+  
+  .type-trial { background: rgba(0, 200, 255, 0.2); color: #0df; border: 1px solid #0df; }
+  .type-collab { background: rgba(255, 0, 200, 0.2); color: #f0c; border: 1px solid #f0c; }
+
+  /* Content Layout */
+  .slot-content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+    margin-bottom: 60px;
+  }
+
+  .visual-area {
+    flex: 1;
+    min-width: 300px;
+  }
+  .visual-placeholder {
+    width: 100%;
+    aspect-ratio: 16/9;
+    background: linear-gradient(135deg, #111, #222);
+    border: 1px solid #333;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #555;
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+  }
+
+  .info-area {
+    flex: 1;
+    min-width: 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .description {
+    line-height: 1.8;
+    color: #ddd;
+    font-size: 1.05rem;
+  }
+
+  .tags-area {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .tag {
+    font-size: 0.8rem;
+    color: #999;
+    background: rgba(255,255,255,0.08);
+    padding: 4px 8px;
+    border-radius: 4px;
+  }
+
+  .action-area {
+    margin-top: 10px;
+  }
+
+  .btn-play-large {
+    display: block;
+    width: 100%;
+    padding: 20px;
+    text-align: center;
+    text-decoration: none;
+    background: var(--c-accent, #00ffff);
+    color: #000;
+    border-radius: 6px;
+    transition: all 0.2s;
+    box-shadow: 0 0 15px rgba(0,255,255,0.4);
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-play-large:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 30px rgba(0,255,255,0.6);
+  }
+
+  .btn-text {
+    font-size: 1.4rem;
+    font-weight: 900;
+    letter-spacing: 2px;
+    display: block;
+  }
+  .btn-sub {
+    font-size: 0.8rem;
+    opacity: 0.7;
+    display: block;
+    margin-top: 4px;
+  }
+
+  .owner-info {
+    margin-top: auto;
+    font-size: 0.9rem;
+    color: #777;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding-top: 15px;
+  }
+  .kana {
+    font-size: 0.8rem;
+    margin-left: 5px;
+    opacity: 0.7;
+  }
+
+  /* Navigation */
+  .slot-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding-top: 30px;
+    margin-top: 40px;
+    font-family: monospace;
+  }
+  
+  .nav-prev, .nav-next, .nav-list {
+    color: #888;
+    text-decoration: none;
+    transition: color 0.2s;
+    font-size: 0.9rem;
+  }
+  .nav-prev:hover, .nav-next:hover, .nav-list:hover {
+    color: #fff;
+    text-shadow: 0 0 5px rgba(255,255,255,0.5);
+  }
+
+  .nav-disabled {
+    color: #333;
+    pointer-events: none;
+    font-size: 0.9rem;
+  }
+</style>

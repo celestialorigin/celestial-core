@@ -44,14 +44,6 @@ export const getNavTiles = (base: string): NavTile[] => {
       class: "card-novels",
     },
     {
-      key: "games",
-      label: "GAMES",
-      icon: "🎮",
-      desc: "いつかゲームになるかもしれない場所。ならないかもしれない。今は妄想と設計図だけあります。",
-      href: `${BASE}wip/games/`,
-      class: "card-game",
-    },
-    {
       key: "vr-world",
       label: "VR WORLD",
       icon: "🥽",

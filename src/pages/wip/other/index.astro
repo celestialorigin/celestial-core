@@ -1,0 +1,89 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+
+const BASE = (import.meta.env.BASE_URL || "/").replace(/\/$/, "");
+---
+
+<Layout title="CELESTIAL OTHER" bodyClass="page-other">
+  <div class="void-container fade-in-section">
+    <div class="void-content">
+      <h1 class="void-concept">
+        何かが生まれるかもしれないし、<br/>
+        何も生まれないかもしれない。<br/>
+        <br/>
+        ここは、そんな居場所。
+      </h1>
+
+      <p class="void-sub">
+        思いつき、試作、失敗、遊び、実験。<br/>
+        形になる前のものたち。
+      </p>
+
+      <div class="void-back">
+        <a href={`${BASE}`} class="btn-back-void">HOME</a>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .void-container {
+    min-height: 80vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.8);
+    background: radial-gradient(circle at center, rgba(20, 30, 40, 0.4) 0%, transparent 70%);
+  }
+
+  .void-content {
+    padding: 20px;
+    max-width: 600px;
+  }
+
+  .void-concept {
+    font-family: "Zen Kaku Gothic New", sans-serif;
+    font-weight: 500;
+    font-size: 1.2rem;
+    line-height: 2.4;
+    letter-spacing: 0.1em;
+    margin-bottom: 60px;
+    color: #fff;
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+  }
+
+  .void-sub {
+    font-size: 0.9rem;
+    line-height: 2.0;
+    color: rgba(255, 255, 255, 0.5);
+    margin-bottom: 80px;
+    font-family: serif; /* Somewhat poetic/rough feel */
+    letter-spacing: 0.05em;
+  }
+
+  /* Minimal Back Button */
+  .btn-back-void {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.3);
+    text-decoration: none;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 8px 24px;
+    border-radius: 999px;
+    transition: all 0.4s ease;
+    letter-spacing: 0.2em;
+  }
+
+  .btn-back-void:hover {
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.4);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+  }
+
+  @media (max-width: 600px) {
+    .void-concept {
+      font-size: 1.1rem;
+      line-height: 2.2;
+    }
+  }
+</style>

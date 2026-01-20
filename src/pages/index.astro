@@ -4,7 +4,8 @@ import "../styles/home.css";
 import { getNavTiles } from "../data/navTiles";
 
 const BASE = (import.meta.env.BASE_URL || "/").replace(/\/?$/, "/");
-const tiles = getNavTiles(BASE);
+  const tiles = getNavTiles(BASE);
+  const SLOT_LIST_URL = `${BASE}wip/games/celestial-slot/`;
 ---
 
 <Layout showStars={true} starPattern="home" bodyClass="page-home" title="CELESTIAL PROJECT">
@@ -28,6 +29,68 @@ const tiles = getNavTiles(BASE);
       </p>
       
       <div class="hero-scroll-indicator">↓</div>
+
+      <!-- CELESTIAL SLOT HERO (Interactive) -->
+      <section class="slot-feature">
+        <div class="slot-feature-card">
+          <h2 class="slot-feature-title">CELESTIAL SLOT</h2>
+
+          <p class="slot-feature-copy">
+            <span class="slot-emp">「あなた」がスロットのキャラクターに！？</span>
+            <br />
+            Lukia（人間）と Lucia（AI）がコラボ参加者をモチーフに
+            <br />
+            オリジナル曲・オリジナルスロットを制作。
+            <br />
+            あなたも、この世に足跡を残してみませんか？
+            <br /><br />
+            <span class="slot-emp-guide">すぐ下の"今すぐ体験する"をクリックして、今すぐ<br />このページで体験してみてください↓</span>
+          </p>
+
+          <div class="slot-feature-actions">
+            <!-- 重要：aタグで遷移しない。buttonでJS起動 -->
+            <button id="slot-try-btn" class="slot-btn slot-btn-primary" type="button">
+              ▶ 今すぐ体験する
+            </button>
+
+            <a class="slot-btn slot-btn-secondary" href={SLOT_LIST_URL} aria-label="コラボスロット一覧">
+              ▶ コラボスロット一覧
+            </a>
+          </div>
+
+          <!-- 埋め込み領域（初期は非表示） -->
+          <div id="slot-embed-wrap" class="slot-embed-wrap" hidden>
+            <div class="slot-embed-frame">
+              <iframe
+                id="slot-embed-iframe"
+                title="CELESTIAL Slot 000"
+                loading="lazy"
+                allow="autoplay; fullscreen"
+                referrerpolicy="no-referrer"
+              ></iframe>
+            </div>
+
+            <div class="slot-feature-actions" style="margin-top: 14px;">
+              <a class="slot-btn slot-btn-secondary" href={SLOT_LIST_URL} aria-label="コラボスロット一覧">
+                ▶ コラボスロット一覧
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CONTACT HERO (Middle Insert) -->
+      <section class="contact-hero">
+        <a class="contact-hero-card contact-card-link" href={`${BASE}contact/`}>
+          <div class="contact-hero-content">
+            <h2 class="contact-hero-title">CONTACT</h2>
+            <p class="contact-hero-desc">コラボ参加・制作依頼・感想など、<br class="sp-only"/>Lukiaに直接連絡したい方はこちら。</p>
+          </div>
+          <span class="contact-hero-btn contact-cta">
+            Lukiaに連絡する
+          </span>
+        </a>
+      </section>
 
       <!-- 6-Card Functional Grid -->
       <div class="hero-grid">
@@ -56,6 +119,11 @@ const tiles = getNavTiles(BASE);
         <a class="hub-card hub-card-primary" href={`${BASE}contact/`}>
           <div class="hub-title">CONTACT</div>
           <div class="hub-desc">Lukia & Lucia（サイト作者）に連絡したい人はこちら</div>
+        </a>
+
+        <a class="hub-card hub-card-primary" href={`${BASE}wip/games/celestial-slot/`}>
+          <div class="hub-title">CELESTIAL SLOT</div>
+          <div class="hub-desc">あなたがスロットのキャラクターに！？ 今すぐ体験できます。</div>
         </a>
 
         <a class="hub-card hub-card-secondary" href={`${BASE}archive/`}>
@@ -101,3 +169,287 @@ const tiles = getNavTiles(BASE);
     }
   });
 </script>
+
+<script>
+  // Slot 000 起動（トップページ内埋め込み）
+  const btn = document.getElementById("slot-try-btn");
+  const wrap = document.getElementById("slot-embed-wrap");
+  const iframe = document.getElementById("slot-embed-iframe");
+
+  function baseJoin(path) {
+    // Astro の base を考慮して /celestial-project/ 配下でも壊れないようにする
+    const base = (import.meta && import.meta.env && import.meta.env.BASE_URL) ? import.meta.env.BASE_URL : "/";
+    const normalizedBase = base.endsWith("/") ? base.slice(0, -1) : base;
+    const normalizedPath = path.startsWith("/") ? path : "/" + path;
+    return normalizedBase + normalizedPath;
+  }
+
+  function toggleSlot() {
+    if (!wrap || !iframe) return;
+
+    const isRunning = !wrap.hidden;
+
+    if (isRunning) {
+      // STOP logic
+      wrap.hidden = true;
+      (iframe as HTMLIFrameElement).src = "about:blank"; // Stop audio/game
+      btn.textContent = "▶ 今すぐ体験する";
+      btn.classList.remove("active");
+    } else {
+      // START logic
+      wrap.hidden = false;
+      // Load if not loaded (or reload if it was blanked)
+      if (!(iframe as HTMLIFrameElement).src || (iframe as HTMLIFrameElement).src === "about:blank") {
+        (iframe as HTMLIFrameElement).src = baseJoin("/games/slot/CS-000/index.html");
+      }
+      wrap.scrollIntoView({ behavior: "smooth", block: "center" });
+      btn.textContent = "■ 閉じる (SLOT 000 停止)";
+      btn.classList.add("active");
+    }
+  }
+
+  if (btn) btn.addEventListener("click", toggleSlot, { passive: true });
+</script>
+
+<style>
+  /* CELESTIAL SLOT HERO STYLES (New Feature) */
+  .slot-feature {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin: 28px 0 26px;
+  }
+
+  .slot-feature-card {
+    width: min(980px, calc(100% - 28px));
+    border: 1px solid rgba(0, 255, 255, 0.22);
+    background: rgba(0, 40, 55, 0.18);
+    box-shadow: 0 0 42px rgba(0, 255, 255, 0.08);
+    border-radius: 14px;
+    padding: 22px 18px;
+    backdrop-filter: blur(6px);
+  }
+
+  .slot-feature-title {
+    margin: 0 0 10px;
+    text-align: center;
+    letter-spacing: 0.12em;
+    font-weight: 800;
+    color: #fff;
+    font-family: inherit; /* or Zen Kaku Gothic if preferred */
+    font-size: 2rem;
+  }
+
+  .slot-feature-copy {
+    margin: 0 auto 18px;
+    text-align: center;
+    line-height: 1.8;
+    font-weight: 500;
+    max-width: 56ch;
+    opacity: 0.95;
+    color: #ddd;
+  }
+
+  .slot-emp {
+    font-weight: 800;
+    font-size: 1.15em;
+    color: #fff;
+    text-shadow: 0 0 8px rgba(0, 255, 255, 0.5);
+    display: inline-block;
+    margin-bottom: 4px;
+  }
+
+  .slot-emp-guide {
+    font-weight: 700;
+    color: #0ff;
+    display: inline-block;
+    border-bottom: 2px solid rgba(0, 255, 255, 0.3);
+    padding-bottom: 2px;
+  }
+
+  .slot-feature-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
+  }
+
+  .slot-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 220px;
+    padding: 12px 18px;
+    border-radius: 10px;
+    text-decoration: none;
+    border: 1px solid rgba(0, 255, 255, 0.35);
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 1rem;
+  }
+  .slot-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 15px rgba(0,255,255,0.3);
+  }
+
+  .slot-btn-primary {
+    background: rgba(180, 0, 255, 0.18);
+    border-color: rgba(200, 0, 255, 0.55);
+  }
+  .slot-btn-primary:hover {
+    background: rgba(180, 0, 255, 0.3);
+    border-color: rgba(200, 0, 255, 0.8);
+  }
+
+  .slot-btn-secondary {
+    background: rgba(0, 255, 255, 0.12);
+  }
+  .slot-btn-secondary:hover {
+    background: rgba(0, 255, 255, 0.25);
+  }
+
+  /* Embed Area */
+  .slot-embed-wrap {
+    margin-top: 12px;
+    animation: slotFadeIn 260ms ease-out both;
+  }
+
+  @keyframes slotFadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Responsive Frame */
+  .slot-embed-frame {
+    width: min(520px, 96vw);
+    margin: 0 auto;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid rgba(0, 255, 255, 0.25);
+    box-shadow: 0 0 24px rgba(0, 255, 255, 0.08);
+    background: rgba(0, 0, 0, 0.35);
+    aspect-ratio: 9 / 16;
+  }
+
+  .slot-embed-frame iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    display: block;
+  }
+
+  .slot-embed-subactions {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 10px;
+    opacity: 0.9;
+  }
+
+  .slot-mini-link {
+    font-weight: 700;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(0, 255, 255, 0.25);
+    padding-bottom: 2px;
+    color: rgba(0, 255, 255, 0.8);
+    font-size: 0.9rem;
+  }
+  .slot-mini-link:hover {
+    color: #fff;
+    border-color: #fff;
+  }
+
+  @media (max-width: 600px) {
+    .slot-feature-title {
+      font-size: 1.5rem;
+    }
+    .slot-btn {
+      width: 100%;
+    }
+    .contact-hero-card {
+      flex-direction: column;
+      text-align: center;
+      gap: 16px;
+    }
+    .contact-hero-desc {
+      text-align: center;
+    }
+    .sp-only {
+      display: inline;
+    }
+  }
+
+  /* CONTACT HERO STYLES */
+  .contact-hero {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin: 0 0 32px;
+  }
+  .contact-hero-card {
+    width: min(800px, calc(100% - 28px));
+    border: 1px solid rgba(255, 0, 255, 0.3);
+    background: rgba(40, 0, 55, 0.3);
+    box-shadow: 0 0 24px rgba(255, 0, 255, 0.1);
+    border-radius: 12px;
+    padding: 24px 32px;
+    backdrop-filter: blur(6px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    text-decoration: none; /* remove underline for anchor */
+    color: inherit; /* inherit text color */
+  }
+  .contact-hero-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 32px rgba(255, 0, 255, 0.2);
+    border-color: rgba(255, 0, 255, 0.5);
+  }
+
+  .contact-hero-title {
+    margin: 0 0 6px;
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: 0.1em;
+    text-shadow: 0 0 10px rgba(255, 0, 255, 0.4);
+    font-family: inherit;
+  }
+  .contact-hero-desc {
+    margin: 0;
+    font-size: 0.95rem;
+    color: #ddd;
+    line-height: 1.5;
+  }
+  .sp-only {
+    display: none;
+  }
+
+  .contact-hero-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 24px;
+    background: linear-gradient(135deg, rgba(255,0,255,0.2), rgba(100,0,200,0.4));
+    border: 1px solid rgba(255, 100, 255, 0.5);
+    color: #fff;
+    font-weight: bold;
+    border-radius: 30px;
+    text-decoration: none;
+    transition: all 0.2s;
+    white-space: nowrap;
+    min-width: 180px;
+  }
+  .contact-hero-btn:hover {
+    background: linear-gradient(135deg, rgba(255,0,255,0.4), rgba(120,0,220,0.6));
+    border-color: #fff;
+    box-shadow: 0 0 15px rgba(255, 0, 255, 0.5);
+  }
+</style>

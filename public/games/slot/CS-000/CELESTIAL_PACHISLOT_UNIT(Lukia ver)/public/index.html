@@ -1,0 +1,1202 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CELESTIAL PACHISLOT UNIT</title>
+    <style>
+        :root {
+            --theme-accent: #00ffff;
+            --theme-bg: #000000;
+            --theme-glow: 0 0 10px #00ffff;
+        }
+
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #111;
+            color: #fff;
+            font-family: 'Segoe UI', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        #game-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            aspect-ratio: 9/16;
+            background: var(--theme-bg);
+            background-size: cover;
+            background-position: center;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.8);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border: 1px solid #333;
+        }
+
+        @media (min-aspect-ratio: 9/16) {
+            #game-container {
+                height: 95vh;
+                width: auto;
+            }
+        }
+
+        /* Screen Area */
+        #screen {
+            position: relative;
+            width: 85%;
+            height: 35%;
+            margin-top: 15%;
+            background: rgba(0, 0, 0, 0.9);
+            border: 2px solid var(--theme-accent);
+            box-shadow: var(--theme-glow), inset 0 0 20px rgba(0, 0, 0, 0.8);
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #reels-container {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .reel {
+            width: 33%;
+            height: 100%;
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(10, 10, 10, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .reel canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        /* Payline Reference - Center Row Highlight */
+        #payline {
+            position: absolute;
+            top: 33.33%;
+            left: 0;
+            width: 100%;
+            height: 33.33%;
+            background: rgba(255, 255, 255, 0.05);
+            border-top: 2px solid rgba(255, 0, 0, 0.3);
+            border-bottom: 2px solid rgba(255, 0, 0, 0.3);
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        /* UI Panel */
+        #ui-panel {
+            width: 90%;
+            margin-top: 15px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            flex-grow: 1;
+        }
+
+        #machine-title {
+            color: var(--theme-accent);
+            text-shadow: 0 0 5px var(--theme-accent);
+            margin: 0;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            order: -1;
+            /* Title at top of UI panel */
+            margin-bottom: 10px;
+        }
+
+        button {
+            border: 1px solid var(--theme-accent);
+            background: rgba(0, 50, 50, 0.5);
+            color: white;
+            padding: 5px 10px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            transition: all 0.1s;
+            border-radius: 4px;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        button:active {
+            transform: translateY(2px);
+        }
+
+        button:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            border-color: #555;
+            box-shadow: none;
+        }
+
+        /* Stop Buttons Row */
+        #stop-controls {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        .stop-btn {
+            width: 30%;
+            height: 50px;
+            background: rgba(200, 50, 50, 0.2);
+            border-color: #ff4444;
+            color: #ffcccc;
+            font-weight: bold;
+            font-size: 1.0rem;
+        }
+
+        .stop-btn:not(:disabled):active {
+            background: rgba(255, 0, 0, 0.8);
+        }
+
+        /* Main Actions */
+        #main-controls {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            height: 80px;
+        }
+
+        #spin-btn,
+        #seq-stop-btn {
+            width: 100%;
+            height: 100%;
+            font-size: 1.5rem;
+            font-weight: bold;
+            border-radius: 8px;
+        }
+
+        #spin-btn {
+            background: rgba(0, 150, 150, 0.4);
+            box-shadow: 0 0 15px var(--theme-accent);
+        }
+
+        #spin-btn:not(:disabled) {
+            animation: pulse-glow 2s infinite;
+        }
+
+        #seq-stop-btn {
+            background: rgba(150, 0, 0, 0.4);
+            border-color: #ff8888;
+            display: none;
+            box-shadow: 0 0 15px #ff0000;
+        }
+
+        @keyframes pulse-glow {
+            0% {
+                box-shadow: 0 0 10px var(--theme-accent);
+            }
+
+            50% {
+                box-shadow: 0 0 25px var(--theme-accent);
+            }
+
+            100% {
+                box-shadow: 0 0 10px var(--theme-accent);
+            }
+        }
+
+        #meta-controls {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 5px;
+        }
+
+        .sys-btn {
+            padding: 5px 12px;
+            font-size: 0.7rem;
+            background: rgba(30, 30, 30, 0.5);
+            border-color: #666;
+            color: #ccc;
+            text-decoration: none;
+            /* In case we apply to a tag */
+        }
+
+        .sys-btn:hover {
+            color: #fff;
+            background: rgba(50, 50, 50, 0.8);
+            border-color: #888;
+        }
+
+        /* PARTNER CARD */
+        #partner-section {
+            margin-top: auto;
+            /* margin-bottom removed, using flex gap/flow */
+            padding: 15px;
+            border: 1px solid var(--theme-accent);
+            background: linear-gradient(90deg, rgba(0, 20, 20, 0.8), rgba(0, 40, 40, 0.9));
+            cursor: pointer;
+            text-align: left;
+            position: relative;
+            border-radius: 6px;
+            transition: transform 0.2s;
+        }
+
+        #partner-section:active {
+            transform: scale(0.98);
+        }
+
+        #partner-label {
+            font-size: 0.7rem;
+            color: var(--theme-accent);
+            letter-spacing: 1px;
+            opacity: 0.8;
+            margin-bottom: 5px;
+        }
+
+        #partner-name {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        #partner-section::after {
+            content: "➜";
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--theme-accent);
+            font-size: 1.2rem;
+        }
+
+        /* CELESTIAL Link (Bottom Right) - Now in flow */
+        #celestial-link {
+            /* Inherits .sys-btn styles */
+            align-self: flex-end;
+            margin-top: 10px;
+            margin-bottom: 12px;
+            /* Inside 90% panel, so no extra right margin needed usually, 
+               but adding a slight push if needed or rely on parent padding */
+        }
+
+        #message-box {
+            position: absolute;
+            top: 8%;
+            width: 100%;
+            text-align: center;
+            color: #fff;
+            font-size: 1.5rem;
+            text-shadow: 0 0 5px #000;
+            pointer-events: none;
+            z-index: 20;
+            font-weight: bold;
+        }
+
+        /* Fever Effect */
+        @keyframes fever-flash {
+            0% {
+                box-shadow: 0 0 20px red;
+                border-color: red;
+                background: rgba(50, 0, 0, 0.9);
+            }
+
+            50% {
+                box-shadow: 0 0 60px yellow;
+                border-color: yellow;
+                background: rgba(50, 50, 0, 0.9);
+            }
+
+            100% {
+                box-shadow: 0 0 20px red;
+                border-color: red;
+                background: rgba(50, 0, 0, 0.9);
+            }
+        }
+
+        .fever-mode #screen {
+            animation: fever-flash 0.5s infinite;
+        }
+
+        #click-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 100;
+            display: none;
+        }
+
+        /* Modal log for init errors (transient) */
+        #init-log {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            color: lime;
+            font-family: monospace;
+            font-size: 0.8rem;
+            padding: 10px;
+            box-sizing: border-box;
+            pointer-events: none;
+            z-index: 9999;
+            display: none;
+        }
+
+        /* Fever Overlay */
+        #fever-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 4rem;
+            font-weight: 900;
+            color: #fff000;
+            text-shadow: 0 0 20px #ff0000, 0 0 40px #ff0000;
+            z-index: 50;
+            display: none;
+            pointer-events: none;
+            white-space: nowrap;
+            animation: glitch-skew 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both infinite;
+        }
+
+        @keyframes glitch-skew {
+            0% {
+                transform: translate(-50%, -50%) skew(0deg);
+            }
+
+            20% {
+                transform: translate(-52%, -50%) skew(-10deg);
+            }
+
+            40% {
+                transform: translate(-48%, -50%) skew(10deg);
+            }
+
+            60% {
+                transform: translate(-50%, -50%) skew(0deg);
+            }
+
+            80% {
+                transform: translate(-50%, -52%) skew(5deg);
+            }
+
+            100% {
+                transform: translate(-50%, -48%) skew(-5deg);
+            }
+        }
+
+        /* Fever Mode Styles */
+        .fever-mode #game-container {
+            border: 2px solid rgba(255, 0, 255, 0.6);
+            box-shadow: 0 0 15px rgba(255, 0, 255, 0.5), inset 0 0 20px rgba(255, 0, 255, 0.4);
+            animation: neon-pulse 2.0s infinite alternate;
+        }
+
+        /* Flash Overlay */
+        #flash-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #fff;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 60;
+            display: none;
+        }
+
+        .fever-mode .reel {
+            background: rgba(40, 0, 40, 0.8);
+            border-color: rgba(255, 0, 255, 0.6);
+        }
+
+        @keyframes neon-pulse {
+            from {
+                box-shadow: 0 0 10px rgba(255, 0, 255, 0.3);
+            }
+
+            to {
+                box-shadow: 0 0 25px rgba(255, 0, 255, 0.6), 0 0 5px rgba(255, 255, 255, 0.4);
+            }
+        }
+
+        /* Anti-Dazzle overrides for FEVER: NO FLASH, NO ANIMATION on Screen */
+        .fever-mode #flash-overlay {
+            display: none !important;
+        }
+
+        .fever-mode .reel {
+            animation: none !important;
+        }
+
+        .fever-mode #screen {
+            animation: none !important;
+        }
+
+        /* LUKIA Subtitle */
+        #subtitle-lukia {
+            margin-top: 8px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: #ea00ff;
+            /* Purple-Pink Neon */
+            text-shadow:
+                0 0 2px #ea00ff,
+                0 0 8px #d000ff,
+                0 0 15px #ff00de;
+            letter-spacing: 2px;
+            animation: erotic-pulse 3s ease-in-out infinite;
+            font-family: 'Segoe UI', serif;
+        }
+
+        @keyframes erotic-pulse {
+
+            0%,
+            100% {
+                opacity: 0.7;
+                text-shadow: 0 0 2px #ea00ff, 0 0 5px #d000ff;
+            }
+
+            50% {
+                opacity: 1.0;
+                text-shadow: 0 0 5px #ea00ff, 0 0 15px #d000ff, 0 0 25px #ff00de;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="game-container">
+        <div id="flash-overlay"></div>
+        <div id="init-log"></div>
+        <div id="message-box">READY</div>
+        <div id="fever-overlay">FEVER!!</div>
+
+        <div id="screen">
+            <div id="reels-container">
+                <div class="reel" id="reel0"><canvas width="256" height="768"></canvas></div>
+                <div class="reel" id="reel1"><canvas width="256" height="768"></canvas></div>
+                <div class="reel" id="reel2"><canvas width="256" height="768"></canvas></div>
+            </div>
+            <div id="payline"></div>
+            <div id="click-layer"></div>
+        </div>
+
+        <div id="ui-panel">
+            <h2 id="machine-title">CELESTIAL SLOT</h2>
+
+            <!-- Stop Buttons -->
+            <div id="stop-controls">
+                <button id="stop-0" class="stop-btn" onclick="stopReel(0)" disabled>STOP L</button>
+                <button id="stop-1" class="stop-btn" onclick="stopReel(1)" disabled>STOP C</button>
+                <button id="stop-2" class="stop-btn" onclick="stopReel(2)" disabled>STOP R</button>
+            </div>
+
+            <!-- Main Actions -->
+            <div id="main-controls">
+                <button id="seq-stop-btn" onclick="stopNext()" disabled>STOP</button>
+                <button id="spin-btn" onclick="spin()">SPIN</button>
+            </div>
+
+            <div id="subtitle-lukia">~ LUKIA SLOT ver ~</div>
+
+            <div id="meta-controls">
+                <div id="meta-controls">
+                    <button class="sys-btn" onclick="resetGame()">RESET SYSTEM</button>
+                </div>
+            </div>
+
+            <!-- Partner Card -->
+            <div id="partner-section" onclick="goPartner()">
+                <div id="partner-label">コラボ・提供者の方のページへ</div>
+                <div id="partner-name">DEFAULT</div>
+            </div>
+
+            <button id="celestial-link" class="sys-btn" onclick="goCelestial()">CELESTIAL Web Site</button>
+        </div>
+    </div>
+
+    <script>
+        /**
+         * CELESTIAL_PACHISLOT_UNIT
+         * ROBUST VERSION - CRASH PROOF
+         */
+
+        const STATE = {
+            config: null,
+            images: [],
+            reels: [
+                { offset: 0, speed: 0, stopping: false, symbolIndex: 0 },
+                { offset: 0, speed: 0, stopping: false, symbolIndex: 0 },
+                { offset: 0, speed: 0, stopping: false, symbolIndex: 0 }
+            ],
+            status: 'IDLE', // IDLE, SPINNING, STOPPING, RESULT
+            mode: 'NORMAL', // NORMAL, FEVER
+            feverCount: 0,
+            bgmParams: { tempo: 1.0, type: 'normal' },
+            audioCtx: null,
+            useDummy: false,
+            forcedSymbol: null, // If set (index), reel must SNAP to this symbol at center
+            winStreak: 0
+        };
+
+        const VOLUMES = {
+            SPIN: 0.1,
+            STOP: 0.2,
+            WIN: 0.1  // Reduced
+        };
+
+        const DEFAULTS = {
+            machineTitle: "CELESTIAL SLOT",
+            partnerLabel: "コラボ・提供者の方のページへ",
+            partnerName: "DEFAULT",
+            partnerUrl: "https://celestial-observers.com",
+            celestialUrl: "https://celestial-observers.com",
+            celestialButtonLabel: "CELESTIAL Web Site",
+            theme: { accent: "#00ffff", bg: "#000000" },
+            feverRate: 0.1,
+            winRate: 0.08,
+            fever: {
+                enabled: true,
+                trigger: { mode: "wins", value: 3 }, // Changed default to wins/3
+                spins: 10,
+                rateBoost: 2.0,
+                visual: { glow: 1.5, flash: false },
+                audio: { tempo: 1.25, pitch: 1.15 }
+            }
+        };
+
+        const CANVAS_WIDTH = 256;
+        const CANVAS_HEIGHT = 768;
+        const SYMBOL_HEIGHT = 256;
+
+        // Logging wrapper
+        function log(msg) {
+            console.log(msg);
+            const el = document.getElementById('init-log');
+            el.style.display = 'block';
+            el.innerText += "> " + msg + "\n";
+            setTimeout(() => { if (STATE.status === 'IDLE') el.style.display = 'none'; }, 3000);
+        }
+
+        // Hardcoded Auto-Symbols
+        const AUTO_SYMBOLS = [
+            "assets/slotimages/01_symbol.png",
+            "assets/slotimages/02_symbol.png",
+            "assets/slotimages/03_symbol.png",
+            "assets/slotimages/04_symbol.png",
+            "assets/slotimages/05_symbol.png",
+            "assets/slotimages/06_symbol.png",
+            "assets/slotimages/07_symbol.png",
+            "assets/slotimages/08_symbol.png",
+            "assets/slotimages/09_symbol.png"
+        ];
+
+        // ==========================================
+        // 1. ROBUST INITIALIZATION
+        // ==========================================
+        async function boot() {
+            log("BOOT SEQUENCE STARTED...");
+
+            // 1. Load Config
+            try {
+                const res = await fetchWithTimeout('config.json', 2000);
+                STATE.config = await res.json();
+                log("Config loaded.");
+            } catch (e) {
+                log("Config failed (" + e.name + "). Using Defaults.");
+                STATE.config = DEFAULTS;
+            }
+
+            applyConfig();
+
+            // 2. Load Images (Auto List)
+            try {
+                await loadImages(AUTO_SYMBOLS);
+                log("Images Loaded.");
+            } catch (e) {
+                log("Images failed. Using Dummies.");
+                createDummySymbols();
+            }
+
+            // Start Engine
+            log("SYSTEM READY.");
+            initReels();
+            setupInteractions();
+            requestAnimationFrame(renderLoop);
+        }
+
+        async function fetchWithTimeout(resource, timeout = 2000) {
+            const controller = new AbortController();
+            const id = setTimeout(() => controller.abort(), timeout);
+            try {
+                const response = await fetch(resource, { signal: controller.signal });
+                clearTimeout(id);
+                if (!response.ok) throw new Error("HTTP " + response.status);
+                return response;
+            } catch (e) {
+                clearTimeout(id);
+                throw e;
+            }
+        }
+
+        function applyConfig() {
+            const c = currentStateConfig();
+            document.title = c.machineTitle;
+            document.getElementById('machine-title').innerText = c.machineTitle;
+
+            // Theme
+            const r = document.documentElement;
+            if (c.theme) {
+                r.style.setProperty('--theme-accent', c.theme.accent || '#00ffff');
+                r.style.setProperty('--theme-bg', c.theme.bg || '#000000');
+                r.style.setProperty('--theme-glow', `0 0 10px ${c.theme.accent || '#00ffff'}`);
+            }
+
+            // Partner
+            document.getElementById('partner-label').innerText = c.partnerLabel || "コラボ・提供者の方のページへ";
+            document.getElementById('partner-name').innerText = c.partnerName || "DEFAULT";
+
+            // Bottom Link (Button)
+            const cl = document.getElementById('celestial-link');
+            // cl.onclick handled by goCelestial() reading state
+            cl.innerText = c.celestialButtonLabel || "CELESTIAL Web Site";
+        }
+
+        function currentStateConfig() {
+            return STATE.config || DEFAULTS;
+        }
+
+        async function loadImages(paths) {
+            const promises = paths.map(path => {
+                return new Promise(resolve => {
+                    const img = new Image();
+                    img.src = path;
+                    img.onload = () => resolve(img);
+                    img.onerror = () => {
+                        console.warn("Image Load Fail: " + path);
+                        resolve(null);
+                    }
+                });
+            });
+
+            const loaded = await Promise.all(promises);
+            const valid = loaded.filter(i => i !== null);
+
+            if (valid.length < 3) {
+                log("Not enough valid images. Using dummies.");
+                createDummySymbols();
+            } else {
+                STATE.images = valid;
+                STATE.useDummy = false;
+            }
+        }
+
+        function createDummySymbols() {
+            STATE.useDummy = true;
+            STATE.images = [];
+            const colors = ['#F00', '#0F0', '#00F', '#FF0', '#0FF', '#F0F', '#FFF'];
+            for (let i = 0; i < 8; i++) {
+                STATE.images.push({
+                    isDummy: true,
+                    color: colors[i % colors.length],
+                    text: "SYM" + (i + 1)
+                });
+            }
+        }
+
+        // ==========================================
+        // 2. STATE MANAGEMENT
+        // ==========================================
+        function resetGame() {
+            // Soft Reset
+            STATE.status = 'IDLE';
+            STATE.fever = false;
+            document.body.classList.remove('fever-mode');
+
+            // Reset Reels
+            STATE.reels.forEach(r => {
+                r.speed = 0;
+                r.stopping = false;
+                r.offset = Math.floor(Math.random() * STATE.images.length * SYMBOL_HEIGHT);
+            });
+
+            // Reset UI
+            document.getElementById('message-box').innerText = "READY";
+            document.getElementById('spin-btn').style.display = 'block';
+            document.getElementById('seq-stop-btn').style.display = 'none';
+            document.getElementById('spin-btn').disabled = false;
+
+            [0, 1, 2].forEach(i => document.getElementById(`stop-${i}`).disabled = true);
+            document.getElementById('click-layer').style.display = 'none';
+
+            // Re-apply config in case it was quirky
+            applyConfig();
+            drawReels();
+        }
+
+        function setupInteractions() {
+            // Click Layer for screen tap stopping
+            const layer = document.getElementById('click-layer');
+            const handleTap = (e) => {
+                e.preventDefault();
+                stopNext();
+            };
+            layer.addEventListener('mousedown', handleTap);
+            layer.addEventListener('touchstart', handleTap, { passive: false });
+        }
+
+        function goPartner() {
+            const url = currentStateConfig().partnerUrl;
+            if (url) window.open(url, '_blank');
+        }
+
+        function goCelestial() {
+            const url = currentStateConfig().celestialUrl || "https://celestial-observers.com";
+            window.open(url, '_blank');
+        }
+
+        // ==========================================
+        // 3. GAME ENGINE
+        // ==========================================
+        function initReels() {
+            STATE.reels.forEach((r, i) => {
+                const c = document.querySelector(`#reel${i} canvas`);
+                r.ctx = c.getContext('2d');
+                // Random start pos
+                r.offset = Math.floor(Math.random() * STATE.images.length * SYMBOL_HEIGHT);
+            });
+            drawReels();
+        }
+
+        function spin() {
+            if (STATE.status !== 'IDLE' && STATE.status !== 'RESULT') return;
+
+            initAudio(); // Unlock audio
+            if (STATE.audioCtx && STATE.audioCtx.state === 'suspended') STATE.audioCtx.resume();
+
+            ensureBGM();
+
+            if (STATE.mode === 'FEVER') {
+                STATE.feverCount--;
+                document.getElementById('message-box').innerText = "FEVER! " + STATE.feverCount + " LEFT";
+
+                // Overlay update
+                const overlay = document.getElementById('fever-overlay');
+                overlay.innerText = "FEVER!! (" + STATE.feverCount + ")";
+                overlay.style.display = 'block';
+            } else {
+                document.getElementById('message-box').innerText = "SPINNING...";
+            }
+
+            playTone('spin'); // Sound effect only
+
+            STATE.status = 'SPINNING';
+
+            // Win Determination (Pre-determination)
+            const conf = currentStateConfig();
+            const feverConf = conf.fever || DEFAULTS.fever;
+
+            let currentWinRate = conf.winRate || DEFAULTS.winRate || 0.08;
+            if (STATE.mode === 'FEVER') {
+                currentWinRate = 1.0; // Force win in FEVER
+            }
+
+            const willWin = Math.random() < currentWinRate;
+            STATE.forcedSymbol = null; // Reset
+
+            if (willWin) {
+                // Pick a winner
+                const symCount = STATE.images.length;
+                let winSymIdx = Math.floor(Math.random() * symCount);
+
+                // If in FEVER, avoid re-triggering recursive fever unless random luck hits it? 
+                // User said: "FEVER中 forced win は trigger対象を避ける"
+                if (STATE.mode === 'FEVER') {
+                    const trigVal = feverConf.trigger ? feverConf.trigger.value : 3;
+                    // Attempt to pick non-trigger
+                    // If trigger is "wins", then symbol doesn't matter for trigger, only count matters.
+                    // But if legacy "symbol" trigger, we should avoid it. 
+                    // Given we moved to "wins", this symbol check is less critical but good safety for hybrid.
+                    // Just randomize freely if trigger is 'wins'.
+                }
+                STATE.forcedSymbol = winSymIdx;
+                console.log("WIN FORCE: " + winSymIdx);
+            } else {
+                console.log("NO WIN FORCE");
+            }
+
+            STATE.fever = false; // Internal flag cleanup if needed, but we use mode now
+            document.body.classList.remove('fever-mode');
+            if (STATE.mode === 'FEVER') document.body.classList.add('fever-mode');
+
+            // UI Toggle
+            document.getElementById('spin-btn').style.display = 'none';
+            document.getElementById('seq-stop-btn').style.display = 'block';
+            document.getElementById('seq-stop-btn').disabled = false;
+            document.getElementById('click-layer').style.display = 'block';
+
+            [0, 1, 2].forEach(i => document.getElementById(`stop-${i}`).disabled = false);
+
+            // Start Motion
+            STATE.reels.forEach(r => {
+                r.speed = 40 + Math.random() * 5;
+                r.stopping = false;
+                r.targetParams = null;
+            });
+        }
+
+        function stopReel(idx) {
+            const r = STATE.reels[idx];
+            if (r.speed > 0 && !r.stopping) {
+                r.stopping = true;
+                playTone('stop');
+                document.getElementById(`stop-${idx}`).disabled = true;
+            }
+        }
+
+        function stopNext() {
+            // Find first spinning reel
+            const idx = STATE.reels.findIndex(r => r.speed > 0 && !r.stopping);
+            if (idx !== -1) stopReel(idx);
+        }
+
+        function renderLoop() {
+            updatePhysics();
+            drawReels();
+            requestAnimationFrame(renderLoop);
+        }
+
+        function updatePhysics() {
+            if (STATE.status !== 'SPINNING' && STATE.status !== 'STOPPING') return;
+
+            let moving = 0;
+            const totalH = STATE.images.length * SYMBOL_HEIGHT;
+
+            STATE.reels.forEach(r => {
+                if (r.speed > 0) {
+                    moving++;
+                    r.offset += r.speed;
+                    if (r.offset >= totalH) r.offset -= totalH;
+
+                    if (r.stopping) {
+                        // Snap logic
+                        let targetIdx = 0;
+
+                        if (STATE.forcedSymbol !== null) {
+                            // FORCED WIN: Snap to forced symbol
+                            // Center row is index+1. So if we want Center=Forced, then Top(Index) = Forced-1
+                            let desiredTop = STATE.forcedSymbol - 1;
+                            if (desiredTop < 0) desiredTop += STATE.images.length;
+                            targetIdx = desiredTop;
+                        } else {
+                            // Normal random stop (nearest integer index)
+                            const currentIndex = Math.floor(r.offset / SYMBOL_HEIGHT);
+                            targetIdx = (currentIndex + 1) % STATE.images.length;
+                        }
+
+                        const targetOffset = targetIdx * SYMBOL_HEIGHT;
+
+                        // If forced, we just SNAP instantly once stopping is requested to ensure it hits.
+                        r.offset = targetOffset;
+                        r.speed = 0;
+                        r.stopping = false;
+                        r.symbolIndex = targetIdx;
+                    }
+                }
+            });
+
+            if (moving === 0 && STATE.status !== 'RESULT') {
+                // All requested stops complete
+                if (STATE.reels.every(r => r.speed === 0)) {
+                    STATE.status = 'RESULT';
+                    checkResult();
+
+                    // Logic to end fever AFTER the spin result is shown/processed
+                    if (STATE.mode === 'FEVER' && STATE.feverCount <= 0) {
+                        setTimeout(endFever, 1500);
+                    }
+                }
+            }
+        }
+
+        function checkResult() {
+            document.getElementById('click-layer').style.display = 'none';
+            document.getElementById('seq-stop-btn').style.display = 'none';
+            document.getElementById('spin-btn').style.display = 'block';
+            document.getElementById('spin-btn').disabled = false;
+
+            // Logic: Horizontal Center
+            // Each reel has 3 visible. Top (index), Center (index+1), Bottom (index+2)
+            const getSym = (reelIdx, rowOffset) => {
+                const r = STATE.reels[reelIdx];
+                // r.symbolIndex is the TOP symbol
+                const i = (r.symbolIndex + rowOffset) % STATE.images.length;
+                return i;
+            };
+
+            const c0 = getSym(0, 1);
+            const c1 = getSym(1, 1);
+            const c2 = getSym(2, 1);
+
+            console.log(`Result: ${c0}-${c1}-${c2}`);
+
+            // Config-safe access
+            const conf = currentStateConfig();
+            const feverConf = conf.fever || DEFAULTS.fever;
+            const triggerMode = (feverConf.trigger && feverConf.trigger.mode) || "wins";
+            const triggerVal = (feverConf.trigger && feverConf.trigger.value) || 3;
+
+            // Check Central Match
+            if (c0 === c1 && c1 === c2) {
+                // WIN!
+                if (STATE.mode === 'NORMAL') {
+                    STATE.winStreak++;
+                    console.log("WIN STREAK: " + STATE.winStreak);
+                }
+
+                // Determine Trigger
+                let isTrigger = false;
+
+                if (triggerMode === 'wins') {
+                    if (STATE.winStreak >= triggerVal) isTrigger = true;
+                } else {
+                    // Legacy modes (symbol/rarePrefix)
+                    const symText0 = STATE.images[c0].text || "";
+                    const src = STATE.images[c0].src || "";
+
+                    if (triggerMode === 'symbol') {
+                        if (symText0 === triggerVal || src.includes(triggerVal)) isTrigger = true;
+                    } else if (triggerMode === 'rarePrefix') {
+                        const parts = src.split('/');
+                        const fname = parts[parts.length - 1];
+                        if (fname.startsWith(triggerVal)) isTrigger = true;
+                    }
+                }
+
+                if (feverConf.enabled && isTrigger && STATE.mode === 'NORMAL') {
+                    startFever();
+                    STATE.winStreak = 0; // Reset
+                } else {
+                    document.getElementById('message-box').innerText = "VITALIZATION! (" + STATE.winStreak + ")";
+                    playTone('win');
+                    // flashScreen(); // Totally Disabled
+                }
+            } else {
+                // LOSE
+                if (STATE.mode === 'NORMAL') STATE.winStreak = 0;
+
+                if (STATE.mode === 'FEVER') {
+                    document.getElementById('message-box').innerText = "";
+                } else {
+                    document.getElementById('message-box').innerText = "TRY AGAIN";
+                }
+            }
+        }
+
+        function flashScreen() {
+            const f = document.getElementById('flash-overlay');
+            if (f) {
+                f.style.display = 'block';
+                f.style.opacity = '1';
+                setTimeout(() => {
+                    f.style.transition = 'opacity 0.5s';
+                    f.style.opacity = '0';
+                    setTimeout(() => { f.style.display = 'none'; f.style.transition = ''; }, 500);
+                }, 50);
+            }
+        }
+
+        function startFever() {
+            STATE.mode = 'FEVER';
+            const f = currentStateConfig().fever || DEFAULTS.fever;
+            STATE.feverCount = f.spins || 10;
+
+            document.body.classList.add('fever-mode');
+            const overlay = document.getElementById('fever-overlay');
+            overlay.innerText = "FEVER!! (" + STATE.feverCount + ")";
+            overlay.style.display = 'block';
+
+            document.getElementById('message-box').innerText = "FEVER!!";
+
+            playTone('win'); // Transition sound
+            // flashScreen(); // Disabled
+
+            // BGM transition
+            setBGMMode('FEVER');
+        }
+
+        function endFever() {
+            STATE.mode = 'NORMAL';
+            document.body.classList.remove('fever-mode');
+
+            const overlay = document.getElementById('fever-overlay');
+            overlay.innerText = "FEVER END";
+            overlay.style.display = 'block';
+            setTimeout(() => overlay.style.display = 'none', 2000);
+
+            document.getElementById('message-box').innerText = "READY";
+            setBGMMode('NORMAL');
+            playTone('stop'); // End sound
+        }
+
+        function triggerFever() {
+            // Legacy Stub
+            startFever();
+        }
+
+        function drawReels() {
+            STATE.reels.forEach(r => {
+                const ctx = r.ctx;
+                ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+
+                // Determine base index
+                const baseIdx = Math.floor(r.offset / SYMBOL_HEIGHT);
+                const shiftY = -(r.offset % SYMBOL_HEIGHT);
+
+                for (let i = -1; i < 4; i++) {
+                    let idx = (baseIdx + i) % STATE.images.length;
+                    if (idx < 0) idx += STATE.images.length;
+
+                    const img = STATE.images[idx];
+                    const y = shiftY + (i * SYMBOL_HEIGHT);
+
+                    if (!img) continue;
+
+                    if (STATE.useDummy || img.isDummy) {
+                        ctx.fillStyle = img.color || '#333';
+                        ctx.fillRect(10, y + 10, 180, 180);
+                        ctx.fillStyle = '#fff';
+                        ctx.font = '30px monospace';
+                        ctx.textAlign = 'center';
+                        ctx.fillText(img.text, 100, y + 110);
+                    } else {
+                        try {
+                            // Cover Crop (Center)
+                            const side = Math.min(img.width, img.height);
+                            const sx = (img.width - side) / 2;
+                            const sy = (img.height - side) / 2;
+                            ctx.drawImage(img, sx, sy, side, side, 0, y, CANVAS_WIDTH, SYMBOL_HEIGHT);
+                        } catch (e) {
+                            ctx.fillStyle = '#f00'; ctx.fillRect(0, y, CANVAS_WIDTH, SYMBOL_HEIGHT);
+                        }
+                    }
+                }
+            });
+        }
+
+        // ==========================================
+        // 4. AUDIO SYSTEM (Synthed)
+        // ==========================================
+        // ==========================================
+        // 4. AUDIO SYSTEM (WAV BGM + Synthed SFX)
+        // ==========================================
+        let bgmAudio = null;
+        let isBgmPlaying = false;
+
+        function initAudio() {
+            if (!STATE.audioCtx) {
+                const AC = window.AudioContext || window.webkitAudioContext;
+                if (AC) STATE.audioCtx = new AC();
+            }
+            if (STATE.audioCtx && STATE.audioCtx.state === 'suspended') {
+                STATE.audioCtx.resume();
+            }
+
+            // Initialize BGM
+            if (!bgmAudio) {
+                bgmAudio = new Audio("assets/audio/audio.wav");
+                bgmAudio.loop = true;
+                // Down 30% from 0.3
+                bgmAudio.volume = Math.max(0.3 * 0.7, 0.05);
+                console.log("BGM Initialized: assets/audio/audio.wav");
+            }
+        }
+
+        function ensureBGM() {
+            if (bgmAudio && !isBgmPlaying) {
+                bgmAudio.play().then(() => {
+                    isBgmPlaying = true;
+                    console.log("BGM Loop Started");
+                }).catch(e => {
+                    console.warn("BGM Auto-play blocked (waiting for interaction):", e);
+                });
+            }
+
+            // Legacy Synth BGM disabled
+        }
+
+        function setBGMMode(mode) {
+            // Future: Could switch track logic here if we had fever audio
+            // Currently just keeps the main loop running
+        }
+
+        function bgmLoop() {
+            // Disabled Synth Loop
+        }
+
+        function playTone(type) {
+            if (!STATE.audioCtx) return;
+
+            const ctx = STATE.audioCtx;
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+
+            const now = ctx.currentTime;
+
+            if (type === 'spin') {
+                osc.type = 'square';
+                osc.frequency.setValueAtTime(220, now);
+                osc.frequency.exponentialRampToValueAtTime(880, now + 0.1);
+                gain.gain.setValueAtTime(VOLUMES.SPIN, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+                osc.start(now);
+                osc.stop(now + 0.1);
+            } else if (type === 'stop') {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(440, now);
+                gain.gain.setValueAtTime(VOLUMES.STOP, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+                osc.start(now);
+                osc.stop(now + 0.1);
+            } else if (type === 'win') {
+                // Arpeggio
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(523.25, now);
+                osc.frequency.setValueAtTime(659.25, now + 0.1);
+                osc.frequency.setValueAtTime(783.99, now + 0.2);
+                osc.frequency.setValueAtTime(1046.50, now + 0.3);
+
+                gain.gain.setValueAtTime(VOLUMES.WIN, now);
+                gain.gain.linearRampToValueAtTime(VOLUMES.WIN, now + 0.4);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 1.0);
+
+                osc.start(now);
+                osc.stop(now + 1.0);
+            }
+        }
+
+        window.onload = boot;
+    </script>
+</body>
+
+</html>

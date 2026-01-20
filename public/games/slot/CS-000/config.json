@@ -1,0 +1,31 @@
+{
+    "machineTitle": "CELESTIAL SLOT UNIT",
+    "partnerLabel": "コラボ・提供者の方のページへ",
+    "partnerName": "DEFAULT",
+    "partnerUrl": "https://celestial-observers.com",
+    "celestialUrl": "https://celestial-observers.com",
+    "celestialButtonLabel": "CELESTIAL Web Site",
+    "theme": {
+        "accent": "#00ffff",
+        "bg": "#000000"
+    },
+    "feverRate": 0.1,
+    "winRate": 0.08,
+    "fever": {
+        "enabled": true,
+        "trigger": {
+            "mode": "symbol",
+            "value": "SYM7"
+        },
+        "spins": 10,
+        "rateBoost": 2.0,
+        "visual": {
+            "glow": 1.5,
+            "flash": true
+        },
+        "audio": {
+            "tempo": 1.25,
+            "pitch": 1.15
+        }
+    }
+}

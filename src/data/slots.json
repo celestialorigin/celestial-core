@@ -1,0 +1,39 @@
+[
+    {
+        "id": "CS-000",
+        "slug": "cs-000",
+        "displayName": "CELESTIAL Slot 000",
+        "ownerName": "Lukia",
+        "kana": "ルキア",
+        "aliases": [
+            "原初",
+            "000",
+            "LUKIA"
+        ],
+        "type": "trial",
+        "status": "live",
+        "tags": {
+            "mood": [
+                "neon",
+                "cyber"
+            ],
+            "world": [
+                "origin"
+            ],
+            "nsfw": false,
+            "platform": [
+                "web"
+            ],
+            "collab": false
+        },
+        "thumb": "/wip/games/celestial-slot/thumbs/CS-000.png",
+        "description": "原初筐体。TRIAL SLOT（LUKIA ver）。全ての始まりとなるスロット。",
+        "playUrl": "/games/slot/CS-000/",
+        "links": {
+            "x": "",
+            "youtube": "",
+            "page": ""
+        },
+        "createdAt": "2026-01-20"
+    }
+]
