@@ -1,4 +1,0 @@
-Place 512x512 PNG images here.
-Standard naming: 01_symbol.png, etc.
-Rare naming: 09_rare.png, etc.
-Update symbols.json to match filenames.
