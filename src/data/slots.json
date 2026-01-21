@@ -1,39 +1,46 @@
 [
-    {
-        "id": "CS-000",
-        "slug": "cs-000",
-        "displayName": "CELESTIAL Slot 000",
-        "ownerName": "Lukia",
-        "kana": "ルキア",
-        "aliases": [
-            "原初",
-            "000",
-            "LUKIA"
-        ],
-        "type": "trial",
-        "status": "live",
-        "tags": {
-            "mood": [
-                "neon",
-                "cyber"
-            ],
-            "world": [
-                "origin"
-            ],
-            "nsfw": false,
-            "platform": [
-                "web"
-            ],
-            "collab": false
-        },
-        "thumb": "/wip/games/celestial-slot/thumbs/CS-000.png",
-        "description": "原初筐体。TRIAL SLOT（LUKIA ver）。全ての始まりとなるスロット。",
-        "playUrl": "/games/slot/CS-000/",
-        "links": {
-            "x": "",
-            "youtube": "",
-            "page": ""
-        },
-        "createdAt": "2026-01-20"
-    }
+  {
+    "id": "CS-000",
+    "slug": "cs-000",
+    "displayName": "CELESTIAL Slot 000",
+    "ownerName": "Lukia",
+    "kana": "ルキア",
+    "aliases": ["原初", "000", "LUKIA"],
+    "type": "trial",
+    "status": "live",
+    "tags": {
+      "mood": ["neon", "cyber"],
+      "world": ["origin"],
+      "nsfw": false,
+      "platform": ["web"],
+      "collab": false
+    },
+    "thumb": "/wip/games/celestial-slot/thumbs/CS-000.png",
+    "description": "原初筐体。TRIAL SLOT（LUKIA ver）。全ての始まりとなるスロット。",
+    "playUrl": "/games/slot/CS-000/",
+    "links": { "x": "", "youtube": "", "page": "" },
+    "createdAt": "2026-01-20"
+  },
+  {
+    "id": "CS-001",
+    "slug": "cs-001",
+    "displayName": "CELESTIAL Slot 001",
+    "ownerName": "VRCなる箱",
+    "kana": "なるはこ",
+    "aliases": ["001", "CS001", "なる箱"],
+    "type": "collab",
+    "status": "live",
+    "tags": {
+      "mood": ["neon", "cyber"],
+      "world": ["collab"],
+      "nsfw": false,
+      "platform": ["web"],
+      "collab": true
+    },
+    "thumb": "/public/wip/games/celestial-slot/thumbs/CS-001.png",
+    "description": "活動者、VRCなる箱コラボ筐体。COLLAB SLOT（NARUHAKO ver）。デカくてかわいいお姉さん系の写真を投稿されている方です。よかったら、VRCなる箱さんのかわいい画像を見ていきませんか？",
+    "playUrl": "/games/slot/CS-001/",
+    "links": { "x": "https://x.com/VRC_box420", "youtube": "", "page": "" },
+    "createdAt": "2026-01-21"
+  }
 ]

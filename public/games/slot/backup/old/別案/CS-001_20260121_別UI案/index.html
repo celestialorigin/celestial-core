@@ -1,0 +1,1172 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>CELESTIAL SLOT UNIT</title>
+  <style>
+    :root{
+      --accent: #b000ff;
+      --bg: #050008;
+      --panel: rgba(255,255,255,0.06);
+      --panel2: rgba(255,255,255,0.10);
+      --text: rgba(255,255,255,0.92);
+      --muted: rgba(255,255,255,0.66);
+      --shadow: rgba(0,0,0,0.55);
+    }
+    html,body{height:100%;}
+    body{
+      margin:0;
+      background: radial-gradient(1200px 800px at 50% 20%, rgba(176,0,255,0.18), transparent 55%),
+                  radial-gradient(900px 700px at 10% 80%, rgba(0,255,255,0.10), transparent 60%),
+                  var(--bg);
+      color:var(--text);
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans JP", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
+      overflow-x:hidden;
+    }
+
+    .stage{
+      display:flex;
+      align-items:stretch;
+      justify-content:center;
+      gap:14px;
+      padding:18px 14px 28px;
+      max-width: 1220px;
+      margin: 0 auto;
+    }
+    .side{
+      width: 260px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 18px;
+      box-shadow: 0 18px 45px rgba(0,0,0,0.35);
+      overflow:hidden;
+      position:relative;
+    }
+    .side .cap{
+      padding: 12px 12px 10px;
+      font-size: 12px;
+      letter-spacing: 0.24em;
+      color: rgba(255,255,255,0.72);
+      text-transform: uppercase;
+    }
+    .side img{
+      width:100%;
+      height: calc(100% - 44px);
+      object-fit: cover;
+      display:block;
+      filter: saturate(1.12) contrast(1.05);
+    }
+
+    #game-container{
+      flex: 1;
+      min-width: 420px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.03));
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 22px;
+      box-shadow: 0 18px 55px rgba(0,0,0,0.45);
+      position: relative;
+      overflow:hidden;
+    }
+    .topbar{
+      padding: 14px 16px 10px;
+      display:flex;
+      align-items:baseline;
+      justify-content:space-between;
+      gap: 10px;
+    }
+    #machine-title{
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      font-size: 18px;
+      text-transform: uppercase;
+    }
+    #slot-display-name{
+      font-size: 12px;
+      color: rgba(255,255,255,0.72);
+      letter-spacing: 0.10em;
+      opacity: 0.95;
+    }
+
+    .mid{ padding: 8px 16px 14px; }
+
+    .reels{
+      display:flex;
+      gap: 10px;
+      justify-content:center;
+      align-items:center;
+      padding: 10px 0 8px;
+      position:relative;
+    }
+    canvas.reel{
+      width: 210px;
+      height: 630px;
+      background: rgba(0,0,0,0.55);
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 18px;
+      box-shadow: inset 0 0 0 2px rgba(255,255,255,0.04);
+    }
+
+    .hud{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+      margin-top: 8px;
+      padding: 10px 12px;
+      border-radius: 16px;
+      background: rgba(0,0,0,0.28);
+      border: 1px solid rgba(255,255,255,0.10);
+    }
+    #status-text{
+      font-size: 12px;
+      color: rgba(255,255,255,0.78);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      user-select:none;
+    }
+    #fever-counter{
+      font-size: 12px;
+      color: rgba(255,255,255,0.90);
+      letter-spacing: 0.10em;
+      user-select:none;
+    }
+
+    .controls{
+      display:flex;
+      gap: 10px;
+      justify-content:center;
+      padding: 12px 16px 16px;
+    }
+    .btn{
+      appearance:none;
+      border: 1px solid rgba(255,255,255,0.16);
+      background: linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.06));
+      color: rgba(255,255,255,0.92);
+      border-radius: 16px;
+      padding: 12px 16px;
+      font-weight: 800;
+      letter-spacing: 0.10em;
+      cursor:pointer;
+      box-shadow: 0 12px 24px rgba(0,0,0,0.28);
+      transition: transform .08s ease, filter .15s ease, border-color .15s ease;
+      user-select:none;
+      min-width: 140px;
+      text-transform: uppercase;
+    }
+    .btn:active{ transform: translateY(1px) scale(0.99); }
+    .btn.primary{
+      border-color: rgba(176,0,255,0.55);
+      box-shadow: 0 14px 34px rgba(176,0,255,0.22);
+    }
+    .btn.danger{
+      border-color: rgba(255,60,140,0.45);
+      box-shadow: 0 14px 34px rgba(255,60,140,0.18);
+    }
+    .btn[data-on="1"]{
+      filter: saturate(1.25) brightness(1.10);
+      border-color: rgba(0,255,255,0.55);
+      box-shadow: 0 14px 34px rgba(0,255,255,0.16);
+    }
+
+    .links{
+      display:flex;
+      justify-content:space-between;
+      gap: 12px;
+      padding: 0 16px 18px;
+    }
+    .linkCard{
+      flex: 1;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap: 8px;
+      padding: 12px 12px;
+      border-radius: 16px;
+      background: rgba(0,0,0,0.24);
+      border: 1px solid rgba(255,255,255,0.10);
+      cursor:pointer;
+      user-select:none;
+      transition: transform .10s ease, border-color .15s ease;
+      text-decoration:none;
+      color: rgba(255,255,255,0.92);
+      font-weight: 800;
+      letter-spacing: 0.08em;
+    }
+    .linkCard:hover{ transform: translateY(-1px); border-color: rgba(255,255,255,0.18); }
+    .linkCard.accent{
+      border-color: rgba(176,0,255,0.45);
+      box-shadow: 0 10px 30px rgba(176,0,255,0.18);
+    }
+
+    #banner{
+      position:absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%,-50%);
+      font-weight: 1000;
+      font-size: 34px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 16px 22px;
+      border-radius: 18px;
+      background: rgba(0,0,0,0.40);
+      border: 1px solid rgba(255,255,255,0.14);
+      box-shadow: 0 26px 60px rgba(0,0,0,0.45);
+      opacity: 0.0;
+      pointer-events:none;
+      transition: opacity .18s ease;
+      text-shadow: 0 0 18px rgba(176,0,255,0.20);
+      z-index: 20;
+      white-space: nowrap;
+    }
+    #banner[data-mode="win"]{ opacity: 0.92; }
+    #banner[data-mode="jackpot"]{ opacity: 0.96; text-shadow: 0 0 22px rgba(255,200,0,0.25); }
+    #banner[data-mode="fever"]{ opacity: 0.92; text-shadow: 0 0 22px rgba(0,255,255,0.20); }
+    #banner[data-mode="lose"]{ opacity: 0.55; }
+    #banner[data-mode="normal"]{ opacity: 0.0; }
+
+    #fx-layer, #cutin-layer{
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+    }
+    #cutin-layer{ z-index: 40; display:flex; align-items:center; justify-content:center; }
+
+    .cutin-img{
+      width: 92%;
+      max-width: 740px;
+      border-radius: 22px;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.55);
+      transform: scale(0.92);
+      opacity: 0;
+      animation: cutinPop 1.2s ease forwards;
+      filter: saturate(1.1) contrast(1.05);
+      border: 1px solid rgba(255,255,255,0.14);
+    }
+    @keyframes cutinPop{
+      0%{ transform: scale(0.88); opacity: 0; }
+      12%{ transform: scale(1.00); opacity: 1; }
+      85%{ transform: scale(1.02); opacity: 1; }
+      100%{ transform: scale(0.98); opacity: 0; }
+    }
+
+    .fx{ position:absolute; inset:0; }
+
+    .fx-flashGrid{
+      background:
+        linear-gradient(90deg, rgba(255,255,255,0.14) 1px, transparent 1px),
+        linear-gradient(180deg, rgba(255,255,255,0.14) 1px, transparent 1px);
+      background-size: 32px 32px;
+      animation: fxFlashGrid 0.65s ease forwards;
+      mix-blend-mode: screen;
+    }
+    @keyframes fxFlashGrid{ 0%{opacity:0;transform:scale(1.02)} 12%{opacity:1} 100%{opacity:0;transform:scale(1.12)} }
+
+    .fx-scanline{
+      background: repeating-linear-gradient(180deg, rgba(0,255,255,0.0) 0px, rgba(0,255,255,0.07) 2px, rgba(0,0,0,0.0) 4px);
+      animation: fxScan 0.7s ease forwards;
+      mix-blend-mode: screen;
+    }
+    @keyframes fxScan{ 0%{opacity:0;transform:translateY(-6%)} 20%{opacity:1} 100%{opacity:0;transform:translateY(6%)} }
+
+    .fx-burst{
+      background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.22), rgba(176,0,255,0.15) 35%, rgba(0,0,0,0.0) 72%);
+      animation: fxBurst 0.6s ease forwards;
+      mix-blend-mode: screen;
+    }
+    @keyframes fxBurst{ 0%{opacity:0;transform:scale(0.90)} 16%{opacity:1;transform:scale(1.02)} 100%{opacity:0;transform:scale(1.18)} }
+
+    .fx-tripleZoom{
+      background: radial-gradient(circle at 50% 50%, rgba(0,255,255,0.18), transparent 55%),
+                  radial-gradient(circle at 50% 50%, rgba(176,0,255,0.18), transparent 62%);
+      animation: fxZoom 0.65s ease forwards;
+      mix-blend-mode: screen;
+    }
+    @keyframes fxZoom{ 0%{opacity:0;transform:scale(0.92)} 18%{opacity:1} 100%{opacity:0;transform:scale(1.24)} }
+
+    .fx-symbolBurst{
+      background: conic-gradient(from 0deg, rgba(176,0,255,0.0), rgba(176,0,255,0.22), rgba(0,255,255,0.0)),
+                  radial-gradient(circle at 50% 50%, rgba(255,255,255,0.10), transparent 60%);
+      animation: fxSymbol 0.75s ease forwards;
+      mix-blend-mode: screen;
+    }
+    @keyframes fxSymbol{ 0%{opacity:0;transform:rotate(0deg) scale(0.96)} 18%{opacity:1} 100%{opacity:0;transform:rotate(40deg) scale(1.25)} }
+
+    .fx-splitPanels{
+      background: linear-gradient(90deg, rgba(0,0,0,0.0), rgba(255,255,255,0.10), rgba(0,0,0,0.0)),
+                  linear-gradient(90deg, rgba(0,0,0,0.0), rgba(176,0,255,0.12), rgba(0,0,0,0.0));
+      animation: fxSplit 0.72s ease forwards;
+      mix-blend-mode: screen;
+    }
+    @keyframes fxSplit{ 0%{opacity:0;transform:translateX(-6%)} 16%{opacity:1} 100%{opacity:0;transform:translateX(6%)} }
+
+    .fx-neonFrame{
+      box-shadow: inset 0 0 0 4px rgba(0,255,255,0.18), 0 0 35px rgba(176,0,255,0.16);
+      border-radius: 22px;
+      animation: fxFrame 0.9s ease forwards;
+      opacity:0;
+    }
+    @keyframes fxFrame{ 0%{opacity:0} 18%{opacity:1} 100%{opacity:0} }
+
+    .fx-roulette{
+      background: conic-gradient(from 0deg, rgba(176,0,255,0.0), rgba(0,255,255,0.20), rgba(255,255,255,0.12), rgba(176,0,255,0.0));
+      animation: fxRoulette 0.95s ease forwards;
+      mix-blend-mode: screen;
+    }
+    @keyframes fxRoulette{ 0%{opacity:0;transform:rotate(0deg) scale(0.92)} 14%{opacity:1} 100%{opacity:0;transform:rotate(90deg) scale(1.15)} }
+
+    .fx-banner{
+      position:absolute; left:50%; top:18%; transform: translateX(-50%);
+      padding: 12px 18px; border-radius: 18px;
+      background: rgba(0,0,0,0.50);
+      border: 1px solid rgba(255,255,255,0.16);
+      font-weight: 1000; letter-spacing: 0.14em;
+      box-shadow: 0 22px 55px rgba(0,0,0,0.42);
+      animation: fxBanner 0.9s ease forwards;
+    }
+    @keyframes fxBanner{ 0%{opacity:0;transform:translateX(-50%) translateY(-12px) scale(0.96)} 18%{opacity:1;transform:translateX(-50%) translateY(0px) scale(1.0)} 100%{opacity:0;transform:translateX(-50%) translateY(6px) scale(1.03)} }
+
+    body.aura-on::before{
+      content:"";
+      position:fixed;
+      inset:-20%;
+      pointer-events:none;
+      z-index: 0;
+      opacity: 0.42;
+      mix-blend-mode: screen;
+      animation: auraPulse 1.6s ease-in-out infinite;
+    }
+    @keyframes auraPulse{ 0%,100%{transform:scale(1.0);opacity:0.34} 50%{transform:scale(1.05);opacity:0.50} }
+    body.aura-on[data-aura="aura_crimson"]::before{ background: radial-gradient(circle at 50% 50%, rgba(255,60,140,0.18), transparent 60%); }
+    body.aura-on[data-aura="aura_azure"]::before{ background: radial-gradient(circle at 50% 50%, rgba(0,180,255,0.18), transparent 60%); }
+    body.aura-on[data-aura="aura_violet"]::before{ background: radial-gradient(circle at 50% 50%, rgba(176,0,255,0.18), transparent 60%); }
+    body.aura-on[data-aura="aura_gold"]::before{ background: radial-gradient(circle at 50% 50%, rgba(255,200,0,0.16), transparent 60%); }
+    body.aura-on[data-aura="aura_neon"]::before{ background: radial-gradient(circle at 50% 50%, rgba(0,255,255,0.16), transparent 60%); }
+    body.aura-on[data-aura="aura_void"]::before{ background: radial-gradient(circle at 50% 50%, rgba(40,40,60,0.22), transparent 60%); }
+    body.aura-on[data-aura="aura_angel"]::before{ background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.12), transparent 60%); }
+    body.aura-on[data-aura="aura_beast"]::before{ background: radial-gradient(circle at 50% 50%, rgba(255,80,0,0.14), transparent 60%); }
+    body.aura-on[data-aura="aura_celestial"]::before{ background: radial-gradient(circle at 50% 50%, rgba(140,255,200,0.14), transparent 60%); }
+
+    /* Debug overlay (確実に原因が見える) */
+    #debug{
+      position:fixed;
+      left:14px;
+      bottom:14px;
+      max-width: 560px;
+      background: rgba(0,0,0,0.55);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 14px;
+      padding: 10px 12px;
+      font-size: 12px;
+      color: rgba(255,255,255,0.86);
+      letter-spacing: 0.04em;
+      z-index: 999;
+      white-space: pre-wrap;
+      user-select:text;
+    }
+
+    @media (max-width: 1100px){
+      .side{ display:none; }
+      #game-container{ min-width: 320px; }
+      canvas.reel{ width: 140px; height: 420px; border-radius: 14px; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="stage">
+    <aside class="side" id="side-left">
+      <div class="cap">SIDE PANEL</div>
+      <img id="side-img-left" alt="thumb left" />
+    </aside>
+
+    <main id="game-container">
+      <div id="fx-layer"></div>
+      <div id="cutin-layer"></div>
+
+      <div class="topbar">
+        <div>
+          <div id="machine-title">CELESTIAL SLOT UNIT</div>
+          <div id="slot-display-name">~LUKIA SLOT ver~</div>
+        </div>
+        <div style="text-align:right">
+          <div id="fever-counter"></div>
+          <div id="status-text">BOOTING</div>
+        </div>
+      </div>
+
+      <div class="mid">
+        <div class="reels">
+          <canvas class="reel" id="reel0"></canvas>
+          <canvas class="reel" id="reel1"></canvas>
+          <canvas class="reel" id="reel2"></canvas>
+        </div>
+
+        <div class="hud">
+          <div style="font-weight:900; letter-spacing:0.12em; color:rgba(255,255,255,0.84);">
+            CENTER LINE
+          </div>
+          <div style="font-size:12px; color:rgba(255,255,255,0.70); letter-spacing:0.08em;">
+            Tap screen to stop
+          </div>
+        </div>
+      </div>
+
+      <div class="controls">
+        <button class="btn primary" id="btn-spin">SPIN</button>
+        <button class="btn" id="btn-auto" data-on="0">AUTO: OFF</button>
+        <button class="btn danger" id="btn-stop">STOP</button>
+      </div>
+
+      <div class="links">
+        <a class="linkCard" id="partner-link" href="javascript:void(0)">PARTNER</a>
+        <a class="linkCard accent" id="btn-celestial" href="javascript:void(0)">CELESTIAL Web Site</a>
+      </div>
+
+      <div id="banner" data-mode="normal">READY</div>
+    </main>
+
+    <aside class="side" id="side-right">
+      <div class="cap">SIDE PANEL</div>
+      <img id="side-img-right" alt="thumb right" />
+    </aside>
+  </div>
+
+  <div id="debug">debug: starting…</div>
+
+  <script>
+    (() => {
+      const $ = (id) => document.getElementById(id);
+      const debugEl = $("debug");
+      const log = (msg) => {
+        console.log(msg);
+        debugEl.textContent = String(msg);
+      };
+      const append = (msg) => {
+        console.log(msg);
+        debugEl.textContent += "\n" + String(msg);
+      };
+
+      // ----- helpers -----
+      const clamp = (v,a,b)=>Math.max(a,Math.min(b,v));
+      const wait = (ms)=>new Promise(r=>setTimeout(r,ms));
+      const pad2 = (n)=>String(n).padStart(2,"0");
+
+      function getSlotIdFromPath() {
+        // file:///.../CS-001/index.html or http://.../CS-001/
+        const parts = location.pathname.split("/").filter(Boolean);
+        const idx = parts.lastIndexOf("slot");
+        if (idx >= 0 && parts[idx + 1]) return parts[idx + 1];
+        return parts[parts.length - 2] || "CS-001";
+      }
+
+      async function tryFetchJson(url, timeoutMs=1200){
+        // file:// では fetch が失敗することが多いので、失敗してもOK
+        const ctrl = new AbortController();
+        const t = setTimeout(()=>ctrl.abort(), timeoutMs);
+        try{
+          const res = await fetch(url, { cache:"no-store", signal: ctrl.signal });
+          if(!res.ok) throw new Error(`HTTP ${res.status}`);
+          return await res.json();
+        }catch(e){
+          return null;
+        }finally{
+          clearTimeout(t);
+        }
+      }
+
+      function buildAutoSymbolPaths(count, base="assets/slotimages"){
+        const out=[];
+        for(let i=1;i<=count;i++) out.push(`${base}/${pad2(i)}_symbol.png`);
+        return out;
+      }
+
+      function normalizeConfig(slotId, configJson, symbolsJson){
+        const slotDef = {
+          id: slotId,
+          machineTitle: "CELESTIAL SLOT UNIT",
+          displayName: "~LUKIA SLOT ver~",
+          links: {
+            partnerLabel: "PARTNER",
+            partnerName: "PARTNER",
+            partnerUrl: "https://celestial-observers.com",
+            celestialUrl: "https://celestial-observers.com",
+            celestialButtonLabel: "CELESTIAL Web Site",
+          },
+          theme: { accent:"#b000ff", bg:"#050008" },
+          ui: { showSideThumbs:true },
+          symbols: {
+            paths: buildAutoSymbolPaths(9),
+            jackpotIndex: 8
+          },
+          rates: { win:0.14, feverStartOnWin:0.25 },
+          auto: { intervalMs:800 },
+          audio: {
+            normalBgm: "assets/audio/bgm_normal.wav",
+            feverBgmList: ["assets/audio/bgm_fever.wav"],
+            master: 0.7, bgm: 0.65, se: 0.7
+          },
+          feverCatalog: []
+        };
+
+        if(configJson){
+          if(typeof configJson.machineTitle==="string") slotDef.machineTitle=configJson.machineTitle;
+          if(typeof configJson.slotDisplayName==="string") slotDef.displayName=configJson.slotDisplayName;
+          if(typeof configJson.partnerLabel==="string") slotDef.links.partnerLabel=configJson.partnerLabel;
+          if(typeof configJson.partnerName==="string") slotDef.links.partnerName=configJson.partnerName;
+          if(typeof configJson.partnerUrl==="string") slotDef.links.partnerUrl=configJson.partnerUrl;
+          if(typeof configJson.celestialUrl==="string") slotDef.links.celestialUrl=configJson.celestialUrl;
+          if(typeof configJson.celestialButtonLabel==="string") slotDef.links.celestialButtonLabel=configJson.celestialButtonLabel;
+
+          if(configJson.theme?.accent) slotDef.theme.accent=String(configJson.theme.accent);
+          if(configJson.theme?.bg) slotDef.theme.bg=String(configJson.theme.bg);
+
+          if(typeof configJson.winRate==="number") slotDef.rates.win=configJson.winRate;
+          const fr = configJson.fever?.randomFeverOnAnyWin?.rate;
+          if(typeof fr==="number") slotDef.rates.feverStartOnWin=fr;
+
+          if(typeof configJson.autoSpinIntervalMs==="number") slotDef.auto.intervalMs=configJson.autoSpinIntervalMs;
+
+          if(typeof configJson.masterVolume==="number") slotDef.audio.master=configJson.masterVolume;
+          if(typeof configJson.bgmVolume==="number") slotDef.audio.bgm=configJson.bgmVolume;
+          if(typeof configJson.sfxVolume==="number") slotDef.audio.se=configJson.sfxVolume;
+          if(typeof configJson.bgm?.normal==="string") slotDef.audio.normalBgm=configJson.bgm.normal;
+          if(Array.isArray(configJson.bgm?.fever)) slotDef.audio.feverBgmList=configJson.bgm.fever.filter(x=>typeof x==="string");
+        }
+
+        if(symbolsJson?.symbols && Array.isArray(symbolsJson.symbols)){
+          const ok = symbolsJson.symbols.filter(x=>typeof x==="string");
+          if(ok.length>=3) slotDef.symbols.paths = ok;
+        }
+
+        // fever catalog: 9 + 1 ultra
+        const feverList = slotDef.audio.feverBgmList.length ? slotDef.audio.feverBgmList : ["assets/audio/bgm_fever.wav"];
+        const bgmPick = (i)=>feverList[i % feverList.length];
+
+        const COMMON = [
+          ["FVR_CRIMSON","CRIMSON FEVER","aura_crimson", ["flashGrid","neonFrame","symbolBurst"]],
+          ["FVR_AZURE","AZURE FEVER","aura_azure", ["scanline","burst","tripleZoom"]],
+          ["FVR_VIOLET","VIOLET FEVER","aura_violet", ["roulette","splitPanels","neonFrame"]],
+          ["FVR_GOLD","GOLD FEVER","aura_gold", ["burst","flashGrid","tripleZoom"]],
+          ["FVR_NEON","NEON FEVER","aura_neon", ["neonFrame","scanline","roulette"]],
+          ["FVR_VOID","VOID FEVER","aura_void", ["splitPanels","scanline","flashGrid"]],
+          ["FVR_ANGEL","ANGEL FEVER","aura_angel", ["tripleZoom","burst","neonFrame"]],
+          ["FVR_BEAST","BEAST FEVER","aura_beast", ["symbolBurst","splitPanels","burst"]],
+          ["FVR_CELESTIAL","CELESTIAL FEVER","aura_celestial", ["flashGrid","roulette","symbolBurst"]],
+        ];
+
+        slotDef.feverCatalog = COMMON.map((c, i)=>({
+          id: c[0], rarity:"common", label:c[1], priority:10+i,
+          spins:10, guaranteeWin:true,
+          extend:{ chance:0.35, addSpins:3, maxSpins:20 },
+          audio:{ bgm: bgmPick(i) },
+          effects:{
+            onEnter:["fvr_banner", c[2]],
+            onWinPool:c[3],
+            onExtend:["fvr_banner"],
+            onExit:[]
+          }
+        }));
+
+        slotDef.feverCatalog.push({
+          id:"FVR_OMEGA", rarity:"ultra", label:"OMEGA FEVER", priority:999,
+          spins:12, guaranteeWin:true,
+          extend:{ chance:0.55, addSpins:4, maxSpins:30 },
+          audio:{ bgm: bgmPick(99) },
+          effects:{
+            onEnter:["fvr_banner","aura_violet"],
+            onWinPool:["flashGrid","burst","neonFrame","tripleZoom","roulette","symbolBurst"],
+            onExtend:["fvr_banner"],
+            onExit:[]
+          }
+        });
+
+        return slotDef;
+      }
+
+      // ----- audio (超簡易で確実) -----
+      const AudioSys = (slotDef) => {
+        const st = {
+          normal: new Audio(slotDef.audio.normalBgm),
+          fever: null,
+          current: null,
+          master: clamp(slotDef.audio.master,0,1),
+          bgm: clamp(slotDef.audio.bgm,0,1),
+          se: clamp(slotDef.audio.se,0,1),
+          unlocked:false,
+          ctx:null
+        };
+        st.normal.loop = true;
+
+        const ensureCtx = ()=>{
+          if(st.ctx) return st.ctx;
+          const Ctx = window.AudioContext || window.webkitAudioContext;
+          if(!Ctx) return null;
+          st.ctx = new Ctx();
+          return st.ctx;
+        };
+
+        const unlock = async()=>{
+          if(st.unlocked) return true;
+          try{
+            ensureCtx();
+            if(st.ctx && st.ctx.state==="suspended") await st.ctx.resume();
+            st.unlocked=true;
+            return true;
+          }catch(e){ return false; }
+        };
+
+        const applyVol = ()=>{
+          const v = st.master*st.bgm;
+          st.normal.volume = v;
+          if(st.fever) st.fever.volume = v;
+        };
+
+        const crossfadeTo = async(next)=>{
+          applyVol();
+          const prev = st.current;
+          st.current = next;
+
+          try{ next.currentTime=0; await next.play(); }catch(e){}
+          const target = st.master*st.bgm;
+          const steps=12, dur=280;
+          for(let i=0;i<=steps;i++){
+            const t=i/steps;
+            if(prev) prev.volume=(1-t)*target;
+            next.volume=t*target;
+            await wait(dur/steps);
+          }
+          if(prev){ try{ prev.pause(); }catch(e){} }
+        };
+
+        const playNormal = async()=>{
+          await unlock();
+          if(st.current===st.normal) return;
+          await crossfadeTo(st.normal);
+        };
+
+        const playFever = async(url)=>{
+          await unlock();
+          if(!url) url = slotDef.audio.feverBgmList[0] || "assets/audio/bgm_fever.wav";
+          if(!st.fever || st.fever.src !== new URL(url, location.href).href){
+            st.fever = new Audio(url);
+            st.fever.loop = true;
+            st.fever.volume = 0;
+          }
+          if(st.current===st.fever) return;
+          await crossfadeTo(st.fever);
+        };
+
+        const winTone = (jackpot=false)=>{
+          const ctx = ensureCtx();
+          if(!ctx) return;
+          const now = ctx.currentTime;
+          const g = ctx.createGain();
+          g.gain.value = 0.0001;
+          g.connect(ctx.destination);
+          const o = ctx.createOscillator();
+          o.type="sine";
+          o.frequency.value = jackpot ? 660 : 440;
+          o.connect(g);
+          const peak = 0.18 * st.master * st.se;
+          g.gain.setValueAtTime(0.0001, now);
+          g.gain.exponentialRampToValueAtTime(peak, now+0.02);
+          g.gain.exponentialRampToValueAtTime(0.0001, now+0.55);
+          o.start(now); o.stop(now+0.6);
+        };
+
+        return { unlock, playNormal, playFever, winTone };
+      };
+
+      // ----- effects (超簡易で確実) -----
+      const Effects = (slotDef, dom) => {
+        const fx = dom.fxLayer;
+        const cut = dom.cutinLayer;
+        const mk = (cls)=>{ const d=document.createElement("div"); d.className=cls; return d; };
+        const rm = (el, ms)=>setTimeout(()=>{ try{ el.remove(); }catch(e){} }, ms);
+
+        const setAura = (id)=>{
+          if(!id){
+            document.body.classList.remove("aura-on");
+            document.body.removeAttribute("data-aura");
+            return;
+          }
+          document.body.classList.add("aura-on");
+          document.body.setAttribute("data-aura", id);
+        };
+
+        const play = (id, params={})=>{
+          switch(id){
+            case "flashGrid": { const el=mk("fx fx-flashGrid"); fx.appendChild(el); rm(el,650); break; }
+            case "scanline": { const el=mk("fx fx-scanline"); fx.appendChild(el); rm(el,700); break; }
+            case "burst": { const el=mk("fx fx-burst"); fx.appendChild(el); rm(el,600); break; }
+            case "tripleZoom": { const el=mk("fx fx-tripleZoom"); fx.appendChild(el); rm(el,650); break; }
+            case "symbolBurst": { const el=mk("fx fx-symbolBurst"); fx.appendChild(el); rm(el,750); break; }
+            case "splitPanels": { const el=mk("fx fx-splitPanels"); fx.appendChild(el); rm(el,720); break; }
+            case "neonFrame": { const el=mk("fx fx-neonFrame"); fx.appendChild(el); rm(el,900); break; }
+            case "roulette": { const el=mk("fx fx-roulette"); fx.appendChild(el); rm(el,950); break; }
+            case "fvr_banner": {
+              const el=mk("fx-banner");
+              el.textContent = params.text || "FEVER!!";
+              fx.appendChild(el); rm(el,900); break;
+            }
+            case "omega_cutinThumb": {
+              const img=document.createElement("img");
+              img.className="cutin-img";
+              img.src = `./assets/thumb/${slotDef.id}.png`;
+              cut.appendChild(img); rm(img,1200); break;
+            }
+            case "aura_crimson":
+            case "aura_azure":
+            case "aura_violet":
+            case "aura_gold":
+            case "aura_neon":
+            case "aura_void":
+            case "aura_angel":
+            case "aura_beast":
+            case "aura_celestial":
+              setAura(id); break;
+            default:
+              // unknown -> ignore safely
+              break;
+          }
+        };
+
+        const playPool = (arr, params={})=>{
+          if(!arr || !arr.length) return;
+          play(arr[Math.floor(Math.random()*arr.length)], params);
+        };
+
+        const playSeq = async(arr, params={})=>{
+          if(!arr || !arr.length) return;
+          for(const id of arr){
+            play(id, params);
+            await wait(160);
+          }
+        };
+
+        return { play, playPool, playSeq, setAura };
+      };
+
+      // ----- fever system -----
+      const Fever = (slotDef, effects, audio) => {
+        const st = { active:null };
+
+        const isActive = ()=>!!st.active;
+        const remaining = ()=>st.active ? st.active.remaining : 0;
+        const winPool = ()=>st.active ? (st.active.def.effects?.onWinPool || []) : [];
+
+        const pickDef = (isJackpot)=>{
+          const cat = slotDef.feverCatalog || [];
+          if(!cat.length) return null;
+          const omega = cat.find(x=>x.rarity==="ultra");
+          const commons = cat.filter(x=>x.rarity!=="ultra");
+          if(isJackpot && omega && Math.random()<0.25) return omega;
+          if(omega && Math.random()<0.02) return omega;
+          return commons[Math.floor(Math.random()*commons.length)];
+        };
+
+        const enter = async({isJackpot=false}={})=>{
+          const def = pickDef(isJackpot);
+          if(!def) return null;
+          st.active = { def, remaining:def.spins||10 };
+          document.body.classList.add("fever-mode");
+          effects.play("fvr_banner",{text:def.label||"FEVER!!"});
+          (def.effects?.onEnter || []).forEach(id=>effects.play(id,{}));
+          await audio.playFever(def.audio?.bgm);
+          return def;
+        };
+
+        const exit = async()=>{
+          st.active=null;
+          document.body.classList.remove("fever-mode");
+          effects.setAura(null);
+          await audio.playNormal();
+        };
+
+        const consumeSpin = ()=>{
+          if(!st.active) return;
+          st.active.remaining = Math.max(0, st.active.remaining-1);
+        };
+
+        const tryExtend = ()=>{
+          if(!st.active) return false;
+          const ex = st.active.def.extend;
+          if(!ex) return false;
+          if(st.active.remaining >= ex.maxSpins) return false;
+          if(Math.random() < ex.chance){
+            st.active.remaining = Math.min(ex.maxSpins, st.active.remaining + ex.addSpins);
+            effects.play("fvr_banner",{text:"EXTEND!"});
+            return true;
+          }
+          return false;
+        };
+
+        return { isActive, remaining, winPool, enter, exit, consumeSpin, tryExtend };
+      };
+
+      // ----- engine (canvas reels) -----
+      const Engine = (slotDef, dom, fever, effects, audio) => {
+        const C = { REEL_W:210, REEL_H:630, SYM_H:210, VISIBLE:3, SPEED:32, SNAP:6, STOP_DELAY:220 };
+        const S = {
+          running:false,
+          status:"IDLE",
+          stopRequested:false,
+          auto:false,
+          autoTimer:null,
+          images:[],
+          n:9,
+          reels:[
+            { offset:0, stopping:false, target:null },
+            { offset:0, stopping:false, target:null },
+            { offset:0, stopping:false, target:null },
+          ],
+        };
+
+        const setStatus = (t)=>dom.status.textContent=t;
+        const setBanner = (t,mode="normal")=>{ dom.banner.textContent=t; dom.banner.setAttribute("data-mode", mode); };
+        const setFeverCounter = (n)=>{ dom.feverCounter.textContent = n>0 ? `FEVER x${n}` : ""; };
+
+        const coverDraw = (ctx, img, dx, dy, dw, dh) => {
+          const sw = img.width || img.naturalWidth || 256;
+          const sh = img.height || img.naturalHeight || 256;
+          const sr = sw/sh, dr = dw/dh;
+          let sx=0, sy=0, ssw=sw, ssh=sh;
+          if(sr>dr){ ssw = sh*dr; sx=(sw-ssw)/2; }
+          else { ssh = sw/dr; sy=(sh-ssh)/2; }
+          ctx.drawImage(img, sx, sy, ssw, ssh, dx, dy, dw, dh);
+        };
+
+        const drawReel = (ctx, reel)=>{
+          ctx.clearRect(0,0,C.REEL_W,C.REEL_H);
+          const base = Math.floor(reel.offset / C.SYM_H) % S.n;
+          const frac = ((reel.offset % C.SYM_H) + C.SYM_H) % C.SYM_H;
+          for(let row=-1; row<C.VISIBLE+1; row++){
+            const idx = (base + row + S.n) % S.n;
+            const img = S.images[idx];
+            const y = (row*C.SYM_H) - frac;
+            coverDraw(ctx, img, 0, y, C.REEL_W, C.SYM_H);
+          }
+          ctx.save();
+          ctx.strokeStyle="rgba(255,255,255,0.18)";
+          ctx.lineWidth=2;
+          ctx.beginPath();
+          ctx.moveTo(0,C.SYM_H);
+          ctx.lineTo(C.REEL_W,C.SYM_H);
+          ctx.stroke();
+          ctx.restore();
+        };
+
+        const render = ()=>{
+          for(let i=0;i<3;i++){
+            const c = dom.reels[i];
+            const ctx = c.getContext("2d");
+            drawReel(ctx, S.reels[i]);
+          }
+        };
+
+        const centerIndex = (reel)=>{
+          const base = Math.floor(reel.offset / C.SYM_H) % S.n;
+          return (base + 1 + S.n) % S.n;
+        };
+
+        const makeDummy = (n, size=256)=>{
+          const out=[];
+          for(let i=0;i<n;i++){
+            const c=document.createElement("canvas");
+            c.width=size; c.height=size;
+            const x=c.getContext("2d");
+            x.fillStyle=`hsl(${(i/n)*360},90%,40%)`;
+            x.fillRect(0,0,size,size);
+            x.fillStyle="rgba(255,255,255,0.9)";
+            x.font="bold 64px system-ui";
+            x.textAlign="center"; x.textBaseline="middle";
+            x.fillText(`SYM ${i+1}`, size/2, size/2);
+            out.push(c);
+          }
+          return out;
+        };
+
+        const loadImages = async(paths)=>{
+          const imgs=[];
+          for(const p of paths){
+            const img=new Image();
+            img.decoding="async";
+            img.src=p;
+            const ok = await new Promise(r=>{ img.onload=()=>r(true); img.onerror=()=>r(false); });
+            imgs.push(ok ? img : null);
+          }
+          const good = imgs.filter(Boolean);
+          if(good.length>=3) return imgs.map((x,i)=>x || good[i%good.length]);
+          return makeDummy(paths.length||9);
+        };
+
+        const computeOutcome = ()=>{
+          if(fever.isActive()){
+            const forced = Math.floor(Math.random()*S.n);
+            return { win:true, forced, jackpot: forced===slotDef.symbols.jackpotIndex };
+          }
+          const win = Math.random() < slotDef.rates.win;
+          if(!win) return { win:false };
+          const forced = Math.floor(Math.random()*S.n);
+          return { win:true, forced, jackpot: forced===slotDef.symbols.jackpotIndex };
+        };
+
+        const stopReel = (i)=>{
+          const r=S.reels[i];
+          r.stopping=true;
+          if(r.target==null) r.target = Math.floor(Math.random()*S.n);
+        };
+
+        const requestStop = ()=>{
+          if(S.status!=="SPINNING") return;
+          if(S.stopRequested) return;
+          S.stopRequested=true;
+          S.status="STOPPING";
+          setStatus("STOPPING");
+          stopReel(0);
+          setTimeout(()=>stopReel(1), C.STOP_DELAY);
+          setTimeout(()=>stopReel(2), C.STOP_DELAY*2);
+        };
+
+        const onResult = async()=>{
+          const a=centerIndex(S.reels[0]);
+          const b=centerIndex(S.reels[1]);
+          const c=centerIndex(S.reels[2]);
+          const isWin = (a===b && b===c);
+          const isJackpot = isWin && (a===slotDef.symbols.jackpotIndex);
+
+          if(isWin){
+            if(isJackpot){
+              setBanner("JACKPOT!!!","jackpot");
+              audio.winTone(true);
+              // ここが脳汁の種：連結演出
+              await effects.playSeq(["omega_cutinThumb","burst","neonFrame","symbolBurst"],{});
+            }else{
+              setBanner("WIN!!","win");
+              audio.winTone(false);
+              effects.playPool(["flashGrid","burst","scanline","neonFrame","roulette","splitPanels","tripleZoom","symbolBurst"],{});
+            }
+
+            if(fever.isActive()){
+              effects.playPool(fever.winPool(),{});
+              fever.tryExtend();
+            }else{
+              if(Math.random() < slotDef.rates.feverStartOnWin){
+                await fever.enter({isJackpot});
+                setBanner("FEVER!!","fever");
+              }
+            }
+          }else{
+            setBanner("TRY AGAIN","lose");
+          }
+
+          if(fever.isActive()){
+            setFeverCounter(fever.remaining());
+            if(fever.remaining()<=0){
+              await fever.exit();
+              setFeverCounter(0);
+              setBanner("BACK TO NORMAL","normal");
+            }
+          }
+
+          S.status="IDLE";
+          S.stopRequested=false;
+
+          if(S.auto) scheduleAutoSpin();
+        };
+
+        const scheduleAutoSpin=()=>{
+          clearTimeout(S.autoTimer);
+          S.autoTimer=setTimeout(()=>spin(), slotDef.auto.intervalMs);
+        };
+
+        const spin = async()=>{
+          await audio.unlock();
+          if(!fever.isActive()) audio.playNormal();
+
+          if(S.status!=="IDLE") return;
+
+          if(fever.isActive()){
+            fever.consumeSpin();
+            setFeverCounter(fever.remaining());
+          }
+
+          const outcome = computeOutcome();
+
+          for(const r of S.reels){ r.stopping=false; r.target=null; }
+
+          if(outcome.win){
+            for(const r of S.reels) r.target = outcome.forced;
+          }
+
+          setStatus("SPINNING");
+          setBanner(fever.isActive() ? "FEVER SPIN" : "SPINNING", fever.isActive() ? "fever" : "normal");
+          S.status="SPINNING";
+          S.stopRequested=false;
+
+          setTimeout(()=>requestStop(), 420);
+        };
+
+        const toggleAuto=()=>{
+          S.auto=!S.auto;
+          dom.btnAuto.setAttribute("data-on", S.auto ? "1":"0");
+          dom.btnAuto.textContent = S.auto ? "AUTO: ON" : "AUTO: OFF";
+          if(S.auto && S.status==="IDLE") scheduleAutoSpin();
+          if(!S.auto) clearTimeout(S.autoTimer);
+        };
+
+        const tick = ()=>{
+          if(!S.running) return;
+
+          for(const r of S.reels){
+            if(S.status==="SPINNING"){
+              r.offset += C.SPEED;
+            }
+            if(S.status==="STOPPING" && r.stopping){
+              const total = S.n * C.SYM_H;
+              let cur = r.offset % total; if(cur<0) cur+=total;
+
+              const desiredBase = (r.target - 1 + S.n) % S.n;
+              const desired = desiredBase * C.SYM_H;
+
+              let diff = desired - cur;
+              if(diff > total/2) diff -= total;
+              if(diff < -total/2) diff += total;
+
+              r.offset += diff * 0.22;
+
+              if(Math.abs(diff) < C.SNAP){
+                r.offset = r.offset - (cur - desired);
+                r.stopping=false;
+              }
+            }
+          }
+
+          render();
+
+          if(S.status==="STOPPING"){
+            const any = S.reels.some(r=>r.stopping);
+            if(!any){
+              S.status="RESULT";
+              onResult();
+            }
+          }
+
+          requestAnimationFrame(tick);
+        };
+
+        const start = async()=>{
+          S.running=true;
+          for(const c of dom.reels){ c.width=C.REEL_W; c.height=C.REEL_H; }
+
+          setStatus("LOADING");
+          setBanner("LOADING","normal");
+
+          S.images = await loadImages(slotDef.symbols.paths);
+          S.n = S.images.length;
+
+          for(const r of S.reels){
+            r.offset = Math.random()*S.n*C.SYM_H;
+          }
+
+          render();
+          setStatus("READY");
+          setBanner("READY","normal");
+          setFeverCounter(0);
+
+          requestAnimationFrame(tick);
+        };
+
+        return { start, spin, requestStop, toggleAuto };
+      };
+
+      // ----- boot -----
+      window.addEventListener("error", (e)=>append("window.error: " + (e.message || e.error)));
+      window.addEventListener("unhandledrejection", (e)=>append("unhandledrejection: " + (e.reason && e.reason.message ? e.reason.message : e.reason)));
+
+      (async()=>{
+        const slotId = getSlotIdFromPath();
+        log(`BOOT slotId=${slotId}\nurl=${location.href}`);
+
+        // try load json (will often fail on file://, that's fine)
+        const configJson = await tryFetchJson("./config.json");
+        const symbolsJson = await tryFetchJson("./symbols.json");
+        append(`config.json: ${configJson ? "OK" : "SKIP(file:// or missing)"}`);
+        append(`symbols.json: ${symbolsJson ? "OK" : "SKIP(file:// or missing)"}`);
+
+        const slotDef = normalizeConfig(slotId, configJson, symbolsJson);
+
+        document.documentElement.style.setProperty("--accent", slotDef.theme.accent);
+        document.documentElement.style.setProperty("--bg", slotDef.theme.bg);
+
+        const dom = {
+          title: $("machine-title"),
+          displayName: $("slot-display-name"),
+          btnSpin: $("btn-spin"),
+          btnAuto: $("btn-auto"),
+          btnStop: $("btn-stop"),
+          status: $("status-text"),
+          banner: $("banner"),
+          feverCounter: $("fever-counter"),
+          fxLayer: $("fx-layer"),
+          cutinLayer: $("cutin-layer"),
+          reels: [$("reel0"),$("reel1"),$("reel2")],
+          linkPartner: $("partner-link"),
+          btnCelestial: $("btn-celestial"),
+          sideLeft: $("side-left"),
+          sideRight: $("side-right"),
+          sideImgLeft: $("side-img-left"),
+          sideImgRight: $("side-img-right"),
+          container: $("game-container"),
+        };
+
+        dom.title.textContent = slotDef.machineTitle;
+        dom.displayName.textContent = slotDef.displayName;
+
+        dom.linkPartner.textContent = slotDef.links.partnerLabel || "PARTNER";
+        dom.linkPartner.addEventListener("click", ()=>window.open(slotDef.links.partnerUrl, "_blank", "noopener,noreferrer"));
+        dom.btnCelestial.textContent = slotDef.links.celestialButtonLabel || "CELESTIAL Web Site";
+        dom.btnCelestial.addEventListener("click", ()=>window.open(slotDef.links.celestialUrl, "_blank", "noopener,noreferrer"));
+
+        // thumbs (存在すれば貼る / 無ければ隠す)
+        const thumbUrl = `./assets/thumb/${slotDef.id}.png`;
+        const attachThumb = (img)=>new Promise((resolve)=>{
+          img.onload=()=>resolve(true);
+          img.onerror=()=>resolve(false);
+          img.src=thumbUrl;
+        });
+        if(slotDef.ui.showSideThumbs){
+          const okL = await attachThumb(dom.sideImgLeft);
+          const okR = await attachThumb(dom.sideImgRight);
+          if(!okL) dom.sideLeft.style.display="none";
+          if(!okR) dom.sideRight.style.display="none";
+          append(`thumb: ${okL&&okR ? "OK" : "MISSING -> hidden"}`);
+        }else{
+          dom.sideLeft.style.display="none";
+          dom.sideRight.style.display="none";
+        }
+
+        const audio = AudioSys(slotDef);
+        const effects = Effects(slotDef, dom);
+        const fever = Fever(slotDef, effects, audio);
+        const engine = Engine(slotDef, dom, fever, effects, audio);
+
+        dom.btnSpin.addEventListener("click", ()=>engine.spin());
+        dom.btnAuto.addEventListener("click", ()=>engine.toggleAuto());
+        dom.btnStop.addEventListener("click", ()=>engine.requestStop());
+        dom.container.addEventListener("pointerdown", (e)=>{
+          const t = e.target;
+          if(t && (t.closest(".btn") || t.closest("a"))) return;
+          engine.requestStop();
+        });
+
+        await engine.start();
+        append("engine: STARTED ✅ (If reels are visible, boot is successful)");
+        window.__CS_ENGINE__ = engine;
+      })();
+    })();
+  </script>
+</body>
+</html>

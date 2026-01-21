@@ -1,0 +1,116 @@
+;
+
+(()=> {
+        const parts=location.pathname.split('/').filter(Boolean);
+        const slotId=parts[parts.length - 2]; // CS-001
+
+        // thumbs: /games/slot/_shared/thumbs/CS-001.png
+        const thumbUrl=`../_shared/thumbs/$ {
+            slotId
+        }
+
+        .png`;
+
+        const Limg=document.getElementById('side-thumb-left');
+        const Rimg=document.getElementById('side-thumb-right');
+
+        const leftSide=document.querySelector('.side.left');
+        const rightSide=document.querySelector('.side.right');
+
+        function attachThumb(img) {
+            if ( !img) return;
+            img.src=thumbUrl;
+            img.loading="lazy";
+            img.decoding="async";
+            img.referrerPolicy="no-referrer";
+
+            img.onerror=()=> {
+                const side=img.closest('.side');
+                if (side) side.style.display='none';
+            }
+
+            ;
+        }
+
+        attachThumb(Limg);
+        attachThumb(Rimg);
+
+        // ---- ver name ----
+        async function loadConfig() {
+            try {
+
+                // index.html と同じ階層の config.json を読む
+                const res=await fetch('./config.json', {
+                    cache: 'no-store'
+                });
+            if ( !res.ok) throw new Error('HTTP ' + res.status);
+            return await res.json();
+        }
+
+        catch (e) {
+            console.warn('[side-thumbs] config load failed:', e);
+            return null;
+        }
+    }
+
+    function ensureBadge(sideEl, text) {
+        if ( !sideEl) return;
+        const existed=sideEl.querySelector('.ver-badge');
+        if (existed) existed.remove();
+
+        if ( !text || !String(text).trim()) return;
+
+        const badge=document.createElement('div');
+        badge.className='ver-badge';
+        badge.textContent=String(text).trim();
+        sideEl.appendChild(badge);
+    }
+
+    (async ()=> {
+            const conf=await loadConfig();
+
+            // 優先: slotDisplayName -> 無ければ machineTitle
+            const verName=conf?.slotDisplayName || conf?.machineTitle || '';
+
+            ensureBadge(leftSide, verName);
+            ensureBadge(rightSide, verName);
+        })();
+
+    /* 縦文字バッジ（左右余白に自動表示） */
+    .ver-badge {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        writing-mode: vertical-rl;
+        text-orientation: mixed;
+        letter-spacing: 0.08em;
+        font-weight: 900;
+        font-size: clamp(18px, 2.6vw, 44px);
+        line-height: 1.05;
+        color: rgba(255, 255, 255, 0.85);
+        text-shadow: 0 0 2px rgba(0, 255, 255, 0.9),
+        0 0 12px rgba(0, 255, 255, 0.55),
+        0 0 28px rgba(0, 255, 255, 0.35);
+        opacity: 0.8;
+        pointer-events: none;
+        user-select: none;
+    }
+
+    /* 左右の位置 */
+    .side.left {
+        position: relative;
+    }
+
+    .side.right {
+        position: relative;
+    }
+
+    .side.left .ver-badge {
+        left: 10px;
+    }
+
+    .side.right .ver-badge {
+        right: 10px; transform: translateY(-50%) rotate(180deg);
+    }
+
+})();

@@ -44,13 +44,22 @@ const playLink = `${BASE}${normalizePlayUrl(slot.playUrl)}`;
     </div>
 
     <div class="slot-content">
-      <div class="visual-area">
-        {/* Placeholder for visual/thumb if needed, currently just using ID */}
-        <div class="visual-placeholder">
-          {slot.displayName} <br/> 
-          <span style="font-size:0.8rem; opacity:0.7;">({slot.id})</span>
-        </div>
+       <div class="visual-area">
+        {slot.thumb ? (
+        <img
+          class="detail-thumb"
+          src={`${BASE}${slot.thumb}`}
+          alt={`${slot.displayName} thumbnail`}
+          loading="lazy"
+        />
+    ) : (
+      <div class="visual-placeholder">
+        {slot.displayName}<br/>
+        <span style="font-size:0.8rem; opacity:0.7;">({slot.id})</span>
       </div>
+    )}
+  </div>
+</div>
 
       <div class="info-area">
         <p class="description">{slot.description}</p>
@@ -289,4 +298,14 @@ const playLink = `${BASE}${normalizePlayUrl(slot.playUrl)}`;
     pointer-events: none;
     font-size: 0.9rem;
   }
+
+  .detail-thumb{
+    width: 100%;
+    aspect-ratio: 16/9;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid #333;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    display: block;
+}
 </style>
