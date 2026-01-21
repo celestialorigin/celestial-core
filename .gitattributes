@@ -1,6 +1,5 @@
 # Normalize text files
 * text=auto
-
 # Force LF for source/content files
 *.md   text eol=lf
 *.mjs  text eol=lf
@@ -12,3 +11,8 @@
 *.yml  text eol=lf
 *.yaml text eol=lf
 *.txt  text eol=lf
+*.psd filter=lfs diff=lfs merge=lfs -text
+*.zip filter=lfs diff=lfs merge=lfs -text
+*.png filter=lfs diff=lfs merge=lfs -text
+*.wav filter=lfs diff=lfs merge=lfs -text
+*.mp3 filter=lfs diff=lfs merge=lfs -text
