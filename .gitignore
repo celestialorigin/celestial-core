@@ -28,3 +28,9 @@ package.json_backup*.txt
 # --- audio masters / big bundles (do not commit) ---
 **/*.wav
 **/*.zip
+
+# slot local backups (not part of civilization core)
+public/games/slot/backup/
+public/games/slot/old/
+public/games/slot/**/_old/
+public/games/slot/**/_backup/
