@@ -24,3 +24,7 @@ pnpm-debug.log*
 .idea/
 
 package.json_backup*.txt
+
+# --- audio masters / big bundles (do not commit) ---
+**/*.wav
+**/*.zip

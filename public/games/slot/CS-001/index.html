@@ -1389,8 +1389,89 @@
 
     const VOLUMES = { SPIN: 0.1, STOP: 0.2, WIN: 0.1 };
 
-    // Embedded config for file:// mode (no fetch required)
-    const EMBEDDED_CONFIG = { "slotDisplayName": "～VRCなる箱 SLOT ver～", "machineTitle": "CELESTIAL SLOT UNIT", "partnerLabel": "コラボ者ページリンク", "partnerName": "VRCなる箱さんのページへ", "partnerUrl": "https://x.com/VRC_box420", "celestialUrl": "https://celestial-observers.com", "celestialButtonLabel": "CELESTIAL Web Site", "theme": { "accent": "#00ffff", "bg": "#000000" }, "winRate": 0.08, "fever": { "enabled": true, "startOnAnyWin": { "enabled": true, "rate": 0.2 }, "bySymbol": true, "spinsDefault": 25, "ultra": { "enabled": true, "chance": 0.006, "typeId": "ULTRA" } }, "bgm": { "normal": "assets/audio/audio.wav", "fever": ["assets/audio/fever_01.wav", "assets/audio/fever_02.wav", "assets/audio/fever_03.wav", "assets/audio/fever_04.wav", "assets/audio/fever_05.wav", "assets/audio/fever_06.wav", "assets/audio/fever_07.wav", "assets/audio/fever_08.wav", "assets/audio/fever_09.wav", "assets/audio/fever_10.wav"] }, "feverTypes": [{ "id": "SYM1", "label": "SYMBOL-1 FEVER", "spins": 25, "bgmIndex": 0, "effects": ["scanline", "neonFrame", "symbolBurst", "tripleZoom"] }, { "id": "SYM2", "label": "SYMBOL-2 FEVER", "spins": 25, "bgmIndex": 1, "effects": ["burst", "flashGrid", "roulette", "splitPanels"] }, { "id": "SYM3", "label": "SYMBOL-3 FEVER", "spins": 25, "bgmIndex": 2, "effects": ["neonFrame", "scanline", "splitPanels", "symbolBurst"] }, { "id": "SYM4", "label": "SYMBOL-4 FEVER", "spins": 25, "bgmIndex": 3, "effects": ["flashGrid", "burst", "tripleZoom", "roulette"] }, { "id": "SYM5", "label": "SYMBOL-5 FEVER", "spins": 25, "bgmIndex": 4, "effects": ["symbolBurst", "scanline", "roulette", "neonFrame"] }, { "id": "SYM6", "label": "SYMBOL-6 FEVER", "spins": 25, "bgmIndex": 5, "effects": ["splitPanels", "flashGrid", "burst", "tripleZoom"] }, { "id": "SYM7", "label": "SYMBOL-7 FEVER", "spins": 25, "bgmIndex": 6, "effects": ["roulette", "symbolBurst", "neonFrame", "scanline"] }, { "id": "SYM8", "label": "SYMBOL-8 FEVER", "spins": 25, "bgmIndex": 7, "effects": ["tripleZoom", "flashGrid", "splitPanels", "burst"] }, { "id": "SYM9", "label": "SYMBOL-9 FEVER", "spins": 25, "bgmIndex": 8, "effects": ["neonFrame", "symbolBurst", "roulette", "scanline"] }, { "id": "ULTRA", "label": "ULTRA VITALIZATION", "spins": 25, "bgmIndex": 9, "effects": ["ultraThumb", "meteorSymbols", "realityCrack"] }], "autoSpin": { "enabledDefault": false, "intervalMs": 180, "feverIntervalMs": 120, "autoStopDelaysMs": [90, 170, 250] } };
+// Embedded config for file:// mode (no fetch required)
+const EMBEDDED_CONFIG = {
+  "slotDisplayName": "～VRCなる箱 SLOT ver～",
+  "machineTitle": "CELESTIAL SLOT UNIT",
+  "partnerLabel": "コラボ者ページリンク",
+  "partnerName": "VRCなる箱さんのページへ",
+  "partnerUrl": "https://x.com/VRC_box420",
+  "celestialUrl": "https://celestial-observers.com",
+  "celestialButtonLabel": "CELESTIAL Web Site",
+  "theme": { "accent": "#00ffff", "bg": "#000000" },
+
+  "winRate": 0.08,
+
+  "fever": {
+    "enabled": true,
+    "startOnAnyWin": { "enabled": true, "rate": 0.20 },
+    "bySymbol": true,
+    "spinsDefault": 25,
+
+    "ultra": { "enabled": true, "chance": 0.006, "typeId": "ULTRA" },
+
+    // ★追加：FEVER中、当たり時に一定確率でスピン延長
+    // まず動作確認したいなら chance: 1.0 にしてテストしてOK
+    "loop": {
+      "enabled": true,
+      "chance": 0.18,
+      "addSpins": 3,
+      "maxSpins": 60
+    }
+  },
+
+  "bgm": {
+    "normal": "assets/audio/audio.mp3",
+    "fever": [
+      "assets/audio/fever_01.mp3",
+      "assets/audio/fever_02.mp3",
+      "assets/audio/fever_03.mp3",
+      "assets/audio/fever_04.mp3",
+      "assets/audio/fever_05.mp3",
+      "assets/audio/fever_06.mp3",
+      "assets/audio/fever_07.mp3",
+      "assets/audio/fever_08.mp3",
+      "assets/audio/fever_09.mp3",
+      "assets/audio/fever_10.mp3"
+    ]
+  },
+
+  "feverTypes": [
+    { "id": "SYM1", "label": "SYMBOL-1 FEVER", "spins": 25, "bgmIndex": 0, "effects": ["scanline","neonFrame","symbolBurst","tripleZoom"] },
+    { "id": "SYM2", "label": "SYMBOL-2 FEVER", "spins": 25, "bgmIndex": 1, "effects": ["burst","flashGrid","roulette","splitPanels"] },
+    { "id": "SYM3", "label": "SYMBOL-3 FEVER", "spins": 25, "bgmIndex": 2, "effects": ["neonFrame","scanline","splitPanels","symbolBurst"] },
+    { "id": "SYM4", "label": "SYMBOL-4 FEVER", "spins": 25, "bgmIndex": 3, "effects": ["flashGrid","burst","tripleZoom","roulette"] },
+    { "id": "SYM5", "label": "SYMBOL-5 FEVER", "spins": 25, "bgmIndex": 4, "effects": ["symbolBurst","scanline","roulette","neonFrame"] },
+    { "id": "SYM6", "label": "SYMBOL-6 FEVER", "spins": 25, "bgmIndex": 5, "effects": ["splitPanels","flashGrid","burst","tripleZoom"] },
+    { "id": "SYM7", "label": "SYMBOL-7 FEVER", "spins": 25, "bgmIndex": 6, "effects": ["roulette","symbolBurst","neonFrame","scanline"] },
+    { "id": "SYM8", "label": "SYMBOL-8 FEVER", "spins": 25, "bgmIndex": 7, "effects": ["tripleZoom","flashGrid","splitPanels","burst"] },
+    { "id": "SYM9", "label": "SYMBOL-9 FEVER", "spins": 25, "bgmIndex": 8, "effects": ["neonFrame","symbolBurst","roulette","scanline"] },
+    { "id": "ULTRA", "label": "ULTRA VITALIZATION", "spins": 25, "bgmIndex": 9, "effects": ["ultraThumb","meteorSymbols","realityCrack"] }
+  ],
+
+  "autoSpin": {
+    "enabledDefault": false,
+    "intervalMs": 180,
+    "feverIntervalMs": 120,
+    "autoStopDelaysMs": [90, 170, 250]
+  },
+
+  // ★追加：フィーバー勝利SE（あなたのファイル実態に合わせてmp3化）
+  // もし「このキーをどこも読んでない」なら害は出ない（無視されるだけ）
+  "feverWinSfxFiles": {
+    "SYM1": "assets/audio/se_fever_sym1.mp3",
+    "SYM2": "assets/audio/se_fever_sym2.mp3",
+    "SYM3": "assets/audio/se_fever_sym3.mp3",
+    "SYM4": "assets/audio/se_ferver_sym4.mp3",
+    "SYM5": "assets/audio/se_ferver_sym5.mp3",
+    "SYM6": "assets/audio/se_ferver_sym6.mp3",
+    "SYM7": "assets/audio/se_ferver_sym7.mp3",
+    "SYM8": "assets/audio/se_ferver_sym8.mp3",
+    "SYM9": "assets/audio/se_ferver_sym9.mp3",
+    "ULTRA": "assets/audio/se_ferver_sym_ultra.mp3"
+  }
+};
+
 
     const DEFAULTS = {
       slotDisplayName: "",
@@ -1414,18 +1495,18 @@
       },
 
       bgm: {
-        normal: "assets/audio/audio.wav",
+        normal: "assets/audio/audio.mp3",
         fever: [
-          "assets/audio/fever_01.wav",
-          "assets/audio/fever_02.wav",
-          "assets/audio/fever_03.wav",
-          "assets/audio/fever_04.wav",
-          "assets/audio/fever_05.wav",
-          "assets/audio/fever_06.wav",
-          "assets/audio/fever_07.wav",
-          "assets/audio/fever_08.wav",
-          "assets/audio/fever_09.wav",
-          "assets/audio/fever_10.wav"
+          "assets/audio/fever_01.mp3",
+          "assets/audio/fever_02.mp3",
+          "assets/audio/fever_03.mp3",
+          "assets/audio/fever_04.mp3",
+          "assets/audio/fever_05.mp3",
+          "assets/audio/fever_06.mp3",
+          "assets/audio/fever_07.mp3",
+          "assets/audio/fever_08.mp3",
+          "assets/audio/fever_09.mp3",
+          "assets/audio/fever_10.mp3"
         ]
       },
 
