@@ -82,97 +82,143 @@
       pointer-events: none;
     }
 
-    /* ===== VERTICAL SLOT NAME ===== */
+    .side::after {
+      content: "";
+      position: absolute;
+      inset: -2px;
+      border: 2px solid rgba(0, 255, 255, 0.20);
+      border-radius: 12px;
+      box-shadow: 0 0 24px rgba(0, 255, 255, 0.16);
+      z-index: 2;
+      pointer-events: none;
+    }
+
     .side-label {
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
-      z-index: 2;
       writing-mode: vertical-rl;
       text-orientation: mixed;
-      font-weight: 900;
       letter-spacing: 0.18em;
-      font-size: clamp(22px, 2.6vw, 44px);
-      color: rgba(255, 255, 255, 0.12);
-      text-shadow:
-        0 0 10px rgba(0, 255, 255, 0.30),
-        0 0 30px rgba(0, 255, 255, 0.18),
-        0 0 60px rgba(0, 0, 0, 0.85);
-      user-select: none;
-      white-space: nowrap;
+      font-weight: 800;
+      font-size: 36px;
+      line-height: 1;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.06);
+      text-shadow: 0 0 18px rgba(255, 0, 255, 0.18), 0 0 28px rgba(0, 255, 255, 0.14);
+      z-index: 3;
       pointer-events: none;
-      filter: drop-shadow(0 0 10px rgba(0, 255, 255, 0.15));
+      user-select: none;
+      mix-blend-mode: screen;
     }
 
-    .side.left .side-label { left: 10px; }
-    .side.right .side-label { right: 10px; }
-
-    @media (max-width: 1100px) {
-      .side { display: none; }
-      .stage {
-        gap: 0;
-        padding: 0;
-      }
-    }
+    .side.left .side-label { left: 14px; }
+    .side.right .side-label { right: 14px; }
 
     /* ===== GAME CONTAINER ===== */
     #game-container {
+      width: 420px;
+      max-width: 92vw;
+      aspect-ratio: 9 / 16;
+      background: #000;
+      border: 2px solid var(--theme-accent);
+      box-shadow: 0 0 25px var(--theme-accent);
+      border-radius: 12px;
+      padding: 14px;
+      box-sizing: border-box;
       position: relative;
-      width: 100%;
-      max-width: 600px;
-      aspect-ratio: 9/16;
-      background: var(--theme-bg);
-      background-size: cover;
-      background-position: center;
-      box-shadow: 0 0 50px rgba(0, 0, 0, 0.8);
       display: flex;
       flex-direction: column;
       align-items: center;
-      border: 1px solid #333;
       overflow: hidden;
-
-      max-height: calc(100svh - var(--safe-top) - var(--safe-bottom) - 48px);
     }
 
-    /* NOTE: 横長端末で“縦に収める”用。スマホ側で !important 上書きする */
-    @media (min-aspect-ratio: 9/16) {
-      #game-container {
-        height: 95vh;
-        width: auto;
-      }
+    #init-log {
+      position: absolute;
+      top: calc(10px + var(--safe-top));
+      left: 14px;
+      right: 14px;
+      background: rgba(0, 0, 0, 0.55);
+      color: #00ff6a;
+      font-family: ui-monospace, Menlo, Consolas, monospace;
+      font-size: 12px;
+      line-height: 1.35;
+      padding: 8px 10px;
+      border: 1px solid rgba(0, 255, 255, 0.35);
+      box-shadow: 0 0 18px rgba(0, 255, 255, 0.25);
+      border-radius: 8px;
+      white-space: pre-line;
+      z-index: 50;
+      pointer-events: none;
+      user-select: none;
     }
 
-    /* Screen Area */
+    #machine-title {
+      text-align: center;
+      margin: 54px 0 10px;
+      font-weight: 900;
+      letter-spacing: 2px;
+      color: var(--theme-accent);
+      text-shadow: 0 0 10px var(--theme-accent), 0 0 18px rgba(255, 0, 255, 0.45);
+    }
+
+    #message-box {
+      position: absolute;
+      top: 112px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 28px;
+      font-weight: 900;
+      text-shadow: 0 0 12px rgba(0, 255, 255, 0.8), 0 0 18px rgba(255, 0, 255, 0.45);
+      color: #fff;
+      z-index: 40;
+      pointer-events: none;
+      opacity: 0.0;
+      transition: opacity .25s ease;
+    }
+
+    #fever-overlay {
+      position: absolute;
+      top: 104px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 30px;
+      font-weight: 1000;
+      letter-spacing: 1px;
+      text-shadow: 0 0 18px rgba(255, 0, 255, 0.55), 0 0 22px rgba(255, 255, 0, 0.45);
+      color: rgba(255, 255, 255, 0.0);
+      z-index: 41;
+      pointer-events: none;
+      opacity: 0.0;
+      transition: opacity .25s ease;
+    }
+
+    /* ===== SCREEN / REELS ===== */
     #screen {
-      position: relative;
-      width: 85%;
-      height: 35%;
-      margin-top: 15%;
-      background: rgba(0, 0, 0, 0.9);
+      width: 100%;
       border: 2px solid var(--theme-accent);
-      box-shadow: var(--theme-glow), inset 0 0 20px rgba(0, 0, 0, 0.8);
+      box-shadow: 0 0 14px rgba(0, 255, 255, 0.65);
+      border-radius: 10px;
       overflow: hidden;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      position: relative;
+      margin-top: 8px;
+      height: 380px;
+      background: #000;
     }
 
     #reels-container {
       display: flex;
       width: 100%;
       height: 100%;
-      justify-content: space-around;
-      align-items: center;
     }
 
     .reel {
-      width: 33%;
-      height: 100%;
-      border-left: 1px solid rgba(255, 255, 255, 0.1);
-      border-right: 1px solid rgba(255, 255, 255, 0.1);
-      background: rgba(10, 10, 10, 1);
-      position: relative;
+      flex: 1;
+      border-left: 1px solid rgba(0, 255, 255, 0.25);
+      border-right: 1px solid rgba(0, 255, 255, 0.25);
       overflow: hidden;
+      background: #000;
+      position: relative;
     }
 
     .reel canvas {
@@ -181,716 +227,311 @@
       display: block;
     }
 
-    /* Payline Reference - Center Row Highlight */
     #payline {
       position: absolute;
-      top: 33.33%;
       left: 0;
-      width: 100%;
-      height: 33.33%;
-      background: rgba(255, 255, 255, 0.05);
-      border-top: 2px solid rgba(255, 0, 0, 0.3);
-      border-bottom: 2px solid rgba(255, 0, 0, 0.3);
+      right: 0;
+      top: 50%;
+      height: 2px;
+      background: rgba(255, 255, 0, 0.9);
+      box-shadow: 0 0 12px rgba(255, 255, 0, 0.75);
+      transform: translateY(-1px);
       pointer-events: none;
-      z-index: 5;
+      z-index: 10;
+      opacity: 0.65;
     }
 
-    /* UI Panel */
-    #ui-panel {
-      width: 90%;
-      margin-top: 15px;
+    /* FX Layer */
+    #fx-layer {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 12;
+      overflow: hidden;
+    }
+
+    #click-layer {
+      position: absolute;
+      inset: 0;
+      z-index: 11;
+      background: rgba(0, 0, 0, 0.0);
+    }
+
+    /* JACKPOT CUTIN */
+    #jackpot-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.88);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+    }
+
+    #jackpot-overlay .card {
+      width: min(92%, 380px);
+      border: 2px solid rgba(255, 255, 0, 0.75);
+      border-radius: 14px;
+      box-shadow: 0 0 40px rgba(255, 255, 0, 0.45), 0 0 60px rgba(255, 0, 255, 0.25);
+      overflow: hidden;
+      background: rgba(10, 0, 12, 0.9);
+      transform: translateY(6px) scale(0.98);
+      animation: jackpotIn 280ms ease forwards;
+    }
+
+    #jackpot-overlay img {
+      width: 100%;
+      height: 240px;
+      object-fit: cover;
+      display: block;
+      filter: saturate(1.1) contrast(1.05);
+    }
+
+    #jackpot-overlay .title {
+      padding: 12px 14px 14px;
+      font-weight: 1000;
       text-align: center;
+      letter-spacing: 1px;
+      color: #fff;
+      text-shadow: 0 0 14px rgba(255, 255, 0, 0.45), 0 0 20px rgba(255, 0, 255, 0.35);
+    }
+
+    @keyframes jackpotIn {
+      to { transform: translateY(0) scale(1); opacity: 1; }
+    }
+
+    /* ===== UI PANEL ===== */
+    #ui-panel {
+      width: 100%;
       display: flex;
       flex-direction: column;
       gap: 12px;
+      margin-top: 12px;
       flex-grow: 1;
+      justify-content: flex-start;
     }
 
-    #machine-title {
-      color: var(--theme-accent);
-      text-shadow: 0 0 5px var(--theme-accent);
-      margin: 0;
-      font-size: 1.2rem;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      order: -1;
-      margin-bottom: 10px;
-    }
-
-    button {
-      border: 1px solid var(--theme-accent);
-      background: rgba(0, 50, 50, 0.5);
-      color: white;
-      padding: 5px 10px;
-      font-size: 0.9rem;
-      cursor: pointer;
-      text-transform: uppercase;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-      transition: all 0.1s;
-      border-radius: 4px;
-      user-select: none;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    button:active { transform: translateY(2px); }
-
-    button:disabled {
-      opacity: 0.3;
-      cursor: not-allowed;
-      border-color: #555;
-      box-shadow: none;
-    }
-
-    /* Stop Buttons Row */
     #stop-controls {
       display: flex;
-      justify-content: space-between;
-      width: 100%;
+      gap: 8px;
     }
 
     .stop-btn {
-      width: 30%;
+      flex: 1;
       height: 50px;
-      background: rgba(200, 50, 50, 0.2);
-      border-color: #ff4444;
-      color: #ffcccc;
-      font-weight: bold;
-      font-size: 1.0rem;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(0, 255, 255, 0.35);
+      color: rgba(255, 255, 255, 0.85);
+      border-radius: 10px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      box-shadow: 0 0 14px rgba(0, 255, 255, 0.15);
     }
 
-    .stop-btn:not(:disabled):active {
-      background: rgba(255, 0, 0, 0.8);
+    .stop-btn:active {
+      transform: translateY(1px);
     }
 
-    /* Main Actions */
     #main-controls {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
       width: 100%;
+      display: flex;
+      gap: 8px;
       height: 80px;
     }
 
     #spin-btn,
     #seq-stop-btn {
+      flex: 1;
+      background: linear-gradient(90deg, rgba(0, 255, 255, 0.22), rgba(255, 0, 255, 0.24));
+      border: 1px solid rgba(0, 255, 255, 0.6);
+      box-shadow: 0 0 18px rgba(0, 255, 255, 0.28), 0 0 18px rgba(255, 0, 255, 0.25);
+      color: #fff;
+      border-radius: 12px;
+      font-weight: 1000;
+      letter-spacing: 1px;
+      font-size: 30px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #spin-btn:active,
+    #seq-stop-btn:active {
+      transform: translateY(1px);
+    }
+
+    #spin-subtitle {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 6px;
+      font-size: 13px;
+      letter-spacing: 2px;
+      font-weight: 900;
+      color: rgba(255, 255, 255, 0.85);
+      text-shadow: 0 0 12px rgba(255, 0, 255, 0.55), 0 0 14px rgba(0, 255, 255, 0.35);
+      pointer-events: none;
+    }
+
+    #music-controls {
       width: 100%;
-      height: 100%;
-      font-size: 1.5rem;
-      font-weight: bold;
-      border-radius: 8px;
-    }
-
-    #spin-btn {
-      background: rgba(0, 150, 150, 0.4);
-      box-shadow: 0 0 15px var(--theme-accent);
-    }
-
-    #spin-btn:not(:disabled) {
-      animation: pulse-glow 2s infinite;
-    }
-
-    #seq-stop-btn {
-      background: rgba(150, 0, 0, 0.4);
-      border-color: #ff8888;
-      display: none;
-      box-shadow: 0 0 15px #ff0000;
-    }
-
-    @keyframes pulse-glow {
-      0% { box-shadow: 0 0 10px var(--theme-accent); }
-      50% { box-shadow: 0 0 25px var(--theme-accent); }
-      100% { box-shadow: 0 0 10px var(--theme-accent); }
-    }
-
-    /* Buttons Row */
-    #meta-controls {
       display: flex;
-      justify-content: flex-end;
       gap: 10px;
-      margin-top: 5px;
       align-items: center;
+      justify-content: center;
     }
 
     .sys-btn {
-      padding: 5px 12px;
-      font-size: 0.7rem;
-      background: rgba(30, 30, 30, 0.5);
-      border-color: #666;
-      color: #ccc;
-      text-decoration: none;
-    }
-
-    .sys-btn:hover {
+      padding: 10px 14px;
+      border-radius: 10px;
+      border: 1px solid rgba(0, 255, 255, 0.35);
+      background: rgba(0, 0, 0, 0.25);
       color: #fff;
-      background: rgba(50, 50, 50, 0.8);
-      border-color: #888;
-    }
-
-    /* PARTNER CARD */
-    #partner-section {
-      margin-top: auto;
-      padding: 15px;
-      border: 1px solid var(--theme-accent);
-      background: linear-gradient(90deg, rgba(0, 20, 20, 0.8), rgba(0, 40, 40, 0.9));
-      cursor: pointer;
-      text-align: left;
-      position: relative;
-      border-radius: 6px;
-      transition: transform 0.2s;
-    }
-
-    #partner-section:active { transform: scale(0.98); }
-
-    #partner-label {
-      font-size: 0.7rem;
-      color: var(--theme-accent);
+      font-weight: 900;
       letter-spacing: 1px;
+      box-shadow: 0 0 16px rgba(0, 255, 255, 0.18);
+    }
+
+    .sys-btn:active { transform: translateY(1px); }
+
+    #sub-controls {
+      width: 100%;
+      display: flex;
+      gap: 8px;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    #partner-section {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(0, 255, 255, 0.28);
+      background: rgba(0, 0, 0, 0.20);
+      box-shadow: 0 0 18px rgba(0, 255, 255, 0.16);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    #partner-section:hover {
+      box-shadow: 0 0 20px rgba(0, 255, 255, 0.22), 0 0 24px rgba(255, 0, 255, 0.10);
+      border-color: rgba(0, 255, 255, 0.45);
+    }
+
+    #partner-section .left {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 0;
+    }
+
+    #partner-section .cap {
+      font-size: 12px;
       opacity: 0.8;
-      margin-bottom: 5px;
+      color: rgba(255, 255, 255, 0.85);
     }
 
-    #partner-name {
-      font-size: 1.1rem;
-      font-weight: bold;
-      color: #fff;
+    #partner-section .name {
+      font-size: 18px;
+      font-weight: 1000;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      text-shadow: 0 0 12px rgba(0, 255, 255, 0.35);
     }
 
-    #partner-section::after {
-      content: "➜";
-      position: absolute;
-      right: 15px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--theme-accent);
-      font-size: 1.2rem;
+    #partner-section .arrow {
+      font-size: 28px;
+      font-weight: 1000;
+      color: rgba(0, 255, 255, 0.95);
+      text-shadow: 0 0 14px rgba(0, 255, 255, 0.45);
+      flex: 0 0 auto;
     }
 
     #celestial-link {
-      align-self: flex-end;
-      margin-top: 10px;
-      margin-bottom: 12px;
-    }
-
-    #message-box {
-      position: absolute;
-      top: 8%;
       width: 100%;
-      text-align: center;
-      color: #fff;
-      font-size: 1.5rem;
-      text-shadow: 0 0 5px #000;
-      pointer-events: none;
-      z-index: 20;
-      font-weight: bold;
-    }
-
-    /* init-log */
-    #init-log {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      background: rgba(0, 0, 0, 0.8);
-      color: lime;
-      font-family: monospace;
-      font-size: 0.8rem;
-      padding: 10px;
-      box-sizing: border-box;
-      pointer-events: none;
-      z-index: 9999;
-      display: none;
-      white-space: pre-wrap;
-    }
-
-    /* Click layer for quick stop */
-    #click-layer {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 100;
-      display: none;
-    }
-
-    /* LUKIA Subtitle */
-    #subtitle-lukia {
-      margin-top: 8px;
-      font-size: 0.9rem;
-      font-weight: bold;
-      color: #00FFFF;
-      text-shadow:
-        0 0 2px #FFFFFF,
-        0 0 8px #FFFFFF,
-        0 0 15px #000000;
-      letter-spacing: 2px;
-      animation: erotic-pulse 3s ease-in-out infinite;
-      font-family: 'Segoe UI', serif;
-    }
-
-    @keyframes erotic-pulse {
-      0%, 100% {
-        opacity: 0.7;
-        text-shadow: 0 0 2px #ea00ff, 0 0 5px #d000ff;
-      }
-      50% {
-        opacity: 1.0;
-        text-shadow: 0 0 5px #ea00ff, 0 0 15px #d000ff, 0 0 25px #ff00de;
-      }
-    }
-
-    /* BGM Toggle Button */
-    .bgm-btn {
-      margin: 10px auto 0;
-      display: block;
-      padding: 8px 14px;
-      font-size: 12px;
-      letter-spacing: 0.08em;
-      border-radius: 8px;
-      border: 1px solid rgba(0, 255, 255, 0.45);
-      background: rgba(0, 0, 0, 0.55);
-      color: rgba(0, 255, 255, 0.95);
-      cursor: pointer;
-      box-shadow: 0 0 14px rgba(0, 255, 255, 0.18);
-      transition: all 0.2s ease;
-    }
-
-    .bgm-btn:hover { box-shadow: 0 0 18px rgba(0, 255, 255, 0.28); }
-
-    .bgm-btn.is-off {
-      border-color: rgba(255, 0, 255, 0.45);
-      color: rgba(255, 0, 255, 0.95);
-      box-shadow: 0 0 14px rgba(255, 0, 255, 0.18);
-    }
-
-    /* AUTO Toggle */
-    .auto-btn {
-      padding: 8px 14px;
-      font-size: 12px;
-      border-radius: 10px;
-      border: 1px solid rgba(255, 0, 255, 0.45);
-      background: rgba(0, 0, 0, 0.55);
-      color: rgba(255, 0, 255, 0.95);
-      cursor: pointer;
-      box-shadow: 0 0 14px rgba(255, 0, 255, 0.18);
-      transition: all 0.2s ease;
-      min-width: 120px;
-      text-align: center;
-    }
-
-    .auto-btn.is-on {
-      border-color: rgba(0, 255, 255, 0.45);
-      color: rgba(0, 255, 255, 0.95);
-      box-shadow: 0 0 14px rgba(0, 255, 255, 0.18);
-    }
-
-    /* Fever overlay (fixed: never clip) */
-    #fever-overlay {
-      position: absolute;
-      top: 52%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 92%;
-      text-align: center;
-
-      font-size: clamp(2.2rem, 6vw, 4rem);
-      font-weight: 900;
-      color: #fff000;
-      text-shadow: 0 0 20px #ff0000, 0 0 40px #ff0000;
-      z-index: 60;
-      display: none;
-      pointer-events: none;
-
-      white-space: normal;
-      word-break: break-word;
-      line-height: 1.1;
-    }
-
-    /* Jackpot overlay (uses thumb image) */
-    #jackpot-overlay {
-      position: absolute;
-      inset: 0;
-      z-index: 70;
-      display: none;
-      align-items: center;
+      display: flex;
       justify-content: center;
-      background: radial-gradient(circle at 50% 45%, rgba(255, 0, 255, 0.18), rgba(0, 0, 0, 0.88));
-      pointer-events: none;
     }
 
-    #jackpot-overlay .card {
-      width: min(92%, 520px);
-      border: 2px solid rgba(255, 0, 255, 0.55);
-      box-shadow: 0 0 22px rgba(255, 0, 255, 0.28), inset 0 0 20px rgba(0, 0, 0, 0.65);
-      border-radius: 14px;
-      overflow: hidden;
-      background: rgba(0, 0, 0, 0.45);
+    /* ===== FEVER MODE ===== */
+    .fever-mode #fever-overlay {
+      opacity: 1;
+      color: rgba(255, 255, 255, 1);
     }
 
-    #jackpot-overlay img {
-      width: 100%;
-      height: auto;
-      display: block;
-      filter: saturate(1.05) contrast(1.05);
-    }
+    /* Anti-Dazzle overrides (FEVER) */
+    .fever-mode #flash-overlay { display: none !important; }
+    .fever-mode .reel { animation: none !important; }
 
-    #jackpot-overlay .title {
-      padding: 10px 14px;
-      font-weight: 900;
-      letter-spacing: 0.12em;
-      color: rgba(255, 0, 255, 0.95);
-      text-shadow: 0 0 10px rgba(255, 0, 255, 0.30);
-      font-size: 1.1rem;
-      text-align: center;
-    }
-
-    /* Fever mode styling */
-    .fever-mode #game-container {
-      border: 2px solid rgba(255, 0, 255, 0.6);
-      box-shadow: 0 0 15px rgba(255, 0, 255, 0.5), inset 0 0 20px rgba(255, 0, 255, 0.4);
-      animation: neon-pulse 2.0s infinite alternate;
-    }
-
-    .fever-mode .reel {
-      background: rgba(40, 0, 40, 0.8);
-      border-color: rgba(255, 0, 255, 0.6);
-    }
-
-    @keyframes neon-pulse {
-      from { box-shadow: 0 0 10px rgba(255, 0, 255, 0.3); }
-      to { box-shadow: 0 0 25px rgba(255, 0, 255, 0.6), 0 0 5px rgba(255, 255, 255, 0.4); }
-    }
-
-    /* ===== FEVER FX LAYER (non-UI, temporary overlays) ===== */
-    #fx-layer {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      z-index: 65;
-      overflow: hidden;
-    }
-
-    .fx {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-    }
-
-    @keyframes fx-scanline {
-      0% { transform: translateY(-30%); opacity: 0.0; }
-      10% { opacity: 1.0; }
-      100% { transform: translateY(30%); opacity: 0.0; }
-    }
-
-    @keyframes fx-shake {
-      0%, 100% { transform: translate(0, 0); }
-      20% { transform: translate(-3px, 2px); }
-      40% { transform: translate(3px, -2px); }
-      60% { transform: translate(-2px, -3px); }
-      80% { transform: translate(2px, 3px); }
-    }
-
-    @keyframes fx-zoom {
-      0% { transform: scale(1); opacity: 0.0; }
-      15% { opacity: 1.0; }
-      100% { transform: scale(1.12); opacity: 0.0; }
-    }
-
-    @keyframes fx-symbolburst {
-      0% { transform: scale(0.9); opacity: 0.0; filter: blur(6px); }
-      20% { opacity: 1.0; filter: blur(0px); }
-      100% { transform: scale(1.15); opacity: 0.0; filter: blur(2px); }
-    }
-
-    @keyframes fx-meteor {
-      0% { transform: translate(-20%, -20%) rotate(-10deg); opacity: 0.0; }
-      10% { opacity: 1.0; }
-      100% { transform: translate(120%, 120%) rotate(20deg); opacity: 0.0; }
-    }
-
-    @keyframes fx-crack {
-      0% { opacity: 0.0; transform: scale(0.98); }
-      15% { opacity: 1.0; }
-      100% { opacity: 0.0; transform: scale(1.02); }
-    }
-
-    @keyframes fx-fade {
-      0% { opacity: 0; transform: scale(0.985); filter: blur(2px); }
-      25% { opacity: 1; transform: scale(1.00); filter: blur(0px); }
-      75% { opacity: 1; transform: scale(1.00); filter: blur(0px); }
-      100% { opacity: 0; transform: scale(1.015); filter: blur(2px); }
-    }
-
-    .fx-fade {
-      animation-name: fx-fade;
-      animation-timing-function: ease-in-out;
-      animation-fill-mode: both;
-    }
-
-    @keyframes fx-glitch-anim {
-      0% { clip-path: inset(40% 0 61% 0); transform: translate(-2px, 2px); opacity: 1; }
-      20% { clip-path: inset(92% 0 1% 0); transform: translate(2px, -3px); }
-      40% { clip-path: inset(43% 0 1% 0); transform: translate(-2px, 4px); }
-      60% { clip-path: inset(25% 0 58% 0); transform: translate(3px, 1px); }
-      80% { clip-path: inset(54% 0 7% 0); transform: translate(-1px, -2px); }
-      100% { clip-path: inset(58% 0 43% 0); transform: translate(2px, 2px); opacity: 0; }
-    }
-
-    .fx-glitch {
-      animation: fx-glitch-anim 0.35s steps(3) forwards;
-      mix-blend-mode: hard-light;
-      background: linear-gradient(90deg, rgba(255, 0, 0, 0.2), rgba(0, 255, 0, 0.2), rgba(0, 0, 255, 0.2));
-    }
-
-    @keyframes fx-timefreeze-anim {
-      0% { filter: sepia(0) grayscale(0); transform: scale(1); }
-      10% { filter: sepia(1) grayscale(1) contrast(1.5); transform: scale(1.02); }
-      90% { filter: sepia(1) grayscale(1) contrast(1.5); transform: scale(1.02); }
-      100% { filter: sepia(0) grayscale(0); transform: scale(1); }
-    }
-    .fx-timefreeze {
-      background: rgba(255, 240, 200, 0.1);
-      backdrop-filter: grayscale(100%) sepia(80%);
-      mix-blend-mode: saturation;
-      animation: fx-timefreeze-anim 1.2s steps(2) forwards;
-    }
-
-    @keyframes fx-spatialwarp-anim {
-      0% { transform: perspective(500px) rotateX(0) scale(1.0); opacity: 0; }
-      20% { opacity: 1; }
-      100% { transform: perspective(500px) rotateX(180deg) scale(2.5); opacity: 0; }
-    }
-    .fx-spatialwarp {
-      border: 4px dashed rgba(0, 255, 255, 0.5);
-      border-radius: 50%;
-      mix-blend-mode: exclusion;
-      animation: fx-spatialwarp-anim 0.9s ease-in forwards;
-    }
-
-    @keyframes fx-holyray-anim {
-      0% { opacity: 0; transform: translateY(100%) scaleX(1); }
-      20% { opacity: 1; transform: translateY(0%) scaleX(1.5); }
-      100% { opacity: 0; transform: translateY(-50%) scaleX(0.5); }
-    }
-    .fx-holyray {
-      background: linear-gradient(0deg, rgba(255, 255, 200, 0) 0%, rgba(255, 255, 220, 0.6) 50%, rgba(255, 255, 200, 0) 100%);
-      width: 40%;
-      left: 30%;
-      mix-blend-mode: screen;
-      filter: blur(8px);
-      animation: fx-holyray-anim 1.5s ease-out forwards;
-    }
-
-    @keyframes fx-voidcrack-anim {
-      0% { clip-path: polygon(50% 50%, 50% 50%, 50% 50%); opacity: 1; background-color: #000; }
-      100% { clip-path: polygon(0% 0%, 100% 0%, 50% 100%); opacity: 0; background-color: #300; }
-    }
-    .fx-voidcrack {
-      mix-blend-mode: multiply;
-      animation: fx-voidcrack-anim 0.4s cubic-bezier(0.1, 0.8, 0.1, 1) forwards;
-    }
-
-    @keyframes fx-matrixrain-anim {
-      0% { background-position: 0% -100%; opacity: 0; }
-      10% { opacity: 1; }
-      100% { background-position: 0% 200%; opacity: 0; }
-    }
-    .fx-matrixrain {
-      background-image: linear-gradient(180deg, rgba(0, 255, 0, 0) 0%, rgba(0, 255, 0, 0.8) 50%, rgba(0, 255, 0, 0) 100%);
-      background-size: 100% 50%;
-      mix-blend-mode: lighten;
-      animation: fx-matrixrain-anim 0.8s linear forwards;
-    }
-
-    @keyframes fx-noisestorm-anim {
-      0% { opacity: 1; transform: translate(0, 0); }
-      25% { opacity: 0.8; transform: translate(-5px, 5px); }
-      50% { opacity: 0.9; transform: translate(5px, -5px); }
-      75% { opacity: 0.7; transform: translate(-5px, -5px); }
-      100% { opacity: 0; transform: translate(5px, 5px); }
-    }
-    .fx-noisestorm {
-      background: repeating-linear-gradient(90deg, #111 0px, #333 1px, transparent 2px);
-      mix-blend-mode: difference;
-      opacity: 0.5;
-      animation: fx-noisestorm-anim 0.3s steps(4) forwards;
-    }
-
-    @keyframes fx-biopulse-anim {
-      0% { box-shadow: inset 0 0 0 0 rgba(255, 0, 0, 0); transform: scale(1); }
-      30% { box-shadow: inset 0 0 80px 40px rgba(180, 0, 0, 0.6); transform: scale(1.02); }
-      60% { box-shadow: inset 0 0 40px 20px rgba(100, 0, 0, 0.4); transform: scale(1.01); }
-      100% { box-shadow: inset 0 0 0 0 rgba(255, 0, 0, 0); transform: scale(1); }
-    }
-    .fx-biopulse {
-      mix-blend-mode: overlay;
-      animation: fx-biopulse-anim 0.9s ease-in-out forwards;
-    }
-
-    @keyframes fx-sonicboom-anim {
-      0% { transform: scale(0.1); border-width: 50px; opacity: 1; }
-      100% { transform: scale(1.5); border-width: 0px; opacity: 0; }
-    }
-    .fx-sonicboom {
-      border-radius: 50%;
-      border: 10px solid rgba(255, 255, 255, 0.8);
-      filter: blur(4px);
-      mix-blend-mode: screen;
-      animation: fx-sonicboom-anim 0.5s cubic-bezier(0, 0.5, 0.5, 1) forwards;
-    }
-
-    @keyframes fx-colorinvert-anim {
-      0% { filter: invert(0) hue-rotate(0deg); }
-      50% { filter: invert(1) hue-rotate(180deg); }
-      100% { filter: invert(0) hue-rotate(360deg); }
-    }
-    .fx-colorinvert {
-      background: white;
-      mix-blend-mode: difference;
-      animation: fx-colorinvert-anim 0.4s linear forwards;
-    }
-
-    @keyframes fx-abyssalgaze-anim {
-      0% { box-shadow: inset 0 0 0 0 #000; opacity: 0; }
-      40% { box-shadow: inset 0 0 150px 100px #000; opacity: 1; }
-      100% { box-shadow: inset 0 0 0 0 #000; opacity: 0; }
-    }
-    .fx-abyssalgaze {
-      mix-blend-mode: multiply;
-      animation: fx-abyssalgaze-anim 1.5s ease-in-out forwards;
-    }
-
-    @keyframes fx-halo-anim {
-      0% { transform: scale(0.5); opacity: 0; box-shadow: 0 0 0 0 rgba(0, 255, 255, 0.8); }
-      30% { opacity: 1; }
-      100% { transform: scale(1.6); opacity: 0; box-shadow: 0 0 50px 20px rgba(0, 255, 255, 0); }
-    }
-    .fx-halo {
-      border-radius: 50%;
-      border: 4px solid #0ff;
-      animation: fx-halo-anim 0.8s ease-out forwards;
-      mix-blend-mode: screen;
-    }
-
-    @keyframes fx-timestop-anim {
-      0% { filter: invert(0) brightness(1); opacity: 0; }
-      10% { filter: invert(1) brightness(2); opacity: 1; }
-      100% { filter: invert(0) brightness(1); opacity: 0; }
-    }
-    .fx-timestop {
-      background: white;
-      animation: fx-timestop-anim 0.4s ease-out forwards;
-      mix-blend-mode: difference;
-    }
-
-    @keyframes fx-particles-anim {
-      0% { transform: translateY(0) scale(1); opacity: 0; }
-      20% { opacity: 1; }
-      100% { transform: translateY(150px) scale(0.5); opacity: 0; }
-    }
-    .fx-particles {
-      background-image:
-        radial-gradient(circle, #fff 1px, transparent 1px),
-        radial-gradient(circle, #0ff 1px, transparent 1px);
-      background-size: 40px 40px, 30px 30px;
-      background-position: 0 0, 15px 15px;
-      animation: fx-particles-anim 1.2s linear forwards;
-      mix-blend-mode: overlay;
-    }
-
-    @keyframes fx-distortion-anim {
-      0% { transform: scale(1) skew(0deg); filter: hue-rotate(0deg); opacity: 0.8; }
-      25% { transform: scale(1.05) skew(5deg); filter: hue-rotate(90deg); }
-      50% { transform: scale(0.95) skew(-5deg); filter: hue-rotate(180deg); }
-      75% { transform: scale(1.02) skew(2deg); filter: hue-rotate(270deg); }
-      100% { transform: scale(1) skew(0deg); filter: hue-rotate(360deg); opacity: 0; }
-    }
-    .fx-distortion {
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(2px);
-      animation: fx-distortion-anim 0.6s ease-in-out forwards;
-      mix-blend-mode: exclusion;
-    }
-
-    @keyframes fx-shockwave-anim {
-      0% { transform: scale(0.2); opacity: 1; border-width: 20px; }
-      100% { transform: scale(2.0); opacity: 0; border-width: 0px; }
-    }
-    .fx-shockwave {
-      border: 4px solid rgba(255, 0, 255, 0.8);
-      border-radius: 50%;
-      animation: fx-shockwave-anim 0.7s cubic-bezier(0.1, 0.8, 0.2, 1) forwards;
-      mix-blend-mode: screen;
-    }
-
-    @keyframes fx-shake-hard-anim {
-      0% { transform: translate(0, 0); }
-      10% { transform: translate(-10px, -10px); }
-      20% { transform: translate(10px, 10px); }
-      30% { transform: translate(-10px, 10px); }
-      40% { transform: translate(10px, -10px); }
-      50% { transform: translate(-5px, 0); }
-      100% { transform: translate(0, 0); }
-    }
-    .fx-shake-hard { animation: fx-shake-hard-anim 0.4s linear forwards; }
-
-    @keyframes fx-shatter-anim {
-      0% { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); transform: scale(1); opacity: 1; }
-      50% { clip-path: polygon(10% 0, 90% 10%, 100% 90%, 0 100%); transform: scale(1.1) rotate(2deg); }
-      100% { clip-path: polygon(20% 20%, 80% 20%, 80% 80%, 20% 80%); transform: scale(1.2) rotate(-5deg); opacity: 0; }
-    }
-    .fx-shatter {
-      background: rgba(255, 255, 255, 0.2);
-      mix-blend-mode: screen;
-      animation: fx-shatter-anim 0.5s ease-out forwards;
-    }
-
-    @keyframes fx-chromatic-anim {
-      0% { text-shadow: 2px 0 red, -2px 0 blue; transform: scale(1); opacity: 1; }
-      50% { text-shadow: 4px 0 red, -4px 0 blue; transform: scale(1.02); }
-      100% { text-shadow: 8px 0 red, -8px 0 blue; transform: scale(1.05); opacity: 0; }
-    }
-    .fx-chromatic {
-      box-shadow: inset 4px 0 rgba(255, 0, 0, 0.5), inset -4px 0 rgba(0, 0, 255, 0.5);
-      animation: fx-chromatic-anim 0.5s ease-out forwards;
-      mix-blend-mode: screen;
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 1100px) {
+      .side { display: none; }
+      .stage { padding: calc(18px + var(--safe-top)) 18px calc(18px + var(--safe-bottom)); }
     }
 
     /* ==============================
-       MOBILE: Make reel screen bigger
+       MOBILE: Make reel screen bigger (FIX)
        ============================== */
-    @media (max-width: 640px) {
-      /* 9/16固定で縮むのを確実に殺す（min-aspect-ratio 側を上書き） */
-      #game-container {
+@media (max-width: 640px) {
+
+      /* 9/16固定で縮むのを殺す（既存踏襲） */
+      #game-container{
         width: 100vw !important;
         max-width: 100vw !important;
         height: calc((var(--vh, 1vh) * 100) - var(--safe-top) - var(--safe-bottom)) !important;
         max-height: none !important;
         aspect-ratio: auto !important;
         border-radius: 0;
+
+        /* ★ここが本命：flex→grid にして “上＝screen / 下＝ui” を固定 */
+        display: grid !important;
+        grid-template-rows: auto 1fr;
+        align-items: stretch;
       }
 
-      /* 上の余白を減らして、リール領域に高さを回す */
-      #screen {
-        width: min(96vw, 600px);
-        margin-top: clamp(8px, 2.5svh, 18px);
-        height: clamp(360px, 50svh, 620px);
+      /* ★screen を「スマホ表示の主役」にする */
+      #screen{
+        width: min(96vw, 680px);
+        margin-top: clamp(6px, 1.6svh, 14px);
+
+        /* ここを上げるほど絵柄がデカくなる */
+        height: clamp(420px, 60svh, 720px);
       }
 
       #reels-container { height: 100%; }
 
-      /* UIが食い込まないように “少しだけ” 詰める */
-      #ui-panel {
-        padding-bottom: max(12px, var(--safe-bottom));
+      /* ★UIは “維持” しつつ、食いすぎないようにする */
+      #ui-panel{
+        width: 94%;
+        margin: 10px auto 0;
         gap: 10px;
-        margin-top: 10px;
+
+        /* grid下段で “余り” を使う。足りなければスクロール */
+        min-height: 0;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+
+        padding-bottom: max(14px, var(--safe-bottom));
       }
 
-      #main-controls { height: 72px; } /* 80px→少し縮める */
-      .stop-btn { height: 46px; }
+      /* タイトル周りを少しだけ詰める（見た目維持） */
+      #machine-title{
+        margin-bottom: 6px;
+        font-size: 1.05rem;
+      }
 
-      #stop-controls { margin-top: 8px; }
-      #spin-btn { min-height: 70px; }
+      /* ボタンサイズは “最低限” 維持しつつ微調整 */
+      #main-controls { height: 72px; }
+      .stop-btn { height: 46px; }
+      #spin-btn, #seq-stop-btn { font-size: 1.35rem; }
+
+      /* 下のカードがデカいので、気持ち詰める（UI維持） */
+      #partner-section { padding: 12px; }
     }
   </style>
 </head>
@@ -929,38 +570,48 @@
         </div>
       </div>
 
+      <h2 id="machine-title">CELESTIAL SLOT UNIT</h2>
+
       <div id="ui-panel">
-        <h2 id="machine-title">CELESTIAL SLOT</h2>
-
-        <!-- Stop Buttons -->
         <div id="stop-controls">
-          <button id="stop-0" class="stop-btn" onclick="stopReel(0)" disabled>STOP L</button>
-          <button id="stop-1" class="stop-btn" onclick="stopReel(1)" disabled>STOP C</button>
-          <button id="stop-2" class="stop-btn" onclick="stopReel(2)" disabled>STOP R</button>
+          <button class="stop-btn" id="stop0">STOP L</button>
+          <button class="stop-btn" id="stop1">STOP C</button>
+          <button class="stop-btn" id="stop2">STOP R</button>
         </div>
 
-        <!-- Main Actions -->
         <div id="main-controls">
-          <button id="seq-stop-btn" onclick="stopNext()" disabled>STOP</button>
-          <button id="spin-btn" onclick="spin()">SPIN</button>
+          <button id="spin-btn">
+            SPIN <span id="spin-count">(0)</span>
+            <div id="spin-subtitle">~VRCなる箱 SLOT ver~</div>
+          </button>
+          <button id="seq-stop-btn" style="display:none;">STOP</button>
         </div>
 
-        <div id="subtitle-lukia">~ ～ VRCなる箱 SLOT ver ～ ~</div>
-        <button id="bgm-toggle" class="bgm-btn" type="button">⏸ MUSIC STOP</button>
-
-        <div id="meta-controls">
-          <button id="auto-toggle" class="auto-btn" type="button">AUTO: OFF</button>
-          <button class="sys-btn" onclick="resetGame()">RESET SYSTEM</button>
+        <div id="music-controls">
+          <button class="sys-btn" id="music-btn">▶︎ MUSIC START</button>
+          <button class="sys-btn" id="music-stop-btn">⏸ MUSIC STOP</button>
         </div>
 
-        <!-- Partner Card -->
-        <div id="partner-section" onclick="goPartner()">
-          <div id="partner-label">コラボ・提供者の方のページへ</div>
-          <div id="partner-name">COLLAB</div>
+        <div id="sub-controls">
+          <button class="sys-btn" id="auto-btn">AUTO: OFF</button>
+          <button class="sys-btn" id="reset-btn">RESET SYSTEM</button>
         </div>
 
-        <button id="celestial-link" class="sys-btn" onclick="goCelestial()">CELESTIAL Web Site</button>
+        <div id="partner-section" role="button" tabindex="0" aria-label="partner link">
+          <div class="left">
+            <div class="cap">コラボ・提供者の方のページへ</div>
+            <div class="name" id="partner-name">VRCなる箱さんのページへ</div>
+          </div>
+          <div class="arrow">→</div>
+        </div>
+
+        <div id="celestial-link">
+          <button class="sys-btn" id="celestial-btn">CELESTIAL WEB SITE</button>
+        </div>
       </div>
+
+      <!-- flash overlay (kept, but disabled in fever-mode via CSS) -->
+      <div id="flash-overlay" style="position:absolute; inset:0; background:#fff; opacity:0; pointer-events:none; z-index:90;"></div>
     </div>
 
     <div class="side right">
@@ -970,1358 +621,715 @@
   </div>
 
   <script>
-    /**
-     * CELESTIAL SLOT UNIT (10-year, collab, mass-production base)
-     * UI: FIXED (Do not touch)
-     * Logic: config-driven
-     * PAYLINES: 5 (横3 + 斜め2)
-     */
+    /* ==============================
+       SLOT ENGINE (single-file, embedded config)
+       ============================== */
 
-    const PAYLINES_5 = [
-      [0, 0, 0], // 上
-      [1, 1, 1], // 中
-      [2, 2, 2], // 下
-      [0, 1, 2], // ＼
-      [2, 1, 0], // ／
-    ];
-
-    const STATE = {
-      config: null,
-      images: [],
-      reels: [
-        { offset: 0, speed: 0, stopping: false, symbolIndex: 0, ctx: null },
-        { offset: 0, speed: 0, stopping: false, symbolIndex: 0, ctx: null },
-        { offset: 0, speed: 0, stopping: false, symbolIndex: 0, ctx: null }
-      ],
-      status: 'IDLE', // IDLE, SPINNING, RESULT
-      mode: 'NORMAL', // NORMAL, FEVER
-      feverCount: 0,
-
-      forcedSymbol: null,      // 0..8
-      forcedLineRows: null,    // [rowL,rowC,rowR] each 0..2
-
-      // Fever Type
-      feverType: null,
-      feverSeedSymbol: null,
-
-      // Audio
-      audioCtx: null,
-      bgmMuted: false,
-      bgmAudio: null,
-      bgmMode: 'NORMAL',
-      isBgmPlaying: false,
-
-      // AUTO
-      autoEnabled: false,
-      autoTimers: [],
-
-      // Assets
-      slotId: 'UNKNOWN',
-      thumbUrl: null,
-      profileImageUrl: null
-    };
-
-    const VOLUMES = { SPIN: 0.1, STOP: 0.2, WIN: 0.1 };
-
-    // Embedded config for file:// mode (no fetch required)
+    // ----- Embedded config (no fetch required) -----
     const EMBEDDED_CONFIG = {
-      "slotDisplayName": "～VRCなる箱 SLOT ver～",
       "machineTitle": "CELESTIAL SLOT UNIT",
-      "partnerLabel": "コラボ者ページリンク",
+      "partnerLabel": "コラボ・提供者の方のページへ",
       "partnerName": "VRCなる箱さんのページへ",
-      "partnerUrl": "https://x.com/VRC_box420",
-      "celestialUrl": "https://celestial-observers.com",
-      "celestialButtonLabel": "CELESTIAL Web Site",
+      "partnerUrl": "https://x.com/",
+      "celestialUrl": "https://celestial-observers.com/",
+      "celestialButtonLabel": "CELESTIAL WEB SITE",
       "theme": { "accent": "#00ffff", "bg": "#000000" },
 
-      "winRate": 0.08,
+      "winRate": 0.16,
+
+      "jackpot": {
+        "enabled": true,
+        "symbolId": "SYM1"
+      },
 
       "fever": {
         "enabled": true,
-        "startOnAnyWin": { "enabled": true, "rate": 0.20 },
-        "bySymbol": true,
-        "spinsDefault": 25,
-
-        "ultra": { "enabled": true, "chance": 0.006, "typeId": "ULTRA" },
-
-        "loop": {
-          "enabled": true,
-          "chance": 0.18,
-          "addSpins": 3,
-          "maxSpins": 60
-        }
-      },
-
-      "bgm": {
-        "normal": "assets/audio/audio.mp3",
-        "fever": [
-          "assets/audio/fever_01.mp3",
-          "assets/audio/fever_02.mp3",
-          "assets/audio/fever_03.mp3",
-          "assets/audio/fever_04.mp3",
-          "assets/audio/fever_05.mp3",
-          "assets/audio/fever_06.mp3",
-          "assets/audio/fever_07.mp3",
-          "assets/audio/fever_08.mp3",
-          "assets/audio/fever_09.mp3",
-          "assets/audio/fever_10.mp3"
-        ]
+        "startRate": 0.10,
+        "spins": 25,
+        "loop": { "chance": 0.35, "addSpins": 3 }
       },
 
       "feverTypes": [
-        { "id": "SYM1", "label": "SYMBOL-1 FEVER", "spins": 25, "bgmIndex": 0, "effects": ["scanline","neonFrame","symbolBurst","tripleZoom"] },
-        { "id": "SYM2", "label": "SYMBOL-2 FEVER", "spins": 25, "bgmIndex": 1, "effects": ["burst","flashGrid","roulette","splitPanels"] },
-        { "id": "SYM3", "label": "SYMBOL-3 FEVER", "spins": 25, "bgmIndex": 2, "effects": ["neonFrame","scanline","splitPanels","symbolBurst"] },
-        { "id": "SYM4", "label": "SYMBOL-4 FEVER", "spins": 25, "bgmIndex": 3, "effects": ["flashGrid","burst","tripleZoom","roulette"] },
-        { "id": "SYM5", "label": "SYMBOL-5 FEVER", "spins": 25, "bgmIndex": 4, "effects": ["symbolBurst","scanline","roulette","neonFrame"] },
-        { "id": "SYM6", "label": "SYMBOL-6 FEVER", "spins": 25, "bgmIndex": 5, "effects": ["splitPanels","flashGrid","burst","tripleZoom"] },
-        { "id": "SYM7", "label": "SYMBOL-7 FEVER", "spins": 25, "bgmIndex": 6, "effects": ["roulette","symbolBurst","neonFrame","scanline"] },
-        { "id": "SYM8", "label": "SYMBOL-8 FEVER", "spins": 25, "bgmIndex": 7, "effects": ["tripleZoom","flashGrid","splitPanels","burst"] },
-        { "id": "SYM9", "label": "SYMBOL-9 FEVER", "spins": 25, "bgmIndex": 8, "effects": ["neonFrame","symbolBurst","roulette","scanline"] },
-        { "id": "ULTRA", "label": "ULTRA VITALIZATION", "spins": 25, "bgmIndex": 9, "effects": ["ultraThumb","meteorSymbols","realityCrack"] }
+        {
+          "id": "SYM4",
+          "label": "SYMBOL-4 FEVER",
+          "priority": 10,
+          "bgm": "assets/audio/bgm_fever.wav",
+          "ambientFx": ["scanline", "neonFrame"],
+          "winFx": ["burst", "tripleZoom", "splitPanels", "roulette"]
+        }
       ],
 
-      "autoSpin": {
-        "enabledDefault": false,
-        "intervalMs": 180,
-        "feverIntervalMs": 120,
-        "autoStopDelaysMs": [90, 170, 250]
-      },
-
-      "feverWinSfxFiles": {
-        "SYM1": "assets/audio/se_fever_sym1.mp3",
-        "SYM2": "assets/audio/se_fever_sym2.mp3",
-        "SYM3": "assets/audio/se_fever_sym3.mp3",
-        "SYM4": "assets/audio/se_ferver_sym4.mp3",
-        "SYM5": "assets/audio/se_ferver_sym5.mp3",
-        "SYM6": "assets/audio/se_ferver_sym6.mp3",
-        "SYM7": "assets/audio/se_ferver_sym7.mp3",
-        "SYM8": "assets/audio/se_ferver_sym8.mp3",
-        "SYM9": "assets/audio/se_ferver_sym9.mp3",
-        "ULTRA": "assets/audio/se_ferver_sym_ultra.mp3"
+      "audio": {
+        "bgmNormal": "assets/audio/bgm_normal.wav",
+        "bgmFever": "assets/audio/bgm_fever.wav",
+        "win": { "volume": 0.10 },
+        "start": { "volume": 0.08 }
       }
     };
 
-    const DEFAULTS = {
-      slotDisplayName: "",
-      machineTitle: "CELESTIAL SLOT UNIT",
-      partnerLabel: "COLLAB",
-      partnerName: "VRCなる箱さんのページへ",
-      partnerUrl: "",
-      celestialUrl: "https://celestial-observers.com",
-      celestialButtonLabel: "CELESTIAL Web Site",
-      theme: { accent: "#00ffff", bg: "#000000" },
-
-      winRate: 0.08,
-
-      fever: {
-        enabled: true,
-        startOnAnyWin: { enabled: true, rate: 0.12 },
-        bySymbol: true,
-        spinsDefault: 25,
-        ultra: { enabled: true, chance: 0.006, typeId: "ULTRA" }
-      },
-
-      bgm: {
-        normal: "assets/audio/audio.mp3",
-        fever: [
-          "assets/audio/fever_01.mp3",
-          "assets/audio/fever_02.mp3",
-          "assets/audio/fever_03.mp3",
-          "assets/audio/fever_04.mp3",
-          "assets/audio/fever_05.mp3",
-          "assets/audio/fever_06.mp3",
-          "assets/audio/fever_07.mp3",
-          "assets/audio/fever_08.mp3",
-          "assets/audio/fever_09.mp3",
-          "assets/audio/fever_10.mp3"
-        ]
-      },
-
-      autoSpin: {
-        enabledDefault: false,
-        intervalMs: 1100,
-        feverIntervalMs: 650,
-        autoStopDelaysMs: [520, 820, 1120]
-      },
-
-      feverTypes: [
-        { id: "SYM1", label: "SYMBOL-1 FEVER", spins: 25, bgmIndex: 0, effects: ["scanline", "neonFrame", "symbolBurst", "tripleZoom"] },
-        { id: "SYM2", label: "SYMBOL-2 FEVER", spins: 25, bgmIndex: 1, effects: ["burst", "flashGrid", "roulette", "splitPanels"] },
-        { id: "SYM3", label: "SYMBOL-3 FEVER", spins: 25, bgmIndex: 2, effects: ["neonFrame", "scanline", "splitPanels", "symbolBurst"] },
-        { id: "SYM4", label: "SYMBOL-4 FEVER", spins: 25, bgmIndex: 3, effects: ["flashGrid", "burst", "tripleZoom", "roulette"] },
-        { id: "SYM5", label: "SYMBOL-5 FEVER", spins: 25, bgmIndex: 4, effects: ["symbolBurst", "scanline", "roulette", "neonFrame"] },
-        { id: "SYM6", label: "SYMBOL-6 FEVER", spins: 25, bgmIndex: 5, effects: ["splitPanels", "flashGrid", "burst", "tripleZoom"] },
-        { id: "SYM7", label: "SYMBOL-7 FEVER", spins: 25, bgmIndex: 6, effects: ["roulette", "symbolBurst", "neonFrame", "scanline"] },
-        { id: "SYM8", label: "SYMBOL-8 FEVER", spins: 25, bgmIndex: 7, effects: ["tripleZoom", "flashGrid", "splitPanels", "burst"] },
-        { id: "SYM9", label: "SYMBOL-9 FEVER", spins: 25, bgmIndex: 8, effects: ["neonFrame", "symbolBurst", "roulette", "scanline"] },
-        { id: "ULTRA", label: "ULTRA VITALIZATION", spins: 25, bgmIndex: 9, effects: ["ultraThumb", "meteorSymbols", "realityCrack"] }
+    // ----- Embedded symbols list -----
+    const EMBEDDED_SYMBOLS = {
+      "symbols": [
+        "assets/slotimages/01_symbol.png",
+        "assets/slotimages/02_symbol.png",
+        "assets/slotimages/03_symbol.png",
+        "assets/slotimages/04_symbol.png",
+        "assets/slotimages/05_symbol.png",
+        "assets/slotimages/06_symbol.png",
+        "assets/slotimages/07_symbol.png",
+        "assets/slotimages/08_symbol.png",
+        "assets/slotimages/09_symbol.png"
       ]
     };
 
-    const CANVAS_WIDTH = 256;
-    const CANVAS_HEIGHT = 768;
-    const SYMBOL_HEIGHT = 256;
+    // ----- Utils -----
+    const $ = (sel) => document.querySelector(sel);
 
-    const AUTO_SYMBOLS = [
-      "assets/slotimages/01_symbol.png",
-      "assets/slotimages/02_symbol.png",
-      "assets/slotimages/03_symbol.png",
-      "assets/slotimages/04_symbol.png",
-      "assets/slotimages/05_symbol.png",
-      "assets/slotimages/06_symbol.png",
-      "assets/slotimages/07_symbol.png",
-      "assets/slotimages/08_symbol.png",
-      "assets/slotimages/09_symbol.png"
-    ];
-
-    function log(msg) {
-      console.log(msg);
-      const el = document.getElementById('init-log');
-      el.style.display = 'block';
-      el.textContent += "> " + msg + "\n";
-      setTimeout(() => {
-        if (STATE.status === 'IDLE') el.style.display = 'none';
-      }, 2500);
+    function logBoot(line) {
+      const el = $("#init-log");
+      if (!el) return;
+      el.textContent = (el.textContent ? el.textContent + "\n" : "") + line;
     }
 
+    function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+    function clamp(n, a, b) { return Math.max(a, Math.min(b, n)); }
+
+    function randInt(a, b) { return Math.floor(Math.random() * (b - a + 1)) + a; }
+
+    // ----- Slot ID (for thumb auto load) -----
     function getSlotIdFromPath() {
-      const parts = location.pathname.split('/').filter(Boolean);
-      return parts[parts.length - 2] || 'UNKNOWN';
+      const p = location.pathname.replace(/\/+$/, "");
+      // expect .../games/slot/CS-001
+      const m = p.match(/\/(CS-\d{3})$/i);
+      return m ? m[1].toUpperCase() : "CS-001";
     }
 
-    function setSideLabels(text) {
-      const t = (text || "").trim();
-      const L = document.getElementById('side-label-left');
-      const R = document.getElementById('side-label-right');
-      if (L) L.textContent = t;
-      if (R) R.textContent = t;
+    const SLOT_ID = getSlotIdFromPath();
+
+    // ----- Theme apply -----
+    function applyTheme(cfg) {
+      const accent = cfg?.theme?.accent || "#00ffff";
+      const bg = cfg?.theme?.bg || "#000000";
+      document.documentElement.style.setProperty("--theme-accent", accent);
+      document.documentElement.style.setProperty("--theme-bg", bg);
+      document.documentElement.style.setProperty("--theme-glow", `0 0 10px ${accent}`);
+      document.body.style.backgroundColor = bg;
+      $("#machine-title").textContent = cfg.machineTitle || "CELESTIAL SLOT UNIT";
+      $("#partner-name").textContent = cfg.partnerName || "Partner";
+      $("#celestial-btn").textContent = cfg.celestialButtonLabel || "CELESTIAL WEB SITE";
+      $("#partner-section .cap").textContent = cfg.partnerLabel || "コラボ・提供者の方のページへ";
     }
 
-    function mountThumbAndProfile() {
-      STATE.slotId = getSlotIdFromPath();
-      const thumbUrl = `assets/thumb/${STATE.slotId}.png`;
-      STATE.thumbUrl = thumbUrl;
-      STATE.profileImageUrl = thumbUrl;
+    // ----- Side thumbs -----
+    function initSideThumbs() {
+      const left = $("#side-thumb-left");
+      const right = $("#side-thumb-right");
+      const leftLabel = $("#side-label-left");
+      const rightLabel = $("#side-label-right");
 
-      const L = document.getElementById('side-thumb-left');
-      const R = document.getElementById('side-thumb-right');
+      const labelText = SLOT_ID;
+      if (leftLabel) leftLabel.textContent = labelText;
+      if (rightLabel) rightLabel.textContent = labelText;
 
-      function attach(img) {
-        if (!img) return;
-        img.src = thumbUrl;
-        img.loading = "lazy";
-        img.decoding = "async";
-        img.referrerPolicy = "no-referrer";
-        img.onerror = () => {
-          const side = img.closest('.side');
-          if (side) side.style.display = 'none';
-        };
-      }
-
-      attach(L);
-      attach(R);
-
-      const ji = document.getElementById('jackpot-img');
-      if (ji) ji.src = STATE.profileImageUrl;
+      const src = `/wip/games/celestial-slot/thumbs/${SLOT_ID}.png`;
+      if (left) left.src = src;
+      if (right) right.src = src;
     }
 
-    function currentConfig() {
-      return STATE.config || DEFAULTS;
-    }
-
-    function getFeverTypes() {
-      const c = currentConfig();
-      if (Array.isArray(c.feverTypes)) return c.feverTypes;
-      return DEFAULTS.feverTypes;
-    }
-
-    function findFeverTypeById(id) {
-      return getFeverTypes().find(t => t && t.id === id) || null;
-    }
-
-    function symbolIdFromIndex(symIndex0to8) {
-      return `SYM${(symIndex0to8 + 1)}`;
-    }
-
-    function bgmNormalSrc() {
-      const c = currentConfig();
-      if (c.bgm && c.bgm.normal) return c.bgm.normal;
-      return DEFAULTS.bgm.normal;
-    }
-
-    function bgmFeverSrcByIndex(i) {
-      const c = currentConfig();
-      const arr = (c.bgm && Array.isArray(c.bgm.fever)) ? c.bgm.fever : DEFAULTS.bgm.fever;
-      return arr[i] || DEFAULTS.bgm.normal;
-    }
-
-    function safeSubtitle(displayText) {
-      const s = (displayText || "").trim();
-      if (!s) return "~ SLOT ver ~";
-      const startsDecor = s.startsWith("~") || s.startsWith("～");
-      const endsDecor = s.endsWith("~") || s.endsWith("～");
-      if (startsDecor && endsDecor) return s;
-      return `~ ${s} ~`;
-    }
-
-    function applyConfig() {
-      const c = currentConfig();
-
-      document.title = c.machineTitle || DEFAULTS.machineTitle;
-      const mt = document.getElementById('machine-title');
-      if (mt) mt.textContent = c.machineTitle || DEFAULTS.machineTitle;
-
-      const r = document.documentElement;
-      const accent = (c.theme && c.theme.accent) ? c.theme.accent : DEFAULTS.theme.accent;
-      const bg = (c.theme && c.theme.bg) ? c.theme.bg : DEFAULTS.theme.bg;
-      r.style.setProperty('--theme-accent', accent);
-      r.style.setProperty('--theme-bg', bg);
-      r.style.setProperty('--theme-glow', `0 0 10px ${accent}`); // ★FIX
-
-      // ★FIX: partner-label id typo
-      const pl = document.getElementById('partner-label');
-      const pn = document.getElementById('partner-name');
-      if (pl) pl.textContent = c.partnerLabel || DEFAULTS.partnerLabel;
-      if (pn) pn.textContent = c.partnerName || DEFAULTS.partnerName;
-
-      const cl = document.getElementById('celestial-link');
-      if (cl) cl.textContent = c.celestialButtonLabel || DEFAULTS.celestialButtonLabel;
-
-      const display = (c.slotDisplayName || "").trim();
-      const sub = document.getElementById('subtitle-lukia');
-
-      if (display) {
-        setSideLabels(display);
-        if (sub) sub.textContent = safeSubtitle(display);
-      } else {
-        if (sub) {
-          const raw = sub.textContent.replace(/^[~\s]+|[~\s]+$/g, "");
-          setSideLabels(raw);
-          sub.textContent = safeSubtitle(raw);
-        }
-      }
-
-      const ji = document.getElementById('jackpot-img');
-      if (ji) ji.src = STATE.profileImageUrl || `assets/thumb/${STATE.slotId}.png`;
-    }
-
-    async function loadImages(paths) {
-      const loaded = await Promise.all(paths.map(path => new Promise(resolve => {
-        const img = new Image();
-        img.src = path;
-        img.onload = () => resolve(img);
-        img.onerror = () => {
-          console.warn("Image Load Fail:", path);
-          resolve(null);
-        };
-      })));
-
-      const valid = loaded.filter(Boolean);
-      if (valid.length < 3) throw new Error("Not enough valid symbol images");
-      STATE.images = valid;
-    }
-
-    function initReels() {
-      STATE.reels.forEach((r, i) => {
-        const c = document.querySelector(`#reel${i} canvas`);
-        r.ctx = c.getContext('2d');
-        r.offset = Math.floor(Math.random() * STATE.images.length * SYMBOL_HEIGHT);
-        r.speed = 0;
-        r.stopping = false;
-      });
-      drawReels();
-    }
-
-    function setupInteractions() {
-      const layer = document.getElementById('click-layer');
-      const handleTap = (e) => { e.preventDefault(); stopNext(); };
-      layer.addEventListener('mousedown', handleTap);
-      layer.addEventListener('touchstart', handleTap, { passive: false });
-    }
-
-    function goPartner() {
-      const url = currentConfig().partnerUrl;
-      if (url) window.open(url, '_blank');
-    }
-
-    function goCelestial() {
-      const url = currentConfig().celestialUrl || DEFAULTS.celestialUrl;
-      window.open(url, '_blank');
-    }
-
-    // ===== BGM =====
-    function initAudio() {
-      if (!STATE.audioCtx) {
-        const AC = window.AudioContext || window.webkitAudioContext;
-        if (AC) STATE.audioCtx = new AC();
-      }
-      if (STATE.audioCtx && STATE.audioCtx.state === 'suspended') {
-        STATE.audioCtx.resume();
-      }
-
-      if (!STATE.bgmAudio) {
-        const src = bgmNormalSrc();
-        STATE.bgmAudio = new Audio(src);
-        STATE.bgmAudio.loop = true;
-        STATE.bgmAudio.volume = 0.30;
-        STATE.isBgmPlaying = false;
-        STATE.bgmMode = 'NORMAL';
-        console.log("BGM Initialized:", src);
-      }
-    }
-
-    function playFeverWinSfx(typeId) {
-      if (STATE.mode !== 'FEVER') return false;
-      const conf = currentConfig();
-      const map = conf.feverWinSfxFiles || DEFAULTS.feverWinSfxFiles || {};
-
-      let file = map[typeId];
-      if (!file) file = map["ULTRA"];
-      if (!file) return false;
-
-      if (!STATE.winSfxAudio) {
-        STATE.winSfxAudio = new Audio();
-        STATE.winSfxAudio.volume = 0.35;
-      }
-
-      try {
-        STATE.winSfxAudio.src = file;
-        STATE.winSfxAudio.currentTime = 0;
-        STATE.winSfxAudio.play().catch(e => console.warn("SFX Play Blocked/Failed:", e));
-        return true;
-      } catch (e) {
-        console.warn("SFX Error:", e);
-        return false;
-      }
-    }
-
-    function ensureBGM() {
-      if (STATE.bgmMuted) return;
-      if (!STATE.bgmAudio) return;
-      if (STATE.isBgmPlaying) return;
-
-      STATE.bgmAudio.play().then(() => {
-        STATE.isBgmPlaying = true;
-      }).catch(e => {
-        console.warn("BGM blocked (needs interaction):", e);
-      });
-    }
-
-    function stopBGM() {
-      if (STATE.bgmAudio) {
-        try { STATE.bgmAudio.pause(); } catch (e) { }
-      }
-      STATE.isBgmPlaying = false;
-    }
-
-    function startBGM() {
-      if (STATE.bgmMuted) return;
-      ensureBGM();
-    }
-
-    function setBGMMode(mode) {
-      const next =
-        (mode === 'FEVER' && STATE.feverType)
-          ? bgmFeverSrcByIndex(STATE.feverType.bgmIndex ?? 0)
-          : bgmNormalSrc();
-
-      if (!STATE.bgmAudio) return;
-
-      if (STATE.bgmAudio.src && STATE.bgmAudio.src.endsWith(next)) {
-        STATE.bgmMode = mode;
-        return;
-      }
-
-      const wasPlaying = STATE.isBgmPlaying && !STATE.bgmAudio.paused;
-      try { STATE.bgmAudio.pause(); } catch (e) { }
-      STATE.isBgmPlaying = false;
-
-      STATE.bgmAudio = new Audio(next);
-      STATE.bgmAudio.loop = true;
-      STATE.bgmAudio.volume = 0.30;
-      STATE.bgmMode = mode;
-
-      if (wasPlaying && !STATE.bgmMuted) {
-        ensureBGM();
-      }
-    }
-
-    function setupBgmToggle() {
-      const btn = document.getElementById('bgm-toggle');
-      if (!btn) return;
-
-      const sync = () => {
-        if (STATE.bgmMuted) {
-          btn.classList.add('is-off');
-          btn.textContent = '▶ MUSIC PLAY';
-        } else {
-          btn.classList.remove('is-off');
-          btn.textContent = '⏸ MUSIC STOP';
-        }
-      };
-
-      sync();
-
-      btn.addEventListener('click', () => {
-        STATE.bgmMuted = !STATE.bgmMuted;
-        if (STATE.bgmMuted) stopBGM();
-        else startBGM();
-        sync();
-      });
-    }
-
-    // ===== AUTO =====
-    function clearAutoTimers() {
-      STATE.autoTimers.forEach(id => clearTimeout(id));
-      STATE.autoTimers = [];
-    }
-
-    function setAutoEnabled(enabled) {
-      STATE.autoEnabled = !!enabled;
-      clearAutoTimers();
-      updateAutoButton();
-
-      if (STATE.autoEnabled) {
-        scheduleNextAutoSpin(200);
-      }
-    }
-
-    function updateAutoButton() {
-      const btn = document.getElementById('auto-toggle');
-      if (!btn) return;
-
-      if (STATE.autoEnabled) {
-        btn.classList.add('is-on');
-        btn.textContent = "AUTO: ON";
-      } else {
-        btn.classList.remove('is-on');
-        btn.textContent = "AUTO: OFF";
-      }
-    }
-
-    function setupAutoToggle() {
-      const btn = document.getElementById('auto-toggle');
-      if (!btn) return;
-      updateAutoButton();
-
-      btn.addEventListener('click', () => {
-        setAutoEnabled(!STATE.autoEnabled);
-      });
-    }
-
-    function scheduleNextAutoSpin(delayMs = 650) {
-      if (!STATE.autoEnabled) return;
-      if (!(STATE.status === 'IDLE' || STATE.status === 'RESULT')) return;
-
-      const id = setTimeout(() => {
-        if (!STATE.autoEnabled) return;
-        if (!(STATE.status === 'IDLE' || STATE.status === 'RESULT')) return;
-        spin();
-      }, delayMs);
-
-      STATE.autoTimers.push(id);
-    }
-
-    function scheduleAutoStops() {
-      if (!STATE.autoEnabled) return;
-      const base = currentConfig().autoSpin || {};
-      const delays = Array.isArray(base.autoStopDelaysMs) ? base.autoStopDelaysMs : [520, 820, 1120];
-
-      const t0 = setTimeout(() => { if (STATE.autoEnabled) stopReel(0); }, delays[0] ?? 520);
-      const t1 = setTimeout(() => { if (STATE.autoEnabled) stopReel(1); }, delays[1] ?? 820);
-      const t2 = setTimeout(() => { if (STATE.autoEnabled) stopReel(2); }, delays[2] ?? 1120);
-      STATE.autoTimers.push(t0, t1, t2);
-    }
-
-    // ===== FEVER TYPE PICKER =====
-    function pickFeverTypeFromWinSymbol(centerSymbolIdx0to8) {
-      const c = currentConfig();
-      const f = c.fever || DEFAULTS.fever;
-      const ultra = f.ultra || DEFAULTS.fever.ultra;
-
-      const baseId = (f.bySymbol !== false) ? symbolIdFromIndex(centerSymbolIdx0to8) : "SYM1";
-      let type = findFeverTypeById(baseId);
-
-      const ultraEnabled = !!(ultra && ultra.enabled);
-      const ultraChance = Number(ultra && ultra.chance != null ? ultra.chance : 0);
-      if (ultraEnabled && Math.random() < ultraChance) {
-        const u = findFeverTypeById(ultra.typeId || "ULTRA");
-        if (u) type = u;
-      }
-
-      if (!type) type = getFeverTypes()[0] || { id: baseId, label: "FEVER", spins: 25, bgmIndex: 0, effects: [] };
-      return type;
-    }
-
-    // ===== FX SYSTEM =====
-    function fxLayer() { return document.getElementById('fx-layer'); }
-    function clearFx() { const layer = fxLayer(); if (layer) layer.innerHTML = ''; }
-
-    function addFx(el, ttlMs = 900) {
-      const layer = fxLayer();
-      if (!layer) return;
-
-      const wrap = document.createElement('div');
-      wrap.className = 'fx';
-      wrap.style.animation = `fx-fade ${ttlMs}ms ease-in-out 1 both`;
-
-      wrap.appendChild(el);
-      layer.appendChild(wrap);
-
-      setTimeout(() => { try { wrap.remove(); } catch (e) { } }, ttlMs + 80);
-    }
-
-    function pickSymbolImageByType(type) {
-      if (!STATE.images.length) return null;
-
-      const useMain = Math.random() < 0.5;
-
-      let mainIndex = 0;
-      if (type && type.id) {
-        const m = /^SYM(\d+)$/.exec(type.id);
-        if (m) mainIndex = Math.max(0, Math.min(8, Number(m[1]) - 1));
-      }
-
-      if (useMain) {
-        return STATE.images[mainIndex] || STATE.images[0];
-      }
-
-      let idx;
-      do {
-        idx = Math.floor(Math.random() * STATE.images.length);
-      } while (idx === mainIndex && STATE.images.length > 1);
-
-      return STATE.images[idx];
-    }
-
-    let _feverTickerId = null;
-    const EXTRA_FX_POOL = [
-      'glitchPulse', 'haloRing', 'timeStop', 'starDust', 'distortion', 'shockwave', 'screenShake', 'realityShatter', 'chromatic',
-      'timeFreeze', 'spatialWarp', 'holyRay', 'voidCrack', 'matrixRain', 'noiseStorm', 'bioPulse', 'sonicBoom', 'colorInvert', 'abyssalGaze'
+    // ----- State -----
+    const STATE = {
+      config: null,
+      symbols: [],
+      images: [],
+      reels: [
+        { offset: 0, speed: 0, stopping: false, stopAt: null },
+        { offset: 0, speed: 0, stopping: false, stopAt: null },
+        { offset: 0, speed: 0, stopping: false, stopAt: null },
+      ],
+      status: "IDLE", // IDLE | SPINNING | STOPPING
+      mode: "NORMAL", // NORMAL | FEVER
+      spinsLeft: 0,
+      auto: false,
+      forcedSymbolIndex: null,
+      currentFeverType: null,
+      audioReady: false,
+      bgm: null,
+      bgmCtx: null,
+      bgmSource: null,
+      bgmGain: null,
+      lastTick: performance.now()
+    };
+
+    const UI = {
+      msg: $("#message-box"),
+      fever: $("#fever-overlay"),
+      spinCount: $("#spin-count"),
+      spinBtn: $("#spin-btn"),
+      seqStopBtn: $("#seq-stop-btn"),
+      stopBtns: [$("#stop0"), $("#stop1"), $("#stop2")],
+      autoBtn: $("#auto-btn"),
+      resetBtn: $("#reset-btn"),
+      partnerSection: $("#partner-section"),
+      celestialBtn: $("#celestial-btn"),
+      musicBtn: $("#music-btn"),
+      musicStopBtn: $("#music-stop-btn"),
+      fxLayer: $("#fx-layer"),
+      jackpotOverlay: $("#jackpot-overlay"),
+      jackpotImg: $("#jackpot-img"),
+      flashOverlay: $("#flash-overlay")
+    };
+
+    // ----- Canvas -----
+    const CANVASES = [
+      document.querySelector("#reel0 canvas"),
+      document.querySelector("#reel1 canvas"),
+      document.querySelector("#reel2 canvas")
     ];
+    const CTX = CANVASES.map(c => c.getContext("2d"));
 
-    function startFeverFxTicker() {
-      stopFeverFxTicker();
-      feverFxTick();
+    const SYMBOL_W = 256;
+    const SYMBOL_H = 256;
+    const VISIBLE = 3;
+
+    function showMsg(text, ms = 900) {
+      if (!UI.msg) return;
+      UI.msg.textContent = text;
+      UI.msg.style.opacity = "1";
+      clearTimeout(showMsg._t);
+      showMsg._t = setTimeout(() => { UI.msg.style.opacity = "0"; }, ms);
     }
 
-    function stopFeverFxTicker() {
-      if (_feverTickerId) {
-        clearTimeout(_feverTickerId);
-        _feverTickerId = null;
+    function setFeverLabel(text, on) {
+      if (!UI.fever) return;
+      UI.fever.textContent = text || "FEVER!!";
+      UI.fever.style.opacity = on ? "1" : "0";
+    }
+
+    function updateSpinCount() {
+      if (!UI.spinCount) return;
+      UI.spinCount.textContent = `(${STATE.spinsLeft})`;
+    }
+
+    // ----- Image loading -----
+    function loadImages(paths) {
+      return Promise.all(paths.map((p) => new Promise((resolve) => {
+        const img = new Image();
+        img.onload = () => resolve(img);
+        img.onerror = () => resolve(null);
+        img.src = p;
+      })));
+    }
+
+    function createDummySymbols(n = 9) {
+      const dummy = [];
+      for (let i = 0; i < n; i++) {
+        const c = document.createElement("canvas");
+        c.width = SYMBOL_W;
+        c.height = SYMBOL_H;
+        const g = c.getContext("2d");
+        g.fillStyle = `hsl(${(i * 40) % 360} 80% 35%)`;
+        g.fillRect(0, 0, SYMBOL_W, SYMBOL_H);
+        g.fillStyle = "rgba(255,255,255,0.85)";
+        g.font = "900 72px ui-monospace, Menlo, Consolas, monospace";
+        g.textAlign = "center";
+        g.textBaseline = "middle";
+        g.fillText(`SYM${i + 1}`, SYMBOL_W / 2, SYMBOL_H / 2);
+        dummy.push(c);
       }
+      return dummy;
     }
 
-    function feverFxTick() {
-      if (STATE.mode !== 'FEVER' || !STATE.feverType) return;
+    // ----- Drawing -----
+    function drawReel(idx) {
+      const ctx = CTX[idx];
+      const reel = STATE.reels[idx];
+      const images = STATE.images;
+      const n = images.length || 9;
 
-      const layer = fxLayer();
-      if (layer && layer.childElementCount < 6) {
-        const base = (STATE.feverType.effects || []);
-        const pool = base.concat(EXTRA_FX_POOL);
-        const randFx = pool[Math.floor(Math.random() * pool.length)];
-        fireOneFeverFx(randFx, STATE.feverType);
+      ctx.clearRect(0, 0, SYMBOL_W, SYMBOL_H * VISIBLE);
+
+      const topIndex = ((Math.floor(reel.offset / SYMBOL_H) % n) + n) % n;
+      const yOffset = -(reel.offset % SYMBOL_H);
+
+      for (let row = 0; row < VISIBLE + 1; row++) {
+        const si = (topIndex + row) % n;
+        const img = images[si];
+        const y = yOffset + row * SYMBOL_H;
+
+        if (img) {
+          ctx.drawImage(img, 0, 0, SYMBOL_W, SYMBOL_H, 0, y, SYMBOL_W, SYMBOL_H);
+        } else {
+          ctx.fillStyle = "#222";
+          ctx.fillRect(0, y, SYMBOL_W, SYMBOL_H);
+        }
       }
 
-      const delay = 600 + Math.random() * 1000;
-      _feverTickerId = setTimeout(feverFxTick, delay);
+      // glossy overlay
+      const grad = ctx.createLinearGradient(0, 0, SYMBOL_W, 0);
+      grad.addColorStop(0, "rgba(255,255,255,0.10)");
+      grad.addColorStop(0.5, "rgba(255,255,255,0.00)");
+      grad.addColorStop(1, "rgba(255,255,255,0.10)");
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, SYMBOL_W, SYMBOL_H * VISIBLE);
     }
 
-    function fireOneFeverFx(e, type) {
-      const mainSym = pickSymbolImageByType(type);
-      const thumbUrl = STATE.profileImageUrl || `assets/thumb/${STATE.slotId}.png`;
-
-      if (e === 'scanline') fxScanline();
-      if (e === 'neonFrame') fxNeonFrame();
-      if (e === 'burst') fxBurst(mainSym);
-      if (e === 'flashGrid') fxFlashGrid();
-      if (e === 'tripleZoom') fxTripleZoom(mainSym);
-      if (e === 'symbolBurst') fxSymbolBurst(mainSym);
-      if (e === 'splitPanels') fxSplitPanels(mainSym);
-      if (e === 'roulette') fxRoulette(mainSym);
-      if (e === 'meteorSymbols') fxMeteorSymbols();
-      if (e === 'ultraThumb') fxUltraThumb(thumbUrl);
-      if (e === 'realityCrack') fxRealityCrack();
-
-      if (e === 'glitchPulse') fxGlitch();
-      if (e === 'haloRing') fxHalo();
-      if (e === 'timeStop') fxTimeStop();
-      if (e === 'starDust') fxParticles();
-      if (e === 'distortion') fxDistortion();
-      if (e === 'shockwave') fxShockwave();
-      if (e === 'screenShake') fxShakeHard();
-      if (e === 'realityShatter') fxShatter();
-      if (e === 'chromatic') fxChromatic();
-
-      if (e === 'timeFreeze') fxTimeFreeze();
-      if (e === 'spatialWarp') fxSpatialWarp();
-      if (e === 'holyRay') fxHolyRay();
-      if (e === 'voidCrack') fxVoidCrack();
-      if (e === 'matrixRain') fxMatrixRain();
-      if (e === 'noiseStorm') fxNoiseStorm();
-      if (e === 'bioPulse') fxBioPulse();
-      if (e === 'sonicBoom') fxSonicBoom();
-      if (e === 'colorInvert') fxColorInvert();
-      if (e === 'abyssalGaze') fxAbyssalGaze();
+    function render() {
+      for (let i = 0; i < 3; i++) drawReel(i);
     }
 
-    function runFeverEffects(type) {
-      if (!type) return;
-      const effects = Array.isArray(type.effects) ? type.effects : [];
-      if (!effects.length) return;
-      clearFx();
-      for (const e of effects) fireOneFeverFx(e, type);
-    }
-
-    function ensureFeverFX() {
-      if (STATE.mode !== 'FEVER' || !STATE.feverType) return;
-      const layer = document.getElementById('fx-layer');
-      if (!layer || layer.childElementCount === 0) {
-        runFeverEffects(STATE.feverType);
-      }
-    }
-
-    function fxScanline() {
-      const el = document.createElement('div');
-      el.className = 'fx';
-      el.style.background = 'linear-gradient(to bottom, rgba(0,255,255,0.0), rgba(0,255,255,0.35), rgba(255,0,255,0.0))';
-      el.style.mixBlendMode = 'screen';
-      el.style.animation = 'fx-scanline 700ms ease-in-out 1';
-      addFx(el, 750);
-    }
-
-    function fxNeonFrame() {
-      const el = document.createElement('div');
-      el.className = 'fx';
-      el.style.boxShadow = 'inset 0 0 0 2px rgba(255,0,255,0.55), inset 0 0 30px rgba(0,255,255,0.22), 0 0 30px rgba(255,0,255,0.20)';
-      el.style.animation = 'fx-zoom 900ms ease-in-out 1';
-      addFx(el, 950);
-    }
-
-    function fxBurst(img) {
-      if (!img) return;
-      const el = document.createElement('div');
-      el.className = 'fx';
-      el.style.backgroundImage = `url("${img.src}")`;
-      el.style.backgroundSize = 'cover';
-      el.style.backgroundPosition = 'center';
-      el.style.filter = 'saturate(1.2) contrast(1.15)';
-      el.style.mixBlendMode = 'screen';
-      el.style.animation = 'fx-zoom 650ms ease-in-out 1';
-      addFx(el, 700);
-    }
-
-    function fxFlashGrid() {
-      const el = document.createElement('div');
-      el.className = 'fx';
-      el.style.backgroundImage =
-        'linear-gradient(rgba(255,255,255,0.12) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.12) 1px, transparent 1px)';
-      el.style.backgroundSize = '28px 28px';
-      el.style.mixBlendMode = 'overlay';
-      el.style.animation = 'fx-zoom 600ms ease-in-out 1';
-      addFx(el, 650);
-    }
-
-    function fxTripleZoom(img) {
-      if (!img) return;
-      const base = 520;
+    // ----- Physics -----
+    function update(dt) {
+      const speedBase = STATE.mode === "FEVER" ? 2100 : 1600;
       for (let i = 0; i < 3; i++) {
-        const el = document.createElement('div');
-        el.className = 'fx';
-        el.style.backgroundImage = `url("${img.src}")`;
-        el.style.backgroundSize = 'cover';
-        el.style.backgroundPosition = 'center';
-        el.style.opacity = String(0.50 - i * 0.14);
-        el.style.filter = `blur(${i * 1.0}px) saturate(1.2)`;
-        el.style.mixBlendMode = 'screen';
-        el.style.animation = `fx-zoom ${base + i * 70}ms ease-in-out 1`;
-        addFx(el, base + i * 70);
-      }
-    }
+        const r = STATE.reels[i];
+        if (STATE.status === "SPINNING") {
+          r.offset += speedBase * dt;
+        } else if (STATE.status === "STOPPING") {
+          if (!r.stopping) continue;
 
-    function fxSymbolBurst(img) {
-      if (!img) return;
-      const el = document.createElement('div');
-      el.className = 'fx';
-      el.style.backgroundImage =
-        `radial-gradient(circle at 50% 45%, rgba(255,0,255,0.15), rgba(0,0,0,0.85)), url("${img.src}")`;
-      el.style.backgroundSize = 'cover';
-      el.style.backgroundPosition = 'center';
-      el.style.mixBlendMode = 'screen';
-      el.style.animation = 'fx-symbolburst 620ms ease-in-out 1';
-      addFx(el, 620);
-    }
+          r.offset += speedBase * dt;
 
-    function fxSplitPanels(img) {
-      if (!img) return;
-
-      const left = document.createElement('div');
-      left.className = 'fx';
-      left.style.width = '55%';
-      left.style.right = '45%';
-      left.style.left = '0';
-      left.style.backgroundImage = `url("${img.src}")`;
-      left.style.backgroundSize = 'cover';
-      left.style.backgroundPosition = 'center';
-      left.style.mixBlendMode = 'screen';
-      left.style.animation = 'fx-zoom 700ms ease-in-out 1';
-
-      const right = document.createElement('div');
-      right.className = 'fx';
-      right.style.width = '55%';
-      right.style.left = '45%';
-      right.style.right = '0';
-      right.style.backgroundImage = `url("${img.src}")`;
-      right.style.backgroundSize = 'cover';
-      right.style.backgroundPosition = 'center';
-      right.style.mixBlendMode = 'screen';
-      right.style.animation = 'fx-zoom 760ms ease-in-out 1';
-
-      addFx(left, 820);
-      addFx(right, 860);
-    }
-
-    function fxRoulette(img) {
-      if (!img) return;
-      const el = document.createElement('div');
-      el.className = 'fx';
-      el.style.backgroundImage = `url("${img.src}")`;
-      el.style.backgroundSize = 'cover';
-      el.style.backgroundPosition = 'center';
-      el.style.mixBlendMode = 'screen';
-      el.style.animation = 'fx-shake 650ms ease-in-out 1';
-      addFx(el, 700);
-    }
-
-    function fxMeteorSymbols() {
-      for (let i = 0; i < 7; i++) {
-        const img = STATE.images[Math.floor(Math.random() * STATE.images.length)];
-        if (!img) continue;
-        const el = document.createElement('div');
-        el.style.position = 'absolute';
-        const size = 60 + Math.random() * 90;
-        el.style.width = `${size}px`;
-        el.style.height = `${size}px`;
-        el.style.left = `${-20 + Math.random() * 30}%`;
-        el.style.top = `${-20 + Math.random() * 30}%`;
-        el.style.backgroundImage = `url("${img.src}")`;
-        el.style.backgroundSize = 'cover';
-        el.style.backgroundPosition = 'center';
-        el.style.opacity = '0.0';
-        el.style.filter = 'saturate(1.25) contrast(1.1) drop-shadow(0 0 10px rgba(255,0,255,0.35))';
-        el.style.animation = `fx-meteor ${650 + Math.random() * 450}ms ease-in-out 1`;
-        addFx(el, 1100);
-      }
-    }
-
-    function fxUltraThumb(thumbUrl) {
-      const el = document.createElement('div');
-      el.className = 'fx';
-      el.style.backgroundImage = `radial-gradient(circle at 50% 45%, rgba(255,0,255,0.22), rgba(0,0,0,0.88)), url("${thumbUrl}")`;
-      el.style.backgroundSize = 'cover';
-      el.style.backgroundPosition = 'center';
-      el.style.mixBlendMode = 'screen';
-      el.style.animation = 'fx-symbolburst 1200ms ease-in-out 1';
-      addFx(el, 1200);
-    }
-
-    function fxRealityCrack() {
-      const el = document.createElement('div');
-      el.className = 'fx';
-      el.style.background =
-        'radial-gradient(circle at 50% 45%, rgba(0,255,255,0.12), rgba(0,0,0,0.0) 40%, rgba(0,0,0,0.65)), ' +
-        'repeating-linear-gradient(135deg, rgba(255,255,255,0.12) 0 2px, rgba(0,0,0,0.0) 2px 14px)';
-      el.style.mixBlendMode = 'overlay';
-      el.style.animation = 'fx-crack 900ms ease-in-out 1';
-      addFx(el, 900);
-    }
-
-    function fxGlitch() { const el = document.createElement('div'); el.className = 'fx fx-glitch'; addFx(el, 400); }
-    function fxHalo() { const el = document.createElement('div'); el.className = 'fx fx-halo'; addFx(el, 800); }
-    function fxTimeStop() { const el = document.createElement('div'); el.className = 'fx fx-timestop'; addFx(el, 400); }
-    function fxParticles() { const el = document.createElement('div'); el.className = 'fx fx-particles'; addFx(el, 1200); }
-    function fxDistortion() { const el = document.createElement('div'); el.className = 'fx fx-distortion'; addFx(el, 600); }
-    function fxShockwave() { const el = document.createElement('div'); el.className = 'fx fx-shockwave'; addFx(el, 750); }
-    function fxShakeHard() {
-      const el = document.createElement('div');
-      el.className = 'fx fx-shake-hard';
-      const img = STATE.images[Math.floor(Math.random() * STATE.images.length)];
-      if (img) {
-        el.style.backgroundImage = `url("${img.src}")`;
-        el.style.backgroundSize = 'cover';
-        el.style.backgroundPosition = 'center';
-        el.style.mixBlendMode = 'hard-light';
-        el.style.opacity = '0.7';
-      }
-      addFx(el, 400);
-    }
-    function fxShatter() { const el = document.createElement('div'); el.className = 'fx fx-shatter'; addFx(el, 550); }
-    function fxChromatic() { const el = document.createElement('div'); el.className = 'fx fx-chromatic'; addFx(el, 550); }
-
-    function fxTimeFreeze() { const el = document.createElement('div'); el.className = 'fx fx-timefreeze'; addFx(el, 1200); }
-    function fxSpatialWarp() { const el = document.createElement('div'); el.className = 'fx fx-spatialwarp'; addFx(el, 900); }
-    function fxHolyRay() { const el = document.createElement('div'); el.className = 'fx fx-holyray'; addFx(el, 1500); }
-    function fxVoidCrack() { const el = document.createElement('div'); el.className = 'fx fx-voidcrack'; addFx(el, 500); }
-    function fxMatrixRain() { const el = document.createElement('div'); el.className = 'fx fx-matrixrain'; addFx(el, 900); }
-    function fxNoiseStorm() { const el = document.createElement('div'); el.className = 'fx fx-noisestorm'; addFx(el, 400); }
-    function fxBioPulse() { const el = document.createElement('div'); el.className = 'fx fx-biopulse'; addFx(el, 900); }
-    function fxSonicBoom() { const el = document.createElement('div'); el.className = 'fx fx-sonicboom'; addFx(el, 600); }
-    function fxColorInvert() { const el = document.createElement('div'); el.className = 'fx fx-colorinvert'; addFx(el, 500); }
-    function fxAbyssalGaze() { const el = document.createElement('div'); el.className = 'fx fx-abyssalgaze'; addFx(el, 1600); }
-
-    function runRandomFeverWinFX() {
-      if (STATE.mode !== 'FEVER' || !STATE.feverType) return;
-      const base = (STATE.feverType.effects || []);
-      const pool = base.concat(EXTRA_FX_POOL);
-      const count = 2 + Math.floor(Math.random() * 5);
-
-      let lastFx = null;
-      for (let i = 0; i < count; i++) {
-        const delay = Math.floor(Math.random() * 380);
-        setTimeout(() => {
-          let fx;
-          let retry = 4;
-          do { fx = pool[Math.floor(Math.random() * pool.length)]; }
-          while (fx === lastFx && retry-- > 0);
-          lastFx = fx;
-          fireOneFeverFx(fx, STATE.feverType);
-        }, delay);
-      }
-    }
-
-    // ===== GRID HELPERS (3x3) =====
-    function getGridSymbol(reelIdx, row) {
-      const r = STATE.reels[reelIdx];
-      const top = r.symbolIndex;
-      const n = STATE.images.length;
-      return (top + row) % n;
-    }
-
-    function detectWinLine() {
-      for (const line of PAYLINES_5) {
-        const a = getGridSymbol(0, line[0]);
-        const b = getGridSymbol(1, line[1]);
-        const c = getGridSymbol(2, line[2]);
-        if (a === b && b === c) return { line, symbol: a };
-      }
-      return null;
-    }
-
-    // ===== GAME =====
-    function resetGame() {
-      stopFeverFxTicker();
-      setAutoEnabled(false);
-
-      STATE.status = 'IDLE';
-      STATE.mode = 'NORMAL';
-      STATE.feverCount = 0;
-
-      STATE.forcedSymbol = null;
-      STATE.forcedLineRows = null;
-
-      STATE.feverType = null;
-      STATE.feverSeedSymbol = null;
-
-      document.body.classList.remove('fever-mode');
-
-      hideFeverOverlay();
-      hideJackpotOverlay();
-      clearFx();
-
-      STATE.reels.forEach(r => {
-        r.speed = 0;
-        r.offset = Math.floor(Math.random() * STATE.images.length * SYMBOL_HEIGHT);
-        r.stopping = false;
-      });
-
-      document.getElementById('message-box').textContent = "READY";
-      document.getElementById('spin-btn').style.display = 'block';
-      document.getElementById('seq-stop-btn').style.display = 'none';
-      document.getElementById('spin-btn').disabled = false;
-
-      [0, 1, 2].forEach(i => document.getElementById(`stop-${i}`).disabled = true);
-      document.getElementById('click-layer').style.display = 'none';
-
-      setBGMMode('NORMAL');
-      applyConfig();
-      drawReels();
-    }
-
-    function spin() {
-      if (!(STATE.status === 'IDLE' || STATE.status === 'RESULT')) return;
-
-      initAudio();
-      if (STATE.audioCtx && STATE.audioCtx.state === 'suspended') STATE.audioCtx.resume();
-      if (!STATE.bgmMuted) ensureBGM();
-
-      if (STATE.mode === 'FEVER') {
-        STATE.feverCount--;
-        const label = STATE.feverType ? STATE.feverType.label : "FEVER!!";
-        showFeverOverlay(`${label} (${STATE.feverCount})`);
-        document.getElementById('message-box').textContent = `FEVER! ${STATE.feverCount} LEFT`;
-        ensureFeverFX();
-      } else {
-        hideFeverOverlay();
-        clearFx();
-        document.getElementById('message-box').textContent = "SPINNING...";
-      }
-
-      playTone('spin');
-
-      STATE.status = 'SPINNING';
-      STATE.forcedSymbol = null;
-      STATE.forcedLineRows = null;
-
-      const c = currentConfig();
-      let currentWinRate = (c.winRate ?? DEFAULTS.winRate);
-      if (STATE.mode === 'FEVER') currentWinRate = 1.0;
-
-      const willWin = Math.random() < currentWinRate;
-      if (willWin) {
-        const symCount = STATE.images.length;
-        STATE.forcedSymbol = Math.floor(Math.random() * symCount);
-        STATE.forcedLineRows = PAYLINES_5[Math.floor(Math.random() * PAYLINES_5.length)];
-      }
-
-      document.getElementById('spin-btn').style.display = 'none';
-      document.getElementById('seq-stop-btn').style.display = 'block';
-      document.getElementById('seq-stop-btn').disabled = false;
-      document.getElementById('click-layer').style.display = 'block';
-      [0, 1, 2].forEach(i => document.getElementById(`stop-${i}`).disabled = false);
-
-      STATE.reels.forEach(r => {
-        r.speed = 40 + Math.random() * 5;
-        r.stopping = false;
-      });
-
-      scheduleAutoStops();
-    }
-
-    function stopReel(idx) {
-      if (STATE.status !== 'SPINNING') return;
-      const r = STATE.reels[idx];
-      if (r.speed > 0 && !r.stopping) {
-        r.stopping = true;
-        playTone('stop');
-        document.getElementById(`stop-${idx}`).disabled = true;
-      }
-    }
-
-    function stopNext() {
-      const idx = STATE.reels.findIndex(r => r.speed > 0 && !r.stopping);
-      if (idx !== -1) stopReel(idx);
-    }
-
-    function renderLoop() {
-      updatePhysics();
-      drawReels();
-      requestAnimationFrame(renderLoop);
-    }
-
-    function updatePhysics() {
-      if (STATE.status !== 'SPINNING') return;
-
-      let moving = 0;
-      const totalH = STATE.images.length * SYMBOL_HEIGHT;
-
-      STATE.reels.forEach((r, reelIdx) => {
-        if (r.speed > 0) {
-          moving++;
-          r.offset += r.speed;
-          if (r.offset >= totalH) r.offset -= totalH;
-
-          if (r.stopping) {
-            let targetIdx = 0;
-
-            if (STATE.forcedSymbol !== null) {
-              const row = (STATE.forcedLineRows && STATE.forcedLineRows[reelIdx] != null)
-                ? STATE.forcedLineRows[reelIdx]
-                : 1;
-
-              let desiredTop = STATE.forcedSymbol - row;
-              const n = STATE.images.length;
-              while (desiredTop < 0) desiredTop += n;
-              desiredTop = desiredTop % n;
-
-              targetIdx = desiredTop;
-            } else {
-              const currentIndex = Math.floor(r.offset / SYMBOL_HEIGHT);
-              targetIdx = (currentIndex + 1) % STATE.images.length;
+          // snap when close to stopAt
+          if (r.stopAt != null) {
+            const diff = r.stopAt - r.offset;
+            if (Math.abs(diff) < 60) {
+              r.offset = r.stopAt;
+              r.stopping = false;
+              r.stopAt = null;
             }
-
-            const targetOffset = targetIdx * SYMBOL_HEIGHT;
-            r.offset = targetOffset;
-            r.speed = 0;
-            r.stopping = false;
-            r.symbolIndex = targetIdx;
           }
         }
-      });
+      }
 
-      if (moving === 0) {
-        STATE.status = 'RESULT';
-        checkResult();
+      if (STATE.status === "STOPPING") {
+        const allStopped = STATE.reels.every(r => !r.stopping);
+        if (allStopped) {
+          STATE.status = "IDLE";
+          onStopFinished();
+        }
       }
     }
 
-    function checkResult() {
-      document.getElementById('click-layer').style.display = 'none';
-      document.getElementById('seq-stop-btn').style.display = 'none';
-      document.getElementById('spin-btn').style.display = 'block';
-      document.getElementById('spin-btn').disabled = false;
+    function getCenterSymbolIndex(reelIdx) {
+      const n = STATE.images.length || 9;
+      const r = STATE.reels[reelIdx];
+      const topIndex = ((Math.floor(r.offset / SYMBOL_H) % n) + n) % n;
+      return (topIndex + 1) % n; // center
+    }
 
-      const conf = currentConfig();
-      const feverConf = conf.fever || DEFAULTS.fever;
+    // ----- FEVER / Result -----
+    function getSymbolIdFromIndex(i) {
+      return `SYM${i + 1}`;
+    }
 
-      const win = detectWinLine();
+    function pickFeverTypeForSymbol(symbolId) {
+      const list = STATE.config.feverTypes || [];
+      const found = list.find(t => t.id === symbolId);
+      return found || null;
+    }
+
+    function enterFever(type) {
+      STATE.mode = "FEVER";
+      STATE.currentFeverType = type;
+      STATE.spinsLeft = STATE.config.fever.spins || 25;
+      document.body.classList.add("fever-mode");
+      setFeverLabel(type?.label || "FEVER!!", true);
+      updateSpinCount();
+      runFeverAmbientFX(type);
+      startBgm(true, type?.bgm || STATE.config.audio?.bgmFever);
+    }
+
+    function exitFever() {
+      STATE.mode = "NORMAL";
+      STATE.currentFeverType = null;
+      document.body.classList.remove("fever-mode");
+      setFeverLabel("", false);
+      clearFxLayer();
+      startBgm(false, STATE.config.audio?.bgmNormal);
+    }
+
+    function maybeExtendFever() {
+      const loop = STATE.config.fever?.loop;
+      if (!loop) return;
+      const chance = loop.chance ?? 0;
+      const add = loop.addSpins ?? 0;
+      if (Math.random() < chance) {
+        STATE.spinsLeft += add;
+        updateSpinCount();
+        showMsg(`FEVER +${add}`, 650);
+      }
+    }
+
+    function onStopFinished() {
+      // compute result
+      const a = getCenterSymbolIndex(0);
+      const b = getCenterSymbolIndex(1);
+      const c = getCenterSymbolIndex(2);
+
+      const win = (a === b && b === c);
 
       if (win) {
-        if (STATE.mode === 'FEVER' && STATE.feverType) {
-          const played = playFeverWinSfx(STATE.feverType.id);
-          if (!played) playTone('win');
+        const symbolId = getSymbolIdFromIndex(a);
+
+        // jackpot cut-in
+        if (STATE.config.jackpot?.enabled && symbolId === (STATE.config.jackpot.symbolId || "SYM1")) {
+          showJackpot();
         } else {
-          playTone('win');
+          showMsg("VITALIZATION!", 900);
         }
 
-        if (STATE.mode === 'FEVER') {
-          const loop = (conf.fever && conf.fever.loop) ? conf.fever.loop : null;
-
-          if (loop && loop.enabled) {
-            const chance = Number(loop.chance ?? 0);
-            const add = Number(loop.addSpins ?? 0);
-            const max = Number(loop.maxSpins ?? 999);
-
-            if (add > 0 && Math.random() < chance) {
-              STATE.feverCount = Math.min(max, STATE.feverCount + add);
-              const label = STATE.feverType ? STATE.feverType.label : "FEVER!!";
-              showFeverOverlay(`${label} (${STATE.feverCount})`);
-              document.getElementById('message-box').textContent = `FEVER EXTEND! +${add}`;
-            }
-          }
-        }
-
-        const winSymbol = win.symbol;
-        const jackpotSymbol = 0;
-        const isJackpot = (winSymbol === jackpotSymbol);
-
-        if (isJackpot) {
-          showJackpotOverlay(1000);
-          if (feverConf.enabled) {
-            if (STATE.mode === 'NORMAL') {
-              startFever(true, winSymbol);
-            } else {
-              document.getElementById('message-box').textContent = "JACKPOT!";
-              runRandomFeverWinFX();
-            }
-          } else {
-            document.getElementById('message-box').textContent = "JACKPOT!";
-          }
+        if (STATE.mode === "FEVER") {
+          runRandomFeverWinFX();
+          maybeExtendFever();
         } else {
-          const startOnAnyWin = (feverConf.startOnAnyWin || { enabled: true, rate: 0.12 });
-          const willFever = feverConf.enabled && !!startOnAnyWin.enabled && (Math.random() < Number(startOnAnyWin.rate ?? 0.12));
-
-          if (willFever && STATE.mode === 'NORMAL') {
-            startFever(false, winSymbol);
-          } else {
-            document.getElementById('message-box').textContent = "VITALIZATION!";
+          // decide fever start
+          const ft = pickFeverTypeForSymbol(symbolId) || STATE.config.feverTypes?.[0] || null;
+          const startRate = STATE.config.fever?.startRate ?? 0.10;
+          if (STATE.config.fever?.enabled && ft && Math.random() < startRate) {
+            enterFever(ft);
           }
         }
-
       } else {
-        if (STATE.mode === 'NORMAL') {
-          document.getElementById('message-box').textContent = "TRY AGAIN";
-        } else {
-          document.getElementById('message-box').textContent = "";
+        if (STATE.mode !== "FEVER") showMsg("TRY AGAIN", 650);
+      }
+
+      // consume spins (in FEVER)
+      if (STATE.mode === "FEVER") {
+        STATE.spinsLeft = Math.max(0, STATE.spinsLeft - 1);
+        updateSpinCount();
+        if (STATE.spinsLeft <= 0) exitFever();
+      }
+
+      // auto continue
+      if (STATE.auto) {
+        setTimeout(() => spin(), 200);
+      }
+    }
+
+    function showJackpot() {
+      const overlay = UI.jackpotOverlay;
+      const img = UI.jackpotImg;
+      if (!overlay || !img) return;
+      img.src = `/wip/games/celestial-slot/thumbs/${SLOT_ID}.png`;
+      overlay.style.display = "flex";
+      setTimeout(() => { overlay.style.display = "none"; }, 1200);
+    }
+
+    // ----- FX -----
+    function clearFxLayer() {
+      if (!UI.fxLayer) return;
+      UI.fxLayer.innerHTML = "";
+    }
+
+    function runFeverAmbientFX(type) {
+      clearFxLayer();
+      const ambient = type?.ambientFx || [];
+      ambient.forEach(name => spawnFx(name, true));
+    }
+
+    function runRandomFeverWinFX() {
+      const type = STATE.currentFeverType;
+      const winFx = type?.winFx || [];
+      if (!winFx.length) return;
+
+      const pick = winFx[randInt(0, winFx.length - 1)];
+      spawnFx(pick, false);
+
+      // restore ambient after a short time
+      setTimeout(() => {
+        if (STATE.mode === "FEVER" && STATE.currentFeverType) {
+          runFeverAmbientFX(STATE.currentFeverType);
         }
-        hideJackpotOverlay();
+      }, 900);
+    }
+
+    function spawnFx(name, persistent) {
+      if (!UI.fxLayer) return;
+
+      const el = document.createElement("div");
+      el.className = `fx fx-${name}`;
+      el.style.position = "absolute";
+      el.style.inset = "0";
+      el.style.pointerEvents = "none";
+
+      // minimal fx styles
+      if (name === "scanline") {
+        el.style.background = "repeating-linear-gradient(to bottom, rgba(0,255,255,0.0), rgba(0,255,255,0.0) 6px, rgba(0,255,255,0.10) 7px)";
+        el.style.mixBlendMode = "screen";
+        el.style.animation = "scan 1.2s linear infinite";
+      }
+      if (name === "neonFrame") {
+        el.style.border = "2px solid rgba(255,0,255,0.55)";
+        el.style.boxShadow = "0 0 18px rgba(255,0,255,0.35), 0 0 22px rgba(0,255,255,0.20)";
+        el.style.borderRadius = "12px";
+        el.style.margin = "10px";
+        el.style.animation = "pulse 1.4s ease-in-out infinite";
+      }
+      if (name === "burst") {
+        el.style.background = "radial-gradient(circle at 50% 50%, rgba(255,255,0,0.30), rgba(255,0,255,0.00) 60%)";
+        el.style.animation = "burst 0.85s ease-out 1";
+      }
+      if (name === "tripleZoom") {
+        el.style.background = "radial-gradient(circle at 50% 50%, rgba(0,255,255,0.22), rgba(0,0,0,0.00) 55%)";
+        el.style.animation = "zoom 0.85s ease-out 1";
+      }
+      if (name === "splitPanels") {
+        el.style.background =
+          "linear-gradient(90deg, rgba(255,0,255,0.25) 0 33%, rgba(0,255,255,0.18) 33% 66%, rgba(255,255,0,0.18) 66% 100%)";
+        el.style.mixBlendMode = "screen";
+        el.style.animation = "burst 0.75s ease-out 1";
+      }
+      if (name === "roulette") {
+        el.style.background = "conic-gradient(from 0deg, rgba(255,0,255,0.25), rgba(0,255,255,0.25), rgba(255,255,0,0.22), rgba(255,0,255,0.25))";
+        el.style.mixBlendMode = "screen";
+        el.style.animation = "spin 0.9s linear 1";
       }
 
-      if (STATE.mode === 'FEVER' && STATE.feverCount <= 0) {
-        setTimeout(endFever, 900);
-      }
+      UI.fxLayer.appendChild(el);
 
-      if (STATE.autoEnabled) {
-        const base = currentConfig().autoSpin || {};
-        const delay = (STATE.mode === 'FEVER')
-          ? Number(base.feverIntervalMs ?? 650)
-          : Number(base.intervalMs ?? 1100);
-        scheduleNextAutoSpin(delay);
+      if (!persistent) {
+        setTimeout(() => { el.remove(); }, 900);
       }
     }
 
-    function startFever(fromJackpot, symbolIdx0to8 = 0) {
-      const type = pickFeverTypeFromWinSymbol(symbolIdx0to8);
-      STATE.feverType = type;
-      STATE.feverSeedSymbol = symbolIdx0to8;
+    // FX keyframes
+    const fxStyle = document.createElement("style");
+    fxStyle.textContent = `
+      @keyframes scan { from { transform: translateY(-10%); } to { transform: translateY(10%); } }
+      @keyframes pulse { 0%,100% { opacity: .65; } 50% { opacity: 1; } }
+      @keyframes burst { from { opacity: 0; transform: scale(.8); } 30% { opacity: 1; } to { opacity: 0; transform: scale(1.15); } }
+      @keyframes zoom { from { opacity: 0; transform: scale(.9); } 40% { opacity: 1; } to { opacity: 0; transform: scale(1.3); } }
+      @keyframes spin { from { opacity: .85; transform: rotate(0deg); } to { opacity: 0; transform: rotate(360deg); } }
+    `;
+    document.head.appendChild(fxStyle);
 
-      STATE.mode = 'FEVER';
-      STATE.feverCount = Number(type.spins ?? (currentConfig().fever?.spinsDefault ?? 25));
-
-      document.body.classList.add('fever-mode');
-
-      const label = type.label || "FEVER!!";
-      showFeverOverlay(`${label} (${STATE.feverCount})`);
-
-      document.getElementById('message-box').textContent = fromJackpot ? "JACKPOT FEVER!!" : label;
-
-      setBGMMode('FEVER');
-      runFeverEffects(type);
-      startFeverFxTicker();
+    // ----- Audio (simple) -----
+    function ensureAudio() {
+      if (STATE.audioReady) return;
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        STATE.bgmCtx = ctx;
+        STATE.bgmGain = ctx.createGain();
+        STATE.bgmGain.gain.value = 0.35;
+        STATE.bgmGain.connect(ctx.destination);
+        STATE.audioReady = true;
+      } catch (e) {
+        console.warn("Audio init failed", e);
+      }
     }
 
-    function endFever() {
-      stopFeverFxTicker();
-      STATE.mode = 'NORMAL';
-      document.body.classList.remove('fever-mode');
-      hideFeverOverlay();
-      clearFx();
-      document.getElementById('message-box').textContent = "READY";
+    async function startBgm(isFever, url) {
+      if (!STATE.audioReady) return;
+      // stop old
+      if (STATE.bgmSource) {
+        try { STATE.bgmSource.stop(); } catch {}
+        STATE.bgmSource.disconnect?.();
+        STATE.bgmSource = null;
+      }
 
-      STATE.feverType = null;
-      STATE.feverSeedSymbol = null;
-      setBGMMode('NORMAL');
+      // If url is wav file, fetch+decode (works on https). If fails, skip silently.
+      if (!url) return;
+
+      try {
+        const res = await fetch(url);
+        const arr = await res.arrayBuffer();
+        const buf = await STATE.bgmCtx.decodeAudioData(arr);
+        const src = STATE.bgmCtx.createBufferSource();
+        src.buffer = buf;
+        src.loop = true;
+        src.connect(STATE.bgmGain);
+        src.start();
+        STATE.bgmSource = src;
+      } catch (e) {
+        console.warn("BGM load failed", url, e);
+      }
     }
 
-    function showFeverOverlay(text) {
-      const overlay = document.getElementById('fever-overlay');
-      overlay.textContent = text || "FEVER!!";
-      overlay.style.display = 'block';
+    function stopBgm() {
+      if (STATE.bgmSource) {
+        try { STATE.bgmSource.stop(); } catch {}
+        STATE.bgmSource = null;
+      }
     }
 
-    function hideFeverOverlay() {
-      const overlay = document.getElementById('fever-overlay');
-      overlay.style.display = 'none';
+    // ----- Spin flow -----
+    function spin() {
+      if (STATE.status !== "IDLE") return;
+
+      // prepare audio on user action
+      ensureAudio();
+      if (STATE.bgmCtx?.state === "suspended") STATE.bgmCtx.resume?.();
+
+      // update UI label (FEVER label already handled)
+      if (STATE.mode === "FEVER") {
+        // keep label
+      } else {
+        setFeverLabel("", false);
+      }
+
+      // Start BGM if not playing
+      if (!STATE.bgmSource) {
+        startBgm(STATE.mode === "FEVER", (STATE.mode === "FEVER") ? (STATE.currentFeverType?.bgm || STATE.config.audio?.bgmFever) : STATE.config.audio?.bgmNormal);
+      }
+
+      // start reels
+      STATE.status = "SPINNING";
+      STATE.reels.forEach(r => { r.stopping = false; r.stopAt = null; });
+
+      // auto stop sequence if no manual
+      setTimeout(() => {
+        if (STATE.status === "SPINNING") startStoppingSequence();
+      }, 550);
     }
 
-    function showJackpotOverlay(duration = 1500) {
-      const el = document.getElementById('jackpot-overlay');
-      const img = document.getElementById('jackpot-img');
-      if (img) img.src = STATE.profileImageUrl || `assets/thumb/${STATE.slotId}.png`;
+    function startStoppingSequence() {
+      if (STATE.status !== "SPINNING") return;
+      STATE.status = "STOPPING";
 
-      el.style.display = 'flex';
-      setTimeout(() => { hideJackpotOverlay(); }, duration);
+      // decide forced symbol index based on win roll
+      const winRate = (STATE.mode === "FEVER") ? 1.0 : (STATE.config.winRate ?? 0.16);
+      const isWin = Math.random() < winRate;
+
+      if (isWin) {
+        // choose a symbol index; in FEVER, avoid SYM1 override issues by not forcing it as "fever trigger" reset
+        const n = STATE.images.length || 9;
+        let idx = randInt(0, n - 1);
+        STATE.forcedSymbolIndex = idx;
+      } else {
+        STATE.forcedSymbolIndex = null;
+      }
+
+      // stagger stops
+      stopReel(0);
+      setTimeout(() => stopReel(1), 160);
+      setTimeout(() => stopReel(2), 320);
     }
 
-    function hideJackpotOverlay() {
-      const el = document.getElementById('jackpot-overlay');
-      el.style.display = 'none';
+    function stopReel(i) {
+      const r = STATE.reels[i];
+      if (!r) return;
+      r.stopping = true;
+
+      // compute target stop offset so center line matches forcedSymbolIndex if any
+      const n = STATE.images.length || 9;
+      const currentTop = ((Math.floor(r.offset / SYMBOL_H) % n) + n) % n;
+
+      if (STATE.forcedSymbolIndex != null) {
+        const forced = STATE.forcedSymbolIndex;
+        // we want (top+1) == forced => top == forced-1
+        const desiredTop = (forced - 1 + n) % n;
+
+        // advance to desiredTop (forward only)
+        let deltaSymbols = (desiredTop - currentTop + n) % n;
+        // ensure at least a couple spins feel
+        deltaSymbols += 2 * n;
+
+        const target = Math.floor(r.offset / SYMBOL_H) * SYMBOL_H + deltaSymbols * SYMBOL_H;
+        r.stopAt = target;
+      } else {
+        // random stop near next symbol boundary
+        const base = Math.floor(r.offset / SYMBOL_H) * SYMBOL_H;
+        const jitter = randInt(1, n + 3) * SYMBOL_H;
+        r.stopAt = base + jitter;
+      }
     }
 
-    function drawReels() {
-      const total = STATE.images.length;
-      STATE.reels.forEach(r => {
-        const ctx = r.ctx;
-        if (!ctx) return;
+    // ----- Controls -----
+    function bindControls() {
+      UI.spinBtn.addEventListener("click", spin);
 
-        ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+      UI.stopBtns[0].addEventListener("click", () => { if (STATE.status === "SPINNING") startStoppingSequence(); });
+      UI.stopBtns[1].addEventListener("click", () => { if (STATE.status === "SPINNING") startStoppingSequence(); });
+      UI.stopBtns[2].addEventListener("click", () => { if (STATE.status === "SPINNING") startStoppingSequence(); });
 
-        const baseIdx = Math.floor(r.offset / SYMBOL_HEIGHT);
-        const shiftY = -(r.offset % SYMBOL_HEIGHT);
-
-        for (let i = -1; i < 4; i++) {
-          let idx = (baseIdx + i) % total;
-          if (idx < 0) idx += total;
-
-          const img = STATE.images[idx];
-          const y = shiftY + (i * SYMBOL_HEIGHT);
-          if (!img) continue;
-
-          try {
-            const side = Math.min(img.width, img.height);
-            const sx = (img.width - side) / 2;
-            const sy = (img.height - side) / 2;
-            ctx.drawImage(img, sx, sy, side, side, 0, y, CANVAS_WIDTH, SYMBOL_HEIGHT);
-          } catch (e) {
-            ctx.fillStyle = '#f00';
-            ctx.fillRect(0, y, CANVAS_WIDTH, SYMBOL_HEIGHT);
-          }
-        }
+      UI.autoBtn.addEventListener("click", () => {
+        STATE.auto = !STATE.auto;
+        UI.autoBtn.textContent = STATE.auto ? "AUTO: ON" : "AUTO: OFF";
+        if (STATE.auto && STATE.status === "IDLE") spin();
       });
+
+      UI.resetBtn.addEventListener("click", () => {
+        STATE.auto = false;
+        UI.autoBtn.textContent = "AUTO: OFF";
+        exitFever();
+        clearFxLayer();
+        showMsg("RESET", 650);
+      });
+
+      UI.partnerSection.addEventListener("click", () => {
+        const url = STATE.config.partnerUrl;
+        if (url) window.open(url, "_blank", "noopener,noreferrer");
+      });
+
+      UI.celestialBtn.addEventListener("click", () => {
+        const url = STATE.config.celestialUrl;
+        if (url) window.open(url, "_blank", "noopener,noreferrer");
+      });
+
+      UI.musicBtn.addEventListener("click", () => {
+        ensureAudio();
+        if (STATE.bgmCtx?.state === "suspended") STATE.bgmCtx.resume?.();
+        if (!STATE.bgmSource) {
+          startBgm(STATE.mode === "FEVER", (STATE.mode === "FEVER") ? (STATE.currentFeverType?.bgm || STATE.config.audio?.bgmFever) : STATE.config.audio?.bgmNormal);
+        }
+        showMsg("MUSIC START", 600);
+      });
+
+      UI.musicStopBtn.addEventListener("click", () => {
+        stopBgm();
+        showMsg("MUSIC STOP", 600);
+      });
+
+      // click-layer to stop sequence in mobile
+      $("#click-layer").addEventListener("pointerdown", () => {
+        if (STATE.status === "SPINNING") startStoppingSequence();
+      }, { passive: true });
     }
 
-    // ===== SFX (synth) =====
-    function playTone(type) {
-      if (!STATE.audioCtx) return;
-
-      const ctx = STATE.audioCtx;
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-
-      const now = ctx.currentTime;
-
-      if (type === 'spin') {
-        osc.type = 'square';
-        osc.frequency.setValueAtTime(220, now);
-        osc.frequency.exponentialRampToValueAtTime(880, now + 0.1);
-        gain.gain.setValueAtTime(VOLUMES.SPIN, now);
-        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
-        osc.start(now);
-        osc.stop(now + 0.1);
-      } else if (type === 'stop') {
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(440, now);
-        gain.gain.setValueAtTime(VOLUMES.STOP, now);
-        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
-        osc.start(now);
-        osc.stop(now + 0.1);
-      } else if (type === 'win') {
-        osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(523.25, now);
-        osc.frequency.setValueAtTime(659.25, now + 0.1);
-        osc.frequency.setValueAtTime(783.99, now + 0.2);
-        osc.frequency.setValueAtTime(1046.50, now + 0.3);
-
-        gain.gain.setValueAtTime(VOLUMES.WIN, now);
-        gain.gain.linearRampToValueAtTime(VOLUMES.WIN, now + 0.4);
-        gain.gain.exponentialRampToValueAtTime(0.01, now + 1.0);
-
-        osc.start(now);
-        osc.stop(now + 1.0);
-      }
-    }
-
-    // ===== BOOT =====
+    // ----- Boot -----
     async function boot() {
-      log("BOOT SEQUENCE STARTED...");
+      logBoot("> BOOT SEQUENCE STARTED...");
+      STATE.config = EMBEDDED_CONFIG;
+      applyTheme(STATE.config);
+      initSideThumbs();
+      logBoot("> Config loaded (embedded).");
 
-      mountThumbAndProfile();
+      const sym = EMBEDDED_SYMBOLS?.symbols || [];
+      STATE.symbols = sym.length ? sym : [];
+      const imgs = await loadImages(STATE.symbols);
+      const ok = imgs.filter(Boolean);
 
-      try {
-        STATE.config = EMBEDDED_CONFIG;
-        log("Config loaded (embedded).");
-      } catch (e) {
-        STATE.config = DEFAULTS;
-        log("Config failed (" + (e && e.name ? e.name : "ERR") + "). Using Defaults.");
+      if (ok.length >= 3) {
+        STATE.images = ok;
+        logBoot("> Images loaded.");
+      } else {
+        STATE.images = createDummySymbols(9);
+        logBoot("> Images fallback (dummy).");
       }
 
-      applyConfig();
+      // init reel offsets
+      STATE.reels.forEach(r => {
+        r.offset = randInt(0, 8) * SYMBOL_H + randInt(0, SYMBOL_H - 1);
+      });
 
-      try {
-        await loadImages(AUTO_SYMBOLS);
-        log("Images loaded.");
-      } catch (e) {
-        log("Images failed. Check assets/slotimages/01_symbol.png...09_symbol.png");
-        console.error(e);
-      }
-
-      initReels();
-      setupInteractions();
-      setupBgmToggle();
-      setupAutoToggle();
-
-      log("SYSTEM READY.");
-      requestAnimationFrame(renderLoop);
+      bindControls();
+      render();
+      logBoot("> SYSTEM READY.");
+      showMsg("READY", 800);
     }
 
-    window.onload = boot;
-  </script>
+    // ----- Main loop -----
+    function loop(now) {
+      const dt = Math.min(0.05, (now - STATE.lastTick) / 1000);
+      STATE.lastTick = now;
+      update(dt);
+      render();
+      requestAnimationFrame(loop);
+    }
 
-  <script>
-    // Mobile viewport height fix (iOS/Android address bar)
+    // ----- iOS/Android viewport height fix -----
     (function () {
       function setVh() {
         document.documentElement.style.setProperty('--vh', (window.innerHeight * 0.01) + 'px');
@@ -2330,6 +1338,8 @@
       window.addEventListener('resize', setVh, { passive: true });
       window.addEventListener('orientationchange', setVh, { passive: true });
     })();
+
+    boot().then(() => requestAnimationFrame(loop));
   </script>
 </body>
 
