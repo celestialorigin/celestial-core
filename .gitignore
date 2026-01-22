@@ -33,4 +33,8 @@ package.json_backup*.txt
 public/games/slot/backup/
 public/games/slot/old/
 public/games/slot/**/_old/
+<<<<<<< Updated upstream
 public/games/slot/**/_backup/
+=======
+public/games/slot/**/_backup/
+>>>>>>> Stashed changes

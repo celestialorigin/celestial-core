@@ -30,18 +30,18 @@
   },
 
   "bgm": {
-    "normal": "assets/audio/audio.mp3",
+    "normal": "assets/audio/audio.wav",
     "fever": [
-      "assets/audio/fever_01.mp3",
-      "assets/audio/fever_02.mp3",
-      "assets/audio/fever_03.mp3",
-      "assets/audio/fever_04.mp3",
-      "assets/audio/fever_05.mp3",
-      "assets/audio/fever_06.mp3",
-      "assets/audio/fever_07.mp3",
-      "assets/audio/fever_08.mp3",
-      "assets/audio/fever_09.mp3",
-      "assets/audio/fever_10.mp3"
+      "assets/audio/fever_01.wav",
+      "assets/audio/fever_02.wav",
+      "assets/audio/fever_03.wav",
+      "assets/audio/fever_04.wav",
+      "assets/audio/fever_05.wav",
+      "assets/audio/fever_06.wav",
+      "assets/audio/fever_07.wav",
+      "assets/audio/fever_08.wav",
+      "assets/audio/fever_09.wav",
+      "assets/audio/fever_10.wav"
     ]
   },
 
@@ -66,15 +66,15 @@
   },
 
   "feverWinSfxFiles": {
-    "SYM1": "assets/audio/se_fever_sym1.mp3",
-    "SYM2": "assets/audio/se_fever_sym2.mp3",
-    "SYM3": "assets/audio/se_fever_sym3.mp3",
-    "SYM4": "assets/audio/se_fever_sym4.mp3",
-    "SYM5": "assets/audio/se_fever_sym5.mp3",
-    "SYM6": "assets/audio/se_fever_sym6.mp3",
-    "SYM7": "assets/audio/se_fever_sym7.mp3",
-    "SYM8": "assets/audio/se_fever_sym8.mp3",
-    "SYM9": "assets/audio/se_fever_sym9.mp3",
-    "ULTRA": "assets/audio/se_fever_ultra.mp3"
+    "SYM1": "assets/audio/se_fever_sym1.wav",
+    "SYM2": "assets/audio/se_fever_sym2.wav",
+    "SYM3": "assets/audio/se_fever_sym3.wav",
+    "SYM4": "assets/audio/se_fever_sym4.wav",
+    "SYM5": "assets/audio/se_fever_sym5.wav",
+    "SYM6": "assets/audio/se_fever_sym6.wav",
+    "SYM7": "assets/audio/se_fever_sym7.wav",
+    "SYM8": "assets/audio/se_fever_sym8.wav",
+    "SYM9": "assets/audio/se_fever_sym9.wav",
+    "ULTRA": "assets/audio/se_fever_ultra.wav"
   }
 }
