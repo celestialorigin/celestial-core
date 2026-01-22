@@ -4,16 +4,11 @@ import "../styles/home.css";
 import { getNavTiles } from "../data/navTiles";
 import slots from "../data/slots.json";
 
-// ========== NAV ==========
-const BASE = (import.meta.env.BASE_URL || "/").replace(/\/?$/, "/");
-const tiles = getNavTiles(BASE);
-const SLOT_LIST_URL = `${BASE}wip/games/celestial-slot/`;
-
-// ========== SLOT DATA ==========
+// trial / collab 分離
 const trialSlots = slots.filter(s => s.status === "live" && s.type === "trial");
 const collabSlots = slots.filter(s => s.status === "live" && s.type === "collab");
 
-// ========== TODAY PICK (JST) ==========
+// JST基準の日付キー
 const todayKey = new Intl.DateTimeFormat("ja-JP", {
   timeZone: "Asia/Tokyo",
   year: "numeric",
@@ -21,6 +16,7 @@ const todayKey = new Intl.DateTimeFormat("ja-JP", {
   day: "2-digit",
 }).format(new Date());
 
+// 簡易ハッシュ → index化
 function hashToIndex(str, mod) {
   let h = 2166136261;
   for (let i = 0; i < str.length; i++) {
@@ -30,19 +26,25 @@ function hashToIndex(str, mod) {
   return Math.abs(h) % mod;
 }
 
+// 今日のCOLLABピック
 const featuredCollab =
   collabSlots.length > 0
     ? collabSlots[hashToIndex(todayKey, collabSlots.length)]
     : null;
 
-// ★ここに入れる
-const joinBase = (p) => {
-  if (!p) return p;
-  if (/^https?:\/\//.test(p)) return p; // 外部URLはそのまま
-  const b = BASE.endsWith("/") ? BASE.slice(0, -1) : BASE;
-  return p.startsWith("/") ? `${b}${p}` : `${b}/${p}`;
-};
+const BASE = (import.meta.env.BASE_URL || "/").replace(/\/?$/, "/");
+const tiles = getNavTiles(BASE);
+const SLOT_LIST_URL = `${BASE}wip/games/celestial-slot/`;
 ---
+import Layout from "../layouts/Layout.astro";
+import "../styles/home.css";
+import { getNavTiles } from "../data/navTiles";
+
+const BASE = (import.meta.env.BASE_URL || "/").replace(/\/?$/, "/");
+  const tiles = getNavTiles(BASE);
+  const SLOT_LIST_URL = `${BASE}wip/games/celestial-slot/`;
+---
+
 <Layout showStars={true} starPattern="home" bodyClass="page-home" title="CELESTIAL PROJECT">
   <section class="hero fade-in-section">
     <div class="container hero-content">
@@ -69,29 +71,6 @@ const joinBase = (p) => {
       <section class="slot-feature">
         <div class="slot-feature-card">
           <h2 class="slot-feature-title">CELESTIAL SLOT</h2>
-{featuredCollab && (
-  <div class="slot-today-pick">
-    <div class="slot-today-label">TODAY'S COLLAB PICK</div>
-
- <a class="slot-today-card" href={joinBase(featuredCollab.playUrl)}>
-   <img
-     src={joinBase(featuredCollab.thumb)}
-     alt={featuredCollab.displayName}
-     loading="lazy"
-     decoding="async"
-   />
-
-
-      <div class="slot-today-info">
-        <div class="slot-today-title">{featuredCollab.displayName}</div>
-        <div class="slot-today-by">by {featuredCollab.ownerName}</div>
-        <div class="slot-today-desc">{featuredCollab.description}</div>
-      </div>
-
-      <div class="slot-today-btn">▶ PLAY SLOT</div>
-    </a>
-  </div>
-)}
 
           <p class="slot-feature-copy">
             <span class="slot-emp">「あなた」がスロットのキャラクターに！？</span>
@@ -270,78 +249,6 @@ const joinBase = (p) => {
 </script>
 
 <style>
-/* === TODAY'S COLLAB PICK === */
-.slot-today-pick {
-  margin: 12px auto 18px;
-  max-width: 640px;
-  text-align: center;
-}
-
-.slot-today-label {
-  font-weight: 800;
-  letter-spacing: 0.18em;
-  font-size: 0.85rem;
-  color: #0ff;
-  opacity: 0.9;
-  margin-bottom: 6px;
-}
-
-.slot-today-card {
-  display: block;
-  text-decoration: none;
-  border: 1px solid rgba(0,255,255,0.35);
-  border-radius: 14px;
-  overflow: hidden;
-  background: rgba(0, 30, 40, 0.35);
-  box-shadow: 0 0 22px rgba(0,255,255,0.12);
-  transition: transform .2s, box-shadow .2s, border-color .2s;
-}
-
-.slot-today-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 0 32px rgba(0,255,255,0.28);
-  border-color: rgba(0,255,255,0.7);
-}
-
-.slot-today-card img {
-  width: 100%;
-  aspect-ratio: 16/9;
-  object-fit: cover;
-  display: block;
-}
-
-.slot-today-info {
-  padding: 12px 14px 10px;
-}
-
-.slot-today-title {
-  font-weight: 900;
-  font-size: 1.1rem;
-  color: #fff;
-  margin-bottom: 2px;
-}
-
-.slot-today-by {
-  font-size: 0.8rem;
-  opacity: 0.7;
-  margin-bottom: 6px;
-}
-
-.slot-today-desc {
-  font-size: 0.85rem;
-  line-height: 1.5;
-  opacity: 0.85;
-}
-
-.slot-today-btn {
-  background: linear-gradient(135deg, rgba(0,255,255,0.25), rgba(180,0,255,0.35));
-  border-top: 1px solid rgba(0,255,255,0.35);
-  padding: 10px;
-  font-weight: 900;
-  letter-spacing: .08em;
-  color: #fff;
-}
-
   /* CELESTIAL SLOT HERO STYLES (New Feature) */
   .slot-feature {
     width: 100%;
