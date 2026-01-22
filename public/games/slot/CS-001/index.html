@@ -7,10 +7,10 @@
   <title>CELESTIAL SLOT UNIT</title>
 
   <style>
-    :root{
-  --safe-top: env(safe-area-inset-top, 0px);
-  --safe-bottom: env(safe-area-inset-bottom, 0px);
-  --vh: 1vh;
+    :root {
+      --safe-top: env(safe-area-inset-top, 0px);
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+      --vh: 1vh;
 
       --theme-accent: #00ffff;
       --theme-bg: #000000;
@@ -26,13 +26,12 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
+      height: 100svh;
     }
 
     /* ===== STAGE LAYOUT ===== */
     .stage {
       width: 100%;
-      /* Use dynamic viewport units to avoid mobile address bar overlap */
       min-height: calc(var(--vh, 1vh) * 100);
       min-height: 100svh;
       min-height: 100dvh;
@@ -105,19 +104,11 @@
       filter: drop-shadow(0 0 10px rgba(0, 255, 255, 0.15));
     }
 
-    .side.left .side-label {
-      left: 10px;
-    }
-
-    .side.right .side-label {
-      right: 10px;
-    }
+    .side.left .side-label { left: 10px; }
+    .side.right .side-label { right: 10px; }
 
     @media (max-width: 1100px) {
-      .side {
-        display: none;
-      }
-
+      .side { display: none; }
       .stage {
         gap: 0;
         padding: 0;
@@ -139,10 +130,11 @@
       align-items: center;
       border: 1px solid #333;
       overflow: hidden;
-    
+
       max-height: calc(100svh - var(--safe-top) - var(--safe-bottom) - 48px);
     }
 
+    /* NOTE: 横長端末で“縦に収める”用。スマホ側で !important 上書きする */
     @media (min-aspect-ratio: 9/16) {
       #game-container {
         height: 95vh;
@@ -240,9 +232,7 @@
       -webkit-tap-highlight-color: transparent;
     }
 
-    button:active {
-      transform: translateY(2px);
-    }
+    button:active { transform: translateY(2px); }
 
     button:disabled {
       opacity: 0.3;
@@ -307,17 +297,9 @@
     }
 
     @keyframes pulse-glow {
-      0% {
-        box-shadow: 0 0 10px var(--theme-accent);
-      }
-
-      50% {
-        box-shadow: 0 0 25px var(--theme-accent);
-      }
-
-      100% {
-        box-shadow: 0 0 10px var(--theme-accent);
-      }
+      0% { box-shadow: 0 0 10px var(--theme-accent); }
+      50% { box-shadow: 0 0 25px var(--theme-accent); }
+      100% { box-shadow: 0 0 10px var(--theme-accent); }
     }
 
     /* Buttons Row */
@@ -357,9 +339,7 @@
       transition: transform 0.2s;
     }
 
-    #partner-section:active {
-      transform: scale(0.98);
-    }
+    #partner-section:active { transform: scale(0.98); }
 
     #partner-label {
       font-size: 0.7rem;
@@ -449,13 +429,10 @@
     }
 
     @keyframes erotic-pulse {
-
-      0%,
-      100% {
+      0%, 100% {
         opacity: 0.7;
         text-shadow: 0 0 2px #ea00ff, 0 0 5px #d000ff;
       }
-
       50% {
         opacity: 1.0;
         text-shadow: 0 0 5px #ea00ff, 0 0 15px #d000ff, 0 0 25px #ff00de;
@@ -478,9 +455,7 @@
       transition: all 0.2s ease;
     }
 
-    .bgm-btn:hover {
-      box-shadow: 0 0 18px rgba(0, 255, 255, 0.28);
-    }
+    .bgm-btn:hover { box-shadow: 0 0 18px rgba(0, 255, 255, 0.28); }
 
     .bgm-btn.is-off {
       border-color: rgba(255, 0, 255, 0.45);
@@ -582,13 +557,8 @@
     }
 
     @keyframes neon-pulse {
-      from {
-        box-shadow: 0 0 10px rgba(255, 0, 255, 0.3);
-      }
-
-      to {
-        box-shadow: 0 0 25px rgba(255, 0, 255, 0.6), 0 0 5px rgba(255, 255, 255, 0.4);
-      }
+      from { box-shadow: 0 0 10px rgba(255, 0, 255, 0.3); }
+      to { box-shadow: 0 0 25px rgba(255, 0, 255, 0.6), 0 0 5px rgba(255, 255, 255, 0.4); }
     }
 
     /* ===== FEVER FX LAYER (non-UI, temporary overlays) ===== */
@@ -607,137 +577,48 @@
     }
 
     @keyframes fx-scanline {
-      0% {
-        transform: translateY(-30%);
-        opacity: 0.0;
-      }
-
-      10% {
-        opacity: 1.0;
-      }
-
-      100% {
-        transform: translateY(30%);
-        opacity: 0.0;
-      }
+      0% { transform: translateY(-30%); opacity: 0.0; }
+      10% { opacity: 1.0; }
+      100% { transform: translateY(30%); opacity: 0.0; }
     }
 
     @keyframes fx-shake {
-
-      0%,
-      100% {
-        transform: translate(0, 0);
-      }
-
-      20% {
-        transform: translate(-3px, 2px);
-      }
-
-      40% {
-        transform: translate(3px, -2px);
-      }
-
-      60% {
-        transform: translate(-2px, -3px);
-      }
-
-      80% {
-        transform: translate(2px, 3px);
-      }
+      0%, 100% { transform: translate(0, 0); }
+      20% { transform: translate(-3px, 2px); }
+      40% { transform: translate(3px, -2px); }
+      60% { transform: translate(-2px, -3px); }
+      80% { transform: translate(2px, 3px); }
     }
 
     @keyframes fx-zoom {
-      0% {
-        transform: scale(1);
-        opacity: 0.0;
-      }
-
-      15% {
-        opacity: 1.0;
-      }
-
-      100% {
-        transform: scale(1.12);
-        opacity: 0.0;
-      }
+      0% { transform: scale(1); opacity: 0.0; }
+      15% { opacity: 1.0; }
+      100% { transform: scale(1.12); opacity: 0.0; }
     }
 
     @keyframes fx-symbolburst {
-      0% {
-        transform: scale(0.9);
-        opacity: 0.0;
-        filter: blur(6px);
-      }
-
-      20% {
-        opacity: 1.0;
-        filter: blur(0px);
-      }
-
-      100% {
-        transform: scale(1.15);
-        opacity: 0.0;
-        filter: blur(2px);
-      }
+      0% { transform: scale(0.9); opacity: 0.0; filter: blur(6px); }
+      20% { opacity: 1.0; filter: blur(0px); }
+      100% { transform: scale(1.15); opacity: 0.0; filter: blur(2px); }
     }
 
     @keyframes fx-meteor {
-      0% {
-        transform: translate(-20%, -20%) rotate(-10deg);
-        opacity: 0.0;
-      }
-
-      10% {
-        opacity: 1.0;
-      }
-
-      100% {
-        transform: translate(120%, 120%) rotate(20deg);
-        opacity: 0.0;
-      }
+      0% { transform: translate(-20%, -20%) rotate(-10deg); opacity: 0.0; }
+      10% { opacity: 1.0; }
+      100% { transform: translate(120%, 120%) rotate(20deg); opacity: 0.0; }
     }
 
     @keyframes fx-crack {
-      0% {
-        opacity: 0.0;
-        transform: scale(0.98);
-      }
-
-      15% {
-        opacity: 1.0;
-      }
-
-      100% {
-        opacity: 0.0;
-        transform: scale(1.02);
-      }
+      0% { opacity: 0.0; transform: scale(0.98); }
+      15% { opacity: 1.0; }
+      100% { opacity: 0.0; transform: scale(1.02); }
     }
 
-    /* FX fade in/out (for comfortable visibility) */
     @keyframes fx-fade {
-      0% {
-        opacity: 0;
-        transform: scale(0.985);
-        filter: blur(2px);
-      }
-
-      25% {
-        opacity: 1;
-        transform: scale(1.00);
-        filter: blur(0px);
-      }
-
-      75% {
-        opacity: 1;
-        transform: scale(1.00);
-        filter: blur(0px);
-      }
-
-      100% {
-        opacity: 0;
-        transform: scale(1.015);
-        filter: blur(2px);
-      }
+      0% { opacity: 0; transform: scale(0.985); filter: blur(2px); }
+      25% { opacity: 1; transform: scale(1.00); filter: blur(0px); }
+      75% { opacity: 1; transform: scale(1.00); filter: blur(0px); }
+      100% { opacity: 0; transform: scale(1.015); filter: blur(2px); }
     }
 
     .fx-fade {
@@ -746,41 +627,13 @@
       animation-fill-mode: both;
     }
 
-    /* --- NEW FX (Additional 8+) --- */
-
-    /* 1. Glitch Pulse */
     @keyframes fx-glitch-anim {
-      0% {
-        clip-path: inset(40% 0 61% 0);
-        transform: translate(-2px, 2px);
-        opacity: 1;
-      }
-
-      20% {
-        clip-path: inset(92% 0 1% 0);
-        transform: translate(2px, -3px);
-      }
-
-      40% {
-        clip-path: inset(43% 0 1% 0);
-        transform: translate(-2px, 4px);
-      }
-
-      60% {
-        clip-path: inset(25% 0 58% 0);
-        transform: translate(3px, 1px);
-      }
-
-      80% {
-        clip-path: inset(54% 0 7% 0);
-        transform: translate(-1px, -2px);
-      }
-
-      100% {
-        clip-path: inset(58% 0 43% 0);
-        transform: translate(2px, 2px);
-        opacity: 0;
-      }
+      0% { clip-path: inset(40% 0 61% 0); transform: translate(-2px, 2px); opacity: 1; }
+      20% { clip-path: inset(92% 0 1% 0); transform: translate(2px, -3px); }
+      40% { clip-path: inset(43% 0 1% 0); transform: translate(-2px, 4px); }
+      60% { clip-path: inset(25% 0 58% 0); transform: translate(3px, 1px); }
+      80% { clip-path: inset(54% 0 7% 0); transform: translate(-1px, -2px); }
+      100% { clip-path: inset(58% 0 43% 0); transform: translate(2px, 2px); opacity: 0; }
     }
 
     .fx-glitch {
@@ -789,31 +642,12 @@
       background: linear-gradient(90deg, rgba(255, 0, 0, 0.2), rgba(0, 255, 0, 0.2), rgba(0, 0, 255, 0.2));
     }
 
-    /* --- EXPANDED 10 FX POOL (CAT 1-10) --- */
-
-    /* Cat 1: Time Freeze (Sepia/Grayscale Flash) */
     @keyframes fx-timefreeze-anim {
-      0% {
-        filter: sepia(0) grayscale(0);
-        transform: scale(1);
-      }
-
-      10% {
-        filter: sepia(1) grayscale(1) contrast(1.5);
-        transform: scale(1.02);
-      }
-
-      90% {
-        filter: sepia(1) grayscale(1) contrast(1.5);
-        transform: scale(1.02);
-      }
-
-      100% {
-        filter: sepia(0) grayscale(0);
-        transform: scale(1);
-      }
+      0% { filter: sepia(0) grayscale(0); transform: scale(1); }
+      10% { filter: sepia(1) grayscale(1) contrast(1.5); transform: scale(1.02); }
+      90% { filter: sepia(1) grayscale(1) contrast(1.5); transform: scale(1.02); }
+      100% { filter: sepia(0) grayscale(0); transform: scale(1); }
     }
-
     .fx-timefreeze {
       background: rgba(255, 240, 200, 0.1);
       backdrop-filter: grayscale(100%) sepia(80%);
@@ -821,23 +655,11 @@
       animation: fx-timefreeze-anim 1.2s steps(2) forwards;
     }
 
-    /* Cat 2: Spatial Warp (Perspective Tunnel) */
     @keyframes fx-spatialwarp-anim {
-      0% {
-        transform: perspective(500px) rotateX(0) scale(1.0);
-        opacity: 0;
-      }
-
-      20% {
-        opacity: 1;
-      }
-
-      100% {
-        transform: perspective(500px) rotateX(180deg) scale(2.5);
-        opacity: 0;
-      }
+      0% { transform: perspective(500px) rotateX(0) scale(1.0); opacity: 0; }
+      20% { opacity: 1; }
+      100% { transform: perspective(500px) rotateX(180deg) scale(2.5); opacity: 0; }
     }
-
     .fx-spatialwarp {
       border: 4px dashed rgba(0, 255, 255, 0.5);
       border-radius: 50%;
@@ -845,24 +667,11 @@
       animation: fx-spatialwarp-anim 0.9s ease-in forwards;
     }
 
-    /* Cat 3: Holy Ray (God Beams) */
     @keyframes fx-holyray-anim {
-      0% {
-        opacity: 0;
-        transform: translateY(100%) scaleX(1);
-      }
-
-      20% {
-        opacity: 1;
-        transform: translateY(0%) scaleX(1.5);
-      }
-
-      100% {
-        opacity: 0;
-        transform: translateY(-50%) scaleX(0.5);
-      }
+      0% { opacity: 0; transform: translateY(100%) scaleX(1); }
+      20% { opacity: 1; transform: translateY(0%) scaleX(1.5); }
+      100% { opacity: 0; transform: translateY(-50%) scaleX(0.5); }
     }
-
     .fx-holyray {
       background: linear-gradient(0deg, rgba(255, 255, 200, 0) 0%, rgba(255, 255, 220, 0.6) 50%, rgba(255, 255, 200, 0) 100%);
       width: 40%;
@@ -872,43 +681,20 @@
       animation: fx-holyray-anim 1.5s ease-out forwards;
     }
 
-    /* Cat 4: Void Crack (Fissure) */
     @keyframes fx-voidcrack-anim {
-      0% {
-        clip-path: polygon(50% 50%, 50% 50%, 50% 50%);
-        opacity: 1;
-        background-color: #000;
-      }
-
-      100% {
-        clip-path: polygon(0% 0%, 100% 0%, 50% 100%);
-        opacity: 0;
-        background-color: #300;
-      }
+      0% { clip-path: polygon(50% 50%, 50% 50%, 50% 50%); opacity: 1; background-color: #000; }
+      100% { clip-path: polygon(0% 0%, 100% 0%, 50% 100%); opacity: 0; background-color: #300; }
     }
-
     .fx-voidcrack {
       mix-blend-mode: multiply;
       animation: fx-voidcrack-anim 0.4s cubic-bezier(0.1, 0.8, 0.1, 1) forwards;
     }
 
-    /* Cat 5: Matrix Rain (Digital Streams) */
     @keyframes fx-matrixrain-anim {
-      0% {
-        background-position: 0% -100%;
-        opacity: 0;
-      }
-
-      10% {
-        opacity: 1;
-      }
-
-      100% {
-        background-position: 0% 200%;
-        opacity: 0;
-      }
+      0% { background-position: 0% -100%; opacity: 0; }
+      10% { opacity: 1; }
+      100% { background-position: 0% 200%; opacity: 0; }
     }
-
     .fx-matrixrain {
       background-image: linear-gradient(180deg, rgba(0, 255, 0, 0) 0%, rgba(0, 255, 0, 0.8) 50%, rgba(0, 255, 0, 0) 100%);
       background-size: 100% 50%;
@@ -916,34 +702,13 @@
       animation: fx-matrixrain-anim 0.8s linear forwards;
     }
 
-    /* Cat 6: Noise Storm (Heavy Static) */
     @keyframes fx-noisestorm-anim {
-      0% {
-        opacity: 1;
-        transform: translate(0, 0);
-      }
-
-      25% {
-        opacity: 0.8;
-        transform: translate(-5px, 5px);
-      }
-
-      50% {
-        opacity: 0.9;
-        transform: translate(5px, -5px);
-      }
-
-      75% {
-        opacity: 0.7;
-        transform: translate(-5px, -5px);
-      }
-
-      100% {
-        opacity: 0;
-        transform: translate(5px, 5px);
-      }
+      0% { opacity: 1; transform: translate(0, 0); }
+      25% { opacity: 0.8; transform: translate(-5px, 5px); }
+      50% { opacity: 0.9; transform: translate(5px, -5px); }
+      75% { opacity: 0.7; transform: translate(-5px, -5px); }
+      100% { opacity: 0; transform: translate(5px, 5px); }
     }
-
     .fx-noisestorm {
       background: repeating-linear-gradient(90deg, #111 0px, #333 1px, transparent 2px);
       mix-blend-mode: difference;
@@ -951,49 +716,21 @@
       animation: fx-noisestorm-anim 0.3s steps(4) forwards;
     }
 
-    /* Cat 7: Bio Pulse (Heartbeat) */
     @keyframes fx-biopulse-anim {
-      0% {
-        box-shadow: inset 0 0 0 0 rgba(255, 0, 0, 0);
-        transform: scale(1);
-      }
-
-      30% {
-        box-shadow: inset 0 0 80px 40px rgba(180, 0, 0, 0.6);
-        transform: scale(1.02);
-      }
-
-      60% {
-        box-shadow: inset 0 0 40px 20px rgba(100, 0, 0, 0.4);
-        transform: scale(1.01);
-      }
-
-      100% {
-        box-shadow: inset 0 0 0 0 rgba(255, 0, 0, 0);
-        transform: scale(1);
-      }
+      0% { box-shadow: inset 0 0 0 0 rgba(255, 0, 0, 0); transform: scale(1); }
+      30% { box-shadow: inset 0 0 80px 40px rgba(180, 0, 0, 0.6); transform: scale(1.02); }
+      60% { box-shadow: inset 0 0 40px 20px rgba(100, 0, 0, 0.4); transform: scale(1.01); }
+      100% { box-shadow: inset 0 0 0 0 rgba(255, 0, 0, 0); transform: scale(1); }
     }
-
     .fx-biopulse {
       mix-blend-mode: overlay;
       animation: fx-biopulse-anim 0.9s ease-in-out forwards;
     }
 
-    /* Cat 8: Sonic Boom (Distorted Ripple) */
     @keyframes fx-sonicboom-anim {
-      0% {
-        transform: scale(0.1);
-        border-width: 50px;
-        opacity: 1;
-      }
-
-      100% {
-        transform: scale(1.5);
-        border-width: 0px;
-        opacity: 0;
-      }
+      0% { transform: scale(0.1); border-width: 50px; opacity: 1; }
+      100% { transform: scale(1.5); border-width: 0px; opacity: 0; }
     }
-
     .fx-sonicboom {
       border-radius: 50%;
       border: 10px solid rgba(255, 255, 255, 0.8);
@@ -1002,69 +739,32 @@
       animation: fx-sonicboom-anim 0.5s cubic-bezier(0, 0.5, 0.5, 1) forwards;
     }
 
-    /* Cat 9: Color Invert (Hue/Invert Loop) */
     @keyframes fx-colorinvert-anim {
-      0% {
-        filter: invert(0) hue-rotate(0deg);
-      }
-
-      50% {
-        filter: invert(1) hue-rotate(180deg);
-      }
-
-      100% {
-        filter: invert(0) hue-rotate(360deg);
-      }
+      0% { filter: invert(0) hue-rotate(0deg); }
+      50% { filter: invert(1) hue-rotate(180deg); }
+      100% { filter: invert(0) hue-rotate(360deg); }
     }
-
     .fx-colorinvert {
       background: white;
       mix-blend-mode: difference;
       animation: fx-colorinvert-anim 0.4s linear forwards;
     }
 
-    /* Cat 10: Abyssal Gaze (Horror Vignette) */
     @keyframes fx-abyssalgaze-anim {
-      0% {
-        box-shadow: inset 0 0 0 0 #000;
-        opacity: 0;
-      }
-
-      40% {
-        box-shadow: inset 0 0 150px 100px #000;
-        opacity: 1;
-      }
-
-      100% {
-        box-shadow: inset 0 0 0 0 #000;
-        opacity: 0;
-      }
+      0% { box-shadow: inset 0 0 0 0 #000; opacity: 0; }
+      40% { box-shadow: inset 0 0 150px 100px #000; opacity: 1; }
+      100% { box-shadow: inset 0 0 0 0 #000; opacity: 0; }
     }
-
     .fx-abyssalgaze {
       mix-blend-mode: multiply;
       animation: fx-abyssalgaze-anim 1.5s ease-in-out forwards;
     }
 
-    /* 2. Halo Ring */
     @keyframes fx-halo-anim {
-      0% {
-        transform: scale(0.5);
-        opacity: 0;
-        box-shadow: 0 0 0 0 rgba(0, 255, 255, 0.8);
-      }
-
-      30% {
-        opacity: 1;
-      }
-
-      100% {
-        transform: scale(1.6);
-        opacity: 0;
-        box-shadow: 0 0 50px 20px rgba(0, 255, 255, 0);
-      }
+      0% { transform: scale(0.5); opacity: 0; box-shadow: 0 0 0 0 rgba(0, 255, 255, 0.8); }
+      30% { opacity: 1; }
+      100% { transform: scale(1.6); opacity: 0; box-shadow: 0 0 50px 20px rgba(0, 255, 255, 0); }
     }
-
     .fx-halo {
       border-radius: 50%;
       border: 4px solid #0ff;
@@ -1072,47 +772,22 @@
       mix-blend-mode: screen;
     }
 
-    /* 3. Time Stop (Flash Invert) */
     @keyframes fx-timestop-anim {
-      0% {
-        filter: invert(0) brightness(1);
-        opacity: 0;
-      }
-
-      10% {
-        filter: invert(1) brightness(2);
-        opacity: 1;
-      }
-
-      100% {
-        filter: invert(0) brightness(1);
-        opacity: 0;
-      }
+      0% { filter: invert(0) brightness(1); opacity: 0; }
+      10% { filter: invert(1) brightness(2); opacity: 1; }
+      100% { filter: invert(0) brightness(1); opacity: 0; }
     }
-
     .fx-timestop {
       background: white;
       animation: fx-timestop-anim 0.4s ease-out forwards;
       mix-blend-mode: difference;
     }
 
-    /* 4. Particles (Star Dust) */
     @keyframes fx-particles-anim {
-      0% {
-        transform: translateY(0) scale(1);
-        opacity: 0;
-      }
-
-      20% {
-        opacity: 1;
-      }
-
-      100% {
-        transform: translateY(150px) scale(0.5);
-        opacity: 0;
-      }
+      0% { transform: translateY(0) scale(1); opacity: 0; }
+      20% { opacity: 1; }
+      100% { transform: translateY(150px) scale(0.5); opacity: 0; }
     }
-
     .fx-particles {
       background-image:
         radial-gradient(circle, #fff 1px, transparent 1px),
@@ -1123,36 +798,13 @@
       mix-blend-mode: overlay;
     }
 
-    /* 5. Distortion (Skew/Scale) */
     @keyframes fx-distortion-anim {
-      0% {
-        transform: scale(1) skew(0deg);
-        filter: hue-rotate(0deg);
-        opacity: 0.8;
-      }
-
-      25% {
-        transform: scale(1.05) skew(5deg);
-        filter: hue-rotate(90deg);
-      }
-
-      50% {
-        transform: scale(0.95) skew(-5deg);
-        filter: hue-rotate(180deg);
-      }
-
-      75% {
-        transform: scale(1.02) skew(2deg);
-        filter: hue-rotate(270deg);
-      }
-
-      100% {
-        transform: scale(1) skew(0deg);
-        filter: hue-rotate(360deg);
-        opacity: 0;
-      }
+      0% { transform: scale(1) skew(0deg); filter: hue-rotate(0deg); opacity: 0.8; }
+      25% { transform: scale(1.05) skew(5deg); filter: hue-rotate(90deg); }
+      50% { transform: scale(0.95) skew(-5deg); filter: hue-rotate(180deg); }
+      75% { transform: scale(1.02) skew(2deg); filter: hue-rotate(270deg); }
+      100% { transform: scale(1) skew(0deg); filter: hue-rotate(360deg); opacity: 0; }
     }
-
     .fx-distortion {
       background: rgba(255, 255, 255, 0.1);
       backdrop-filter: blur(2px);
@@ -1160,21 +812,10 @@
       mix-blend-mode: exclusion;
     }
 
-    /* 6. Shockwave */
     @keyframes fx-shockwave-anim {
-      0% {
-        transform: scale(0.2);
-        opacity: 1;
-        border-width: 20px;
-      }
-
-      100% {
-        transform: scale(2.0);
-        opacity: 0;
-        border-width: 0px;
-      }
+      0% { transform: scale(0.2); opacity: 1; border-width: 20px; }
+      100% { transform: scale(2.0); opacity: 0; border-width: 0px; }
     }
-
     .fx-shockwave {
       border: 4px solid rgba(255, 0, 255, 0.8);
       border-radius: 50%;
@@ -1182,110 +823,76 @@
       mix-blend-mode: screen;
     }
 
-    /* 7. Shake Hard */
     @keyframes fx-shake-hard-anim {
-      0% {
-        transform: translate(0, 0);
-      }
-
-      10% {
-        transform: translate(-10px, -10px);
-      }
-
-      20% {
-        transform: translate(10px, 10px);
-      }
-
-      30% {
-        transform: translate(-10px, 10px);
-      }
-
-      40% {
-        transform: translate(10px, -10px);
-      }
-
-      50% {
-        transform: translate(-5px, 0);
-      }
-
-      100% {
-        transform: translate(0, 0);
-      }
+      0% { transform: translate(0, 0); }
+      10% { transform: translate(-10px, -10px); }
+      20% { transform: translate(10px, 10px); }
+      30% { transform: translate(-10px, 10px); }
+      40% { transform: translate(10px, -10px); }
+      50% { transform: translate(-5px, 0); }
+      100% { transform: translate(0, 0); }
     }
+    .fx-shake-hard { animation: fx-shake-hard-anim 0.4s linear forwards; }
 
-    .fx-shake-hard {
-      animation: fx-shake-hard-anim 0.4s linear forwards;
-    }
-
-    /* 8. Shatter (Clip Path) */
     @keyframes fx-shatter-anim {
-      0% {
-        clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
-        transform: scale(1);
-        opacity: 1;
-      }
-
-      50% {
-        clip-path: polygon(10% 0, 90% 10%, 100% 90%, 0 100%);
-        transform: scale(1.1) rotate(2deg);
-      }
-
-      100% {
-        clip-path: polygon(20% 20%, 80% 20%, 80% 80%, 20% 80%);
-        transform: scale(1.2) rotate(-5deg);
-        opacity: 0;
-      }
+      0% { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); transform: scale(1); opacity: 1; }
+      50% { clip-path: polygon(10% 0, 90% 10%, 100% 90%, 0 100%); transform: scale(1.1) rotate(2deg); }
+      100% { clip-path: polygon(20% 20%, 80% 20%, 80% 80%, 20% 80%); transform: scale(1.2) rotate(-5deg); opacity: 0; }
     }
-
     .fx-shatter {
       background: rgba(255, 255, 255, 0.2);
       mix-blend-mode: screen;
       animation: fx-shatter-anim 0.5s ease-out forwards;
     }
 
-    /* 9. Chromatic Aberration */
     @keyframes fx-chromatic-anim {
-      0% {
-        text-shadow: 2px 0 red, -2px 0 blue;
-        transform: scale(1);
-        opacity: 1;
-      }
-
-      50% {
-        text-shadow: 4px 0 red, -4px 0 blue;
-        transform: scale(1.02);
-      }
-
-      100% {
-        text-shadow: 8px 0 red, -8px 0 blue;
-        transform: scale(1.05);
-        opacity: 0;
-      }
+      0% { text-shadow: 2px 0 red, -2px 0 blue; transform: scale(1); opacity: 1; }
+      50% { text-shadow: 4px 0 red, -4px 0 blue; transform: scale(1.02); }
+      100% { text-shadow: 8px 0 red, -8px 0 blue; transform: scale(1.05); opacity: 0; }
     }
-
     .fx-chromatic {
-      /* Requires text or box-shadow content to be visible really, but we can simulate */
       box-shadow: inset 4px 0 rgba(255, 0, 0, 0.5), inset -4px 0 rgba(0, 0, 255, 0.5);
       animation: fx-chromatic-anim 0.5s ease-out forwards;
       mix-blend-mode: screen;
     }
-  
 
-    /* Mobile layout */
+    /* ==============================
+       MOBILE: Make reel screen bigger
+       ============================== */
     @media (max-width: 640px) {
-      .stage {
-        gap: 12px;
-        padding: calc(12px + var(--safe-top)) 12px calc(12px + var(--safe-bottom));
-      }
-      .side { display: none; }
+      /* 9/16固定で縮むのを確実に殺す（min-aspect-ratio 側を上書き） */
       #game-container {
-        width: 100%;
-        max-width: 520px;
-        /* Fit within the visible viewport */
-        max-height: calc(100svh - var(--safe-top) - var(--safe-bottom) - 24px);
+        width: 100vw !important;
+        max-width: 100vw !important;
+        height: calc((var(--vh, 1vh) * 100) - var(--safe-top) - var(--safe-bottom)) !important;
+        max-height: none !important;
+        aspect-ratio: auto !important;
+        border-radius: 0;
       }
+
+      /* 上の余白を減らして、リール領域に高さを回す */
+      #screen {
+        width: min(96vw, 600px);
+        margin-top: clamp(8px, 2.5svh, 18px);
+        height: clamp(360px, 50svh, 620px);
+      }
+
+      #reels-container { height: 100%; }
+
+      /* UIが食い込まないように “少しだけ” 詰める */
+      #ui-panel {
+        padding-bottom: max(12px, var(--safe-bottom));
+        gap: 10px;
+        margin-top: 10px;
+      }
+
+      #main-controls { height: 72px; } /* 80px→少し縮める */
+      .stop-btn { height: 46px; }
+
+      #stop-controls { margin-top: 8px; }
+      #spin-btn { min-height: 70px; }
     }
-</style>
+  </style>
 </head>
 
 <body>
@@ -1416,89 +1023,84 @@
 
     const VOLUMES = { SPIN: 0.1, STOP: 0.2, WIN: 0.1 };
 
-// Embedded config for file:// mode (no fetch required)
-const EMBEDDED_CONFIG = {
-  "slotDisplayName": "～VRCなる箱 SLOT ver～",
-  "machineTitle": "CELESTIAL SLOT UNIT",
-  "partnerLabel": "コラボ者ページリンク",
-  "partnerName": "VRCなる箱さんのページへ",
-  "partnerUrl": "https://x.com/VRC_box420",
-  "celestialUrl": "https://celestial-observers.com",
-  "celestialButtonLabel": "CELESTIAL Web Site",
-  "theme": { "accent": "#00ffff", "bg": "#000000" },
+    // Embedded config for file:// mode (no fetch required)
+    const EMBEDDED_CONFIG = {
+      "slotDisplayName": "～VRCなる箱 SLOT ver～",
+      "machineTitle": "CELESTIAL SLOT UNIT",
+      "partnerLabel": "コラボ者ページリンク",
+      "partnerName": "VRCなる箱さんのページへ",
+      "partnerUrl": "https://x.com/VRC_box420",
+      "celestialUrl": "https://celestial-observers.com",
+      "celestialButtonLabel": "CELESTIAL Web Site",
+      "theme": { "accent": "#00ffff", "bg": "#000000" },
 
-  "winRate": 0.08,
+      "winRate": 0.08,
 
-  "fever": {
-    "enabled": true,
-    "startOnAnyWin": { "enabled": true, "rate": 0.20 },
-    "bySymbol": true,
-    "spinsDefault": 25,
+      "fever": {
+        "enabled": true,
+        "startOnAnyWin": { "enabled": true, "rate": 0.20 },
+        "bySymbol": true,
+        "spinsDefault": 25,
 
-    "ultra": { "enabled": true, "chance": 0.006, "typeId": "ULTRA" },
+        "ultra": { "enabled": true, "chance": 0.006, "typeId": "ULTRA" },
 
-    // ★追加：FEVER中、当たり時に一定確率でスピン延長
-    // まず動作確認したいなら chance: 1.0 にしてテストしてOK
-    "loop": {
-      "enabled": true,
-      "chance": 0.18,
-      "addSpins": 3,
-      "maxSpins": 60
-    }
-  },
+        "loop": {
+          "enabled": true,
+          "chance": 0.18,
+          "addSpins": 3,
+          "maxSpins": 60
+        }
+      },
 
-  "bgm": {
-    "normal": "assets/audio/audio.mp3",
-    "fever": [
-      "assets/audio/fever_01.mp3",
-      "assets/audio/fever_02.mp3",
-      "assets/audio/fever_03.mp3",
-      "assets/audio/fever_04.mp3",
-      "assets/audio/fever_05.mp3",
-      "assets/audio/fever_06.mp3",
-      "assets/audio/fever_07.mp3",
-      "assets/audio/fever_08.mp3",
-      "assets/audio/fever_09.mp3",
-      "assets/audio/fever_10.mp3"
-    ]
-  },
+      "bgm": {
+        "normal": "assets/audio/audio.mp3",
+        "fever": [
+          "assets/audio/fever_01.mp3",
+          "assets/audio/fever_02.mp3",
+          "assets/audio/fever_03.mp3",
+          "assets/audio/fever_04.mp3",
+          "assets/audio/fever_05.mp3",
+          "assets/audio/fever_06.mp3",
+          "assets/audio/fever_07.mp3",
+          "assets/audio/fever_08.mp3",
+          "assets/audio/fever_09.mp3",
+          "assets/audio/fever_10.mp3"
+        ]
+      },
 
-  "feverTypes": [
-    { "id": "SYM1", "label": "SYMBOL-1 FEVER", "spins": 25, "bgmIndex": 0, "effects": ["scanline","neonFrame","symbolBurst","tripleZoom"] },
-    { "id": "SYM2", "label": "SYMBOL-2 FEVER", "spins": 25, "bgmIndex": 1, "effects": ["burst","flashGrid","roulette","splitPanels"] },
-    { "id": "SYM3", "label": "SYMBOL-3 FEVER", "spins": 25, "bgmIndex": 2, "effects": ["neonFrame","scanline","splitPanels","symbolBurst"] },
-    { "id": "SYM4", "label": "SYMBOL-4 FEVER", "spins": 25, "bgmIndex": 3, "effects": ["flashGrid","burst","tripleZoom","roulette"] },
-    { "id": "SYM5", "label": "SYMBOL-5 FEVER", "spins": 25, "bgmIndex": 4, "effects": ["symbolBurst","scanline","roulette","neonFrame"] },
-    { "id": "SYM6", "label": "SYMBOL-6 FEVER", "spins": 25, "bgmIndex": 5, "effects": ["splitPanels","flashGrid","burst","tripleZoom"] },
-    { "id": "SYM7", "label": "SYMBOL-7 FEVER", "spins": 25, "bgmIndex": 6, "effects": ["roulette","symbolBurst","neonFrame","scanline"] },
-    { "id": "SYM8", "label": "SYMBOL-8 FEVER", "spins": 25, "bgmIndex": 7, "effects": ["tripleZoom","flashGrid","splitPanels","burst"] },
-    { "id": "SYM9", "label": "SYMBOL-9 FEVER", "spins": 25, "bgmIndex": 8, "effects": ["neonFrame","symbolBurst","roulette","scanline"] },
-    { "id": "ULTRA", "label": "ULTRA VITALIZATION", "spins": 25, "bgmIndex": 9, "effects": ["ultraThumb","meteorSymbols","realityCrack"] }
-  ],
+      "feverTypes": [
+        { "id": "SYM1", "label": "SYMBOL-1 FEVER", "spins": 25, "bgmIndex": 0, "effects": ["scanline","neonFrame","symbolBurst","tripleZoom"] },
+        { "id": "SYM2", "label": "SYMBOL-2 FEVER", "spins": 25, "bgmIndex": 1, "effects": ["burst","flashGrid","roulette","splitPanels"] },
+        { "id": "SYM3", "label": "SYMBOL-3 FEVER", "spins": 25, "bgmIndex": 2, "effects": ["neonFrame","scanline","splitPanels","symbolBurst"] },
+        { "id": "SYM4", "label": "SYMBOL-4 FEVER", "spins": 25, "bgmIndex": 3, "effects": ["flashGrid","burst","tripleZoom","roulette"] },
+        { "id": "SYM5", "label": "SYMBOL-5 FEVER", "spins": 25, "bgmIndex": 4, "effects": ["symbolBurst","scanline","roulette","neonFrame"] },
+        { "id": "SYM6", "label": "SYMBOL-6 FEVER", "spins": 25, "bgmIndex": 5, "effects": ["splitPanels","flashGrid","burst","tripleZoom"] },
+        { "id": "SYM7", "label": "SYMBOL-7 FEVER", "spins": 25, "bgmIndex": 6, "effects": ["roulette","symbolBurst","neonFrame","scanline"] },
+        { "id": "SYM8", "label": "SYMBOL-8 FEVER", "spins": 25, "bgmIndex": 7, "effects": ["tripleZoom","flashGrid","splitPanels","burst"] },
+        { "id": "SYM9", "label": "SYMBOL-9 FEVER", "spins": 25, "bgmIndex": 8, "effects": ["neonFrame","symbolBurst","roulette","scanline"] },
+        { "id": "ULTRA", "label": "ULTRA VITALIZATION", "spins": 25, "bgmIndex": 9, "effects": ["ultraThumb","meteorSymbols","realityCrack"] }
+      ],
 
-  "autoSpin": {
-    "enabledDefault": false,
-    "intervalMs": 180,
-    "feverIntervalMs": 120,
-    "autoStopDelaysMs": [90, 170, 250]
-  },
+      "autoSpin": {
+        "enabledDefault": false,
+        "intervalMs": 180,
+        "feverIntervalMs": 120,
+        "autoStopDelaysMs": [90, 170, 250]
+      },
 
-  // ★追加：フィーバー勝利SE（あなたのファイル実態に合わせてmp3化）
-  // もし「このキーをどこも読んでない」なら害は出ない（無視されるだけ）
-  "feverWinSfxFiles": {
-    "SYM1": "assets/audio/se_fever_sym1.mp3",
-    "SYM2": "assets/audio/se_fever_sym2.mp3",
-    "SYM3": "assets/audio/se_fever_sym3.mp3",
-    "SYM4": "assets/audio/se_ferver_sym4.mp3",
-    "SYM5": "assets/audio/se_ferver_sym5.mp3",
-    "SYM6": "assets/audio/se_ferver_sym6.mp3",
-    "SYM7": "assets/audio/se_ferver_sym7.mp3",
-    "SYM8": "assets/audio/se_ferver_sym8.mp3",
-    "SYM9": "assets/audio/se_ferver_sym9.mp3",
-    "ULTRA": "assets/audio/se_ferver_sym_ultra.mp3"
-  }
-};
-
+      "feverWinSfxFiles": {
+        "SYM1": "assets/audio/se_fever_sym1.mp3",
+        "SYM2": "assets/audio/se_fever_sym2.mp3",
+        "SYM3": "assets/audio/se_fever_sym3.mp3",
+        "SYM4": "assets/audio/se_ferver_sym4.mp3",
+        "SYM5": "assets/audio/se_ferver_sym5.mp3",
+        "SYM6": "assets/audio/se_ferver_sym6.mp3",
+        "SYM7": "assets/audio/se_ferver_sym7.mp3",
+        "SYM8": "assets/audio/se_ferver_sym8.mp3",
+        "SYM9": "assets/audio/se_ferver_sym9.mp3",
+        "ULTRA": "assets/audio/se_ferver_sym_ultra.mp3"
+      }
+    };
 
     const DEFAULTS = {
       slotDisplayName: "",
@@ -1510,7 +1112,6 @@ const EMBEDDED_CONFIG = {
       celestialButtonLabel: "CELESTIAL Web Site",
       theme: { accent: "#00ffff", bg: "#000000" },
 
-      // NOTE: 5ライン化したので、ここは後で下げるの推奨
       winRate: 0.08,
 
       fever: {
@@ -1625,20 +1226,6 @@ const EMBEDDED_CONFIG = {
       if (ji) ji.src = STATE.profileImageUrl;
     }
 
-    async function fetchWithTimeout(resource, timeout = 2000) {
-      const controller = new AbortController();
-      const id = setTimeout(() => controller.abort(), timeout);
-      try {
-        const response = await fetch(resource, { signal: controller.signal });
-        clearTimeout(id);
-        if (!response.ok) throw new Error("HTTP " + response.status);
-        return response;
-      } catch (e) {
-        clearTimeout(id);
-        throw e;
-      }
-    }
-
     function currentConfig() {
       return STATE.config || DEFAULTS;
     }
@@ -1690,9 +1277,10 @@ const EMBEDDED_CONFIG = {
       const bg = (c.theme && c.theme.bg) ? c.theme.bg : DEFAULTS.theme.bg;
       r.style.setProperty('--theme-accent', accent);
       r.style.setProperty('--theme-bg', bg);
-      r.style.setProperty('--themeglow', `0 0 10px ${accent}`);
+      r.style.setProperty('--theme-glow', `0 0 10px ${accent}`); // ★FIX
 
-      const pl = document.getElementById('partnr-label');
+      // ★FIX: partner-label id typo
+      const pl = document.getElementById('partner-label');
       const pn = document.getElementById('partner-name');
       if (pl) pl.textContent = c.partnerLabel || DEFAULTS.partnerLabel;
       if (pn) pn.textContent = c.partnerName || DEFAULTS.partnerName;
@@ -1788,10 +1376,8 @@ const EMBEDDED_CONFIG = {
       const conf = currentConfig();
       const map = conf.feverWinSfxFiles || DEFAULTS.feverWinSfxFiles || {};
 
-      // Fallback Logic: Specific -> ULTRA -> False
       let file = map[typeId];
       if (!file) file = map["ULTRA"];
-
       if (!file) return false;
 
       if (!STATE.winSfxAudio) {
@@ -1802,10 +1388,8 @@ const EMBEDDED_CONFIG = {
       try {
         STATE.winSfxAudio.src = file;
         STATE.winSfxAudio.currentTime = 0;
-        STATE.winSfxAudio.play().catch(e => {
-          console.warn("SFX Play Blocked/Failed:", e);
-        });
-        return true; // Attempted
+        STATE.winSfxAudio.play().catch(e => console.warn("SFX Play Blocked/Failed:", e));
+        return true;
       } catch (e) {
         console.warn("SFX Error:", e);
         return false;
@@ -1973,23 +1557,6 @@ const EMBEDDED_CONFIG = {
     // ===== FX SYSTEM =====
     function fxLayer() { return document.getElementById('fx-layer'); }
     function clearFx() { const layer = fxLayer(); if (layer) layer.innerHTML = ''; }
-    function inferAnimMsFromStyle(el) {
-      // el.style.animation から "1200ms" / "1.2s" を拾って最大値を返す
-      const a = (el && el.style && el.style.animation) ? String(el.style.animation) : '';
-      let max = 0;
-
-      // 例: "fx-symbolburst 1200ms ease-in-out 1"
-      // 例: "fx-meteor 1.1s ease-in-out 1"
-      const re = /([\d.]+)\s*(ms|s)\b/g;
-      let m;
-      while ((m = re.exec(a)) !== null) {
-        const v = Number(m[1]);
-        if (!Number.isFinite(v)) continue;
-        const ms = (m[2] === 's') ? v * 1000 : v;
-        if (ms > max) max = ms;
-      }
-      return max;
-    }
 
     function addFx(el, ttlMs = 900) {
       const layer = fxLayer();
@@ -1997,21 +1564,14 @@ const EMBEDDED_CONFIG = {
 
       const wrap = document.createElement('div');
       wrap.className = 'fx';
-
-      // ★フェードを確実に当てる（class任せにしない）
       wrap.style.animation = `fx-fade ${ttlMs}ms ease-in-out 1 both`;
 
       wrap.appendChild(el);
       layer.appendChild(wrap);
 
-      // 最後まで描画させてから消す
       setTimeout(() => { try { wrap.remove(); } catch (e) { } }, ttlMs + 80);
     }
 
-
-
-
-    // 50% = FEVER絵柄 / 50% = 他8種（混ぜる）
     function pickSymbolImageByType(type) {
       if (!STATE.images.length) return null;
 
@@ -2035,7 +1595,6 @@ const EMBEDDED_CONFIG = {
       return STATE.images[idx];
     }
 
-    /* --- FEVER FX TICKER SYSTEM --- */
     let _feverTickerId = null;
     const EXTRA_FX_POOL = [
       'glitchPulse', 'haloRing', 'timeStop', 'starDust', 'distortion', 'shockwave', 'screenShake', 'realityShatter', 'chromatic',
@@ -2057,24 +1616,18 @@ const EMBEDDED_CONFIG = {
     function feverFxTick() {
       if (STATE.mode !== 'FEVER' || !STATE.feverType) return;
 
-      // パフォーマンス保護: レイヤー内の要素数が多すぎたら今回はスキップ
       const layer = fxLayer();
       if (layer && layer.childElementCount < 6) {
-        // 候補: base effects + extra pool
         const base = (STATE.feverType.effects || []);
         const pool = base.concat(EXTRA_FX_POOL);
         const randFx = pool[Math.floor(Math.random() * pool.length)];
-
-        // 重複回避: 新規追加
         fireOneFeverFx(randFx, STATE.feverType);
       }
 
-      // 次回: 0.6s ~ 1.6s
       const delay = 600 + Math.random() * 1000;
       _feverTickerId = setTimeout(feverFxTick, delay);
     }
 
-    // 単発発火用 (clearFxなし)
     function fireOneFeverFx(e, type) {
       const mainSym = pickSymbolImageByType(type);
       const thumbUrl = STATE.profileImageUrl || `assets/thumb/${STATE.slotId}.png`;
@@ -2091,7 +1644,6 @@ const EMBEDDED_CONFIG = {
       if (e === 'ultraThumb') fxUltraThumb(thumbUrl);
       if (e === 'realityCrack') fxRealityCrack();
 
-      // --- NEW FX INTEGRATION ---
       if (e === 'glitchPulse') fxGlitch();
       if (e === 'haloRing') fxHalo();
       if (e === 'timeStop') fxTimeStop();
@@ -2102,7 +1654,6 @@ const EMBEDDED_CONFIG = {
       if (e === 'realityShatter') fxShatter();
       if (e === 'chromatic') fxChromatic();
 
-      // --- EXPANDED 10 FX (CAT 1-10) ---
       if (e === 'timeFreeze') fxTimeFreeze();
       if (e === 'spatialWarp') fxSpatialWarp();
       if (e === 'holyRay') fxHolyRay();
@@ -2119,26 +1670,17 @@ const EMBEDDED_CONFIG = {
       if (!type) return;
       const effects = Array.isArray(type.effects) ? type.effects : [];
       if (!effects.length) return;
-
       clearFx();
-
-      // Initial Base Display
-      for (const e of effects) {
-        fireOneFeverFx(e, type);
-      }
+      for (const e of effects) fireOneFeverFx(e, type);
     }
 
     function ensureFeverFX() {
       if (STATE.mode !== 'FEVER' || !STATE.feverType) return;
       const layer = document.getElementById('fx-layer');
-      // WIN演出やTTLで演出が消えて「無演出」になったら、baseを復元
-      // (Tickerがいるので空になることは少ないが、念のため維持)
       if (!layer || layer.childElementCount === 0) {
         runFeverEffects(STATE.feverType);
       }
     }
-
-
 
     function fxScanline() {
       const el = document.createElement('div');
@@ -2183,9 +1725,7 @@ const EMBEDDED_CONFIG = {
 
     function fxTripleZoom(img) {
       if (!img) return;
-
-      // 3枚重ねは残りやすいのでテンポ最適化
-      const base = 520; // ここを上げると長くなる（例: 650）
+      const base = 520;
       for (let i = 0; i < 3; i++) {
         const el = document.createElement('div');
         el.className = 'fx';
@@ -2195,18 +1735,13 @@ const EMBEDDED_CONFIG = {
         el.style.opacity = String(0.50 - i * 0.14);
         el.style.filter = `blur(${i * 1.0}px) saturate(1.2)`;
         el.style.mixBlendMode = 'screen';
-
-        // ここがポイント：ズーム自体の時間も短く
         el.style.animation = `fx-zoom ${base + i * 70}ms ease-in-out 1`;
-
-        // TTLも短めに（addFxにフェードがある前提）
         addFx(el, base + i * 70);
       }
     }
 
     function fxSymbolBurst(img) {
       if (!img) return;
-
       const el = document.createElement('div');
       el.className = 'fx';
       el.style.backgroundImage =
@@ -2214,8 +1749,6 @@ const EMBEDDED_CONFIG = {
       el.style.backgroundSize = 'cover';
       el.style.backgroundPosition = 'center';
       el.style.mixBlendMode = 'screen';
-
-      // 長いと「残ってる感」になるので短縮
       el.style.animation = 'fx-symbolburst 620ms ease-in-out 1';
       addFx(el, 620);
     }
@@ -2290,7 +1823,7 @@ const EMBEDDED_CONFIG = {
       el.style.backgroundPosition = 'center';
       el.style.mixBlendMode = 'screen';
       el.style.animation = 'fx-symbolburst 1200ms ease-in-out 1';
-      addFx(el); // ← ttlMs を渡さない（内側1200msを自動で拾わせる）
+      addFx(el, 1200);
     }
 
     function fxRealityCrack() {
@@ -2301,44 +1834,18 @@ const EMBEDDED_CONFIG = {
         'repeating-linear-gradient(135deg, rgba(255,255,255,0.12) 0 2px, rgba(0,0,0,0.0) 2px 14px)';
       el.style.mixBlendMode = 'overlay';
       el.style.animation = 'fx-crack 900ms ease-in-out 1';
-      addFx(el);
+      addFx(el, 900);
     }
 
-    /* --- NEW FX HELPERS --- */
-    function fxGlitch() {
-      const el = document.createElement('div');
-      el.className = 'fx fx-glitch';
-      addFx(el, 400);
-    }
-    function fxHalo() {
-      const el = document.createElement('div');
-      el.className = 'fx fx-halo';
-      addFx(el, 800);
-    }
-    function fxTimeStop() {
-      const el = document.createElement('div');
-      el.className = 'fx fx-timestop';
-      addFx(el, 400);
-    }
-    function fxParticles() {
-      const el = document.createElement('div');
-      el.className = 'fx fx-particles';
-      addFx(el, 1200);
-    }
-    function fxDistortion() {
-      const el = document.createElement('div');
-      el.className = 'fx fx-distortion';
-      addFx(el, 600);
-    }
-    function fxShockwave() {
-      const el = document.createElement('div');
-      el.className = 'fx fx-shockwave';
-      addFx(el, 750);
-    }
+    function fxGlitch() { const el = document.createElement('div'); el.className = 'fx fx-glitch'; addFx(el, 400); }
+    function fxHalo() { const el = document.createElement('div'); el.className = 'fx fx-halo'; addFx(el, 800); }
+    function fxTimeStop() { const el = document.createElement('div'); el.className = 'fx fx-timestop'; addFx(el, 400); }
+    function fxParticles() { const el = document.createElement('div'); el.className = 'fx fx-particles'; addFx(el, 1200); }
+    function fxDistortion() { const el = document.createElement('div'); el.className = 'fx fx-distortion'; addFx(el, 600); }
+    function fxShockwave() { const el = document.createElement('div'); el.className = 'fx fx-shockwave'; addFx(el, 750); }
     function fxShakeHard() {
       const el = document.createElement('div');
       el.className = 'fx fx-shake-hard';
-      // Add a visual element to shake (random symbol overlay)
       const img = STATE.images[Math.floor(Math.random() * STATE.images.length)];
       if (img) {
         el.style.backgroundImage = `url("${img.src}")`;
@@ -2349,92 +1856,35 @@ const EMBEDDED_CONFIG = {
       }
       addFx(el, 400);
     }
-    function fxShatter() {
-      const el = document.createElement('div');
-      el.className = 'fx fx-shatter';
-      addFx(el, 550);
-    }
-    function fxChromatic() {
-      const el = document.createElement('div');
-      el.className = 'fx fx-chromatic';
-      addFx(el, 550);
-    }
+    function fxShatter() { const el = document.createElement('div'); el.className = 'fx fx-shatter'; addFx(el, 550); }
+    function fxChromatic() { const el = document.createElement('div'); el.className = 'fx fx-chromatic'; addFx(el, 550); }
 
-    /* --- EXPANDED 10 FX HELPERS --- */
-    function fxTimeFreeze() {
-      const el = document.createElement('div');
-      el.className = 'fx fx-timefreeze';
-      addFx(el, 1200);
-    }
-    function fxSpatialWarp() {
-      const el = document.createElement('div');
-      el.className = 'fx fx-spatialwarp';
-      addFx(el, 900);
-    }
-    function fxHolyRay() {
-      const el = document.createElement('div');
-      el.className = 'fx fx-holyray';
-      addFx(el, 1500);
-    }
-    function fxVoidCrack() {
-      const el = document.createElement('div');
-      el.className = 'fx fx-voidcrack';
-      addFx(el, 500);
-    }
-    function fxMatrixRain() {
-      const el = document.createElement('div');
-      el.className = 'fx fx-matrixrain';
-      addFx(el, 900);
-    }
-    function fxNoiseStorm() {
-      const el = document.createElement('div');
-      el.className = 'fx fx-noisestorm';
-      addFx(el, 400);
-    }
-    function fxBioPulse() {
-      const el = document.createElement('div');
-      el.className = 'fx fx-biopulse';
-      addFx(el, 900);
-    }
-    function fxSonicBoom() {
-      const el = document.createElement('div');
-      el.className = 'fx fx-sonicboom';
-      addFx(el, 600);
-    }
-    function fxColorInvert() {
-      const el = document.createElement('div');
-      el.className = 'fx fx-colorinvert';
-      addFx(el, 500);
-    }
-    function fxAbyssalGaze() {
-      const el = document.createElement('div');
-      el.className = 'fx fx-abyssalgaze';
-      addFx(el, 1600);
-    }
+    function fxTimeFreeze() { const el = document.createElement('div'); el.className = 'fx fx-timefreeze'; addFx(el, 1200); }
+    function fxSpatialWarp() { const el = document.createElement('div'); el.className = 'fx fx-spatialwarp'; addFx(el, 900); }
+    function fxHolyRay() { const el = document.createElement('div'); el.className = 'fx fx-holyray'; addFx(el, 1500); }
+    function fxVoidCrack() { const el = document.createElement('div'); el.className = 'fx fx-voidcrack'; addFx(el, 500); }
+    function fxMatrixRain() { const el = document.createElement('div'); el.className = 'fx fx-matrixrain'; addFx(el, 900); }
+    function fxNoiseStorm() { const el = document.createElement('div'); el.className = 'fx fx-noisestorm'; addFx(el, 400); }
+    function fxBioPulse() { const el = document.createElement('div'); el.className = 'fx fx-biopulse'; addFx(el, 900); }
+    function fxSonicBoom() { const el = document.createElement('div'); el.className = 'fx fx-sonicboom'; addFx(el, 600); }
+    function fxColorInvert() { const el = document.createElement('div'); el.className = 'fx fx-colorinvert'; addFx(el, 500); }
+    function fxAbyssalGaze() { const el = document.createElement('div'); el.className = 'fx fx-abyssalgaze'; addFx(el, 1600); }
 
     function runRandomFeverWinFX() {
       if (STATE.mode !== 'FEVER' || !STATE.feverType) return;
-
       const base = (STATE.feverType.effects || []);
       const pool = base.concat(EXTRA_FX_POOL);
-
-      // 2〜6個
       const count = 2 + Math.floor(Math.random() * 5);
 
       let lastFx = null;
-
       for (let i = 0; i < count; i++) {
         const delay = Math.floor(Math.random() * 380);
-
         setTimeout(() => {
-          // 直前と被らないようにリトライ
           let fx;
           let retry = 4;
-          do {
-            fx = pool[Math.floor(Math.random() * pool.length)];
-          } while (fx === lastFx && retry-- > 0);
+          do { fx = pool[Math.floor(Math.random() * pool.length)]; }
+          while (fx === lastFx && retry-- > 0);
           lastFx = fx;
-
           fireOneFeverFx(fx, STATE.feverType);
         }, delay);
       }
@@ -2443,9 +1893,9 @@ const EMBEDDED_CONFIG = {
     // ===== GRID HELPERS (3x3) =====
     function getGridSymbol(reelIdx, row) {
       const r = STATE.reels[reelIdx];
-      const top = r.symbolIndex; // 上段
+      const top = r.symbolIndex;
       const n = STATE.images.length;
-      return (top + row) % n; // row: 0上 1中 2下
+      return (top + row) % n;
     }
 
     function detectWinLine() {
@@ -2453,9 +1903,7 @@ const EMBEDDED_CONFIG = {
         const a = getGridSymbol(0, line[0]);
         const b = getGridSymbol(1, line[1]);
         const c = getGridSymbol(2, line[2]);
-        if (a === b && b === c) {
-          return { line, symbol: a }; // symbol: 0..8
-        }
+        if (a === b && b === c) return { line, symbol: a };
       }
       return null;
     }
@@ -2527,17 +1975,12 @@ const EMBEDDED_CONFIG = {
 
       const c = currentConfig();
       let currentWinRate = (c.winRate ?? DEFAULTS.winRate);
-
-      if (STATE.mode === 'FEVER') {
-        currentWinRate = 1.0; // FEVERは気持ちよく
-      }
+      if (STATE.mode === 'FEVER') currentWinRate = 1.0;
 
       const willWin = Math.random() < currentWinRate;
       if (willWin) {
         const symCount = STATE.images.length;
         STATE.forcedSymbol = Math.floor(Math.random() * symCount);
-
-        // 5ラインのどれかで当てる
         STATE.forcedLineRows = PAYLINES_5[Math.floor(Math.random() * PAYLINES_5.length)];
       }
 
@@ -2592,12 +2035,10 @@ const EMBEDDED_CONFIG = {
             let targetIdx = 0;
 
             if (STATE.forcedSymbol !== null) {
-              // そのリールが狙う段(row)：上0 / 中1 / 下2（未指定なら中）
               const row = (STATE.forcedLineRows && STATE.forcedLineRows[reelIdx] != null)
                 ? STATE.forcedLineRows[reelIdx]
                 : 1;
 
-              // top + row = forcedSymbol => top = forcedSymbol - row
               let desiredTop = STATE.forcedSymbol - row;
               const n = STATE.images.length;
               while (desiredTop < 0) desiredTop += n;
@@ -2643,9 +2084,7 @@ const EMBEDDED_CONFIG = {
           playTone('win');
         }
 
-        // ===== FEVER LOOP (config-driven) =====
         if (STATE.mode === 'FEVER') {
-          const conf = currentConfig();
           const loop = (conf.fever && conf.fever.loop) ? conf.fever.loop : null;
 
           if (loop && loop.enabled) {
@@ -2655,8 +2094,6 @@ const EMBEDDED_CONFIG = {
 
             if (add > 0 && Math.random() < chance) {
               STATE.feverCount = Math.min(max, STATE.feverCount + add);
-
-              // 表示更新（FEVER表記を今の残り回数に追従）
               const label = STATE.feverType ? STATE.feverType.label : "FEVER!!";
               showFeverOverlay(`${label} (${STATE.feverCount})`);
               document.getElementById('message-box').textContent = `FEVER EXTEND! +${add}`;
@@ -2664,20 +2101,17 @@ const EMBEDDED_CONFIG = {
           }
         }
 
-        const winSymbol = win.symbol; // 0..8
-        const jackpotSymbol = 0;      // SYM1 をジャックポット扱い（現行仕様）
-
+        const winSymbol = win.symbol;
+        const jackpotSymbol = 0;
         const isJackpot = (winSymbol === jackpotSymbol);
 
         if (isJackpot) {
           showJackpotOverlay(1000);
           if (feverConf.enabled) {
-            // ★FEVER中はタイプを上書きしない（SYM1に奪われるのを防ぐ）
             if (STATE.mode === 'NORMAL') {
               startFever(true, winSymbol);
             } else {
               document.getElementById('message-box').textContent = "JACKPOT!";
-              // FEVER中の当たり演出は通常のFEVER演出強化だけ
               runRandomFeverWinFX();
             }
           } else {
@@ -2766,9 +2200,7 @@ const EMBEDDED_CONFIG = {
       if (img) img.src = STATE.profileImageUrl || `assets/thumb/${STATE.slotId}.png`;
 
       el.style.display = 'flex';
-      setTimeout(() => {
-        hideJackpotOverlay();
-      }, duration);
+      setTimeout(() => { hideJackpotOverlay(); }, duration);
     }
 
     function hideJackpotOverlay() {
@@ -2887,17 +2319,18 @@ const EMBEDDED_CONFIG = {
 
     window.onload = boot;
   </script>
-<script>
-  // Mobile viewport height fix (iOS/Android address bar)
-  (function () {
-    function setVh() {
-      document.documentElement.style.setProperty('--vh', (window.innerHeight * 0.01) + 'px');
-    }
-    setVh();
-    window.addEventListener('resize', setVh, { passive: true });
-    window.addEventListener('orientationchange', setVh, { passive: true });
-  })();
-</script>
+
+  <script>
+    // Mobile viewport height fix (iOS/Android address bar)
+    (function () {
+      function setVh() {
+        document.documentElement.style.setProperty('--vh', (window.innerHeight * 0.01) + 'px');
+      }
+      setVh();
+      window.addEventListener('resize', setVh, { passive: true });
+      window.addEventListener('orientationchange', setVh, { passive: true });
+    })();
+  </script>
 </body>
 
 </html>
