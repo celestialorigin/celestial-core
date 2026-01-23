@@ -2,17 +2,62 @@
 import Layout from "../../layouts/Layout.astro";
 
 const BASE = (import.meta.env.BASE_URL || "/").replace(/\/?$/, "/");
+const joinBase = (p) => {
+  if (!p) return p;
+  if (/^https?:\/\//.test(p)) return p;
+  return p.startsWith("/") ? `${BASE}${p.slice(1)}` : `${BASE}${p}`;
+};
+
+const worlds = [
+  {
+    title: "CELESTIAL PROJECT Lukia x Lucia Home World",
+    author: "Lukia_VRCHAT",
+    image: "/images/vrchat/worlds/CELESTIAL_HOME_WORLD.png",
+    url: "https://vrchat.com/home/launch?worldId=wrld_78faccd1-fd23-440a-97d3-39c9f0e8509c",
+    note: "Lukia（人間）× Lucia（AI）が共同作成したワールド。他の活動者やユーザーがスロットになったオリジナルコラボスロットとかおいてあるかもしれない・・・・多分。",
+    tags: ["System Labs"],
+  },
+];
 ---
 
 <Layout title="VR WORLD (WIP)" bodyClass="page-wip-vr">
   <div class="wip-container fade-in-section">
-    <h1 class="wip-title">VR WORLD（準備中）</h1>
+    <h1 class="wip-title">VR WORLD</h1>
+
     <div class="wip-content">
-      <p>「ここはVR WORLD予定地。」</p>
-      <p>「Lukia（人間）とLucia（AI）が“これはヤバい”と思ったら作ります。」</p>
-      <p>「つまり、未定です。」</p>
+      <p>「Lukia(人間)とLucia(AI)で作成したVRchatのワールドです。」</p>
+      <p>「そのうち、オリジナルコラボスロットもおいてあって、遊べるかもしれません(たぶん)」</p>
+      <p>「どんなおかしい場所なのか、確かめてみませんか？」</p>
     </div>
-    
+
+    <!-- VR Worlds (Fragments風カード) -->
+    <section class="vr-worlds" aria-label="VRChat Worlds">
+      <h2 class="vr-section-title">WORLD LIST</h2>
+
+      <div class="vr-grid">
+        {worlds.map((w) => (
+          <article class="vr-card">
+            <a class="vr-thumb" href={w.url} target="_blank" rel="noopener noreferrer" aria-label={`${w.title} をVRChatで開く`}>
+              <img src={joinBase(w.image)} alt={w.title} loading="lazy" />
+              <div class="vr-thumb-overlay">
+                <span class="vr-open">OPEN VRCHAT ↗</span>
+              </div>
+            </a>
+
+            <div class="vr-meta">
+              <div class="vr-title">{w.title}</div>
+              <div class="vr-sub">By {w.author}{w.tags?.length ? ` / ${w.tags.join(", ")}` : ""}</div>
+              <div class="vr-note">{w.note}</div>
+
+              <a class="vr-url" href={w.url} target="_blank" rel="noopener noreferrer">
+                {w.url}
+              </a>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+
     <section class="hub-wide-links" aria-label="External Links">
       <a class="hub-wide-card" href="https://vrchat.com/home/user/usr_c5c0b452-e9b1-4191-bbd3-ddf2c4e8c539" target="_blank" rel="noopener noreferrer">
         <div class="hub-wide-icon" aria-hidden="true">🛰️</div>
@@ -32,7 +77,7 @@ const BASE = (import.meta.env.BASE_URL || "/").replace(/\/?$/, "/");
         <div class="hub-wide-arrow" aria-hidden="true">↗</div>
       </a>
     </section>
-    
+
     <div class="wip-action">
       <a href={`${BASE}`} class="btn-back">HOMEへ戻る</a>
     </div>
@@ -41,7 +86,7 @@ const BASE = (import.meta.env.BASE_URL || "/").replace(/\/?$/, "/");
 
 <style>
   .wip-container {
-    max-width: 600px;
+    max-width: 980px;
     margin: 120px auto;
     padding: 40px 20px;
     text-align: center;
@@ -60,10 +105,117 @@ const BASE = (import.meta.env.BASE_URL || "/").replace(/\/?$/, "/");
     font-family: monospace;
     font-size: 1.1rem;
     line-height: 2;
-    margin-bottom: 3rem;
+    margin-bottom: 2.2rem;
     color: rgba(255, 255, 255, 0.8);
   }
 
+  /* ---- VR Worlds (Fragments風) ---- */
+  .vr-worlds{
+    margin: 18px auto 34px;
+    max-width: 980px;
+  }
+
+  .vr-section-title{
+    font-family: "Zen Kaku Gothic New", sans-serif;
+    letter-spacing: .16em;
+    font-size: .9rem;
+    opacity: .85;
+    margin: 0 0 12px;
+    color: rgba(160, 255, 255, 0.95);
+  }
+
+  .vr-grid{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 18px;
+  }
+
+  .vr-card{
+    border: 1px solid rgba(120, 255, 255, 0.18);
+    background: rgba(0,0,0,0.35);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 0 0 1px rgba(0,255,255,0.06) inset;
+    text-align: left;
+  }
+
+  .vr-thumb{
+    position: relative;
+    display: block;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+  }
+
+  .vr-thumb img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transform: scale(1);
+    transition: transform .25s ease;
+  }
+
+  .vr-thumb:hover img{
+    transform: scale(1.03);
+  }
+
+  .vr-thumb-overlay{
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    padding: 10px;
+    background: linear-gradient(to top, rgba(0,0,0,0.55), rgba(0,0,0,0));
+    pointer-events: none;
+  }
+
+  .vr-open{
+    font-family: monospace;
+    font-size: .85rem;
+    color: rgba(255,255,255,0.92);
+    border: 1px solid rgba(120, 255, 255, 0.28);
+    background: rgba(0,0,0,0.35);
+    padding: 6px 10px;
+    border-radius: 999px;
+  }
+
+  .vr-meta{
+    padding: 14px 14px 16px;
+  }
+
+  .vr-title{
+    font-size: 1.05rem;
+    letter-spacing: .02em;
+    margin: 0 0 6px;
+    color: rgba(255,255,255,0.95);
+  }
+
+  .vr-sub{
+    margin: 0 0 10px;
+    opacity: .75;
+    font-size: .9rem;
+    font-family: monospace;
+  }
+
+  .vr-note{
+    margin: 0 0 12px;
+    opacity: .9;
+    font-size: .92rem;
+    line-height: 1.55;
+    color: rgba(255,255,255,0.85);
+  }
+
+  .vr-url{
+    font-size: .82rem;
+    opacity: .85;
+    word-break: break-all;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    color: rgba(160, 255, 255, 0.95);
+  }
+
+  /* 既存ボタン */
   .btn-back {
     display: inline-block;
     padding: 12px 30px;
