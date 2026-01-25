@@ -1,11 +1,11 @@
 [
   {
-    "id": "CS-000",
-    "slug": "cs-000",
-    "displayName": "CELESTIAL Slot 000",
+    "id": "CST-00000000",
+    "slug": "cst-00000000",
+    "displayName": "CELESTIAL Slot 00000000",
     "ownerName": "Lukia",
     "kana": "ルキア",
-    "aliases": ["原初", "000", "LUKIA"],
+    "aliases": ["原初", "00000000", "LUKIA"],
     "type": "trial",
     "status": "live",
     "tags": {
@@ -15,19 +15,19 @@
       "platform": ["web"],
       "collab": false
     },
-    "thumb": "/wip/games/celestial-slot/thumbs/CS-000.png",
+    "thumb": "/wip/games/celestial-slot/thumbs/CST-00000000.png",
     "description": "原初筐体。TRIAL SLOT（LUKIA ver）。全ての始まりとなるスロット。",
-    "playUrl": "/games/slot/CS-000/",
+    "playUrl": "/games/slot/CST-00000000/",
     "links": { "x": "", "youtube": "", "page": "" },
     "createdAt": "2026-01-20"
   },
   {
-    "id": "CS-001",
-    "slug": "cs-001",
-    "displayName": "CELESTIAL Slot 001",
+    "id": "CSC-00000001",
+    "slug": "csc-00000001",
+    "displayName": "CELESTIAL Slot 00000001",
     "ownerName": "VRCなる箱",
     "kana": "なるはこ",
-    "aliases": ["001", "CS001", "なる箱"],
+    "aliases": ["00000001", "CSC00000001", "なる箱"],
     "type": "collab",
     "status": "live",
     "tags": {
@@ -37,9 +37,9 @@
       "platform": ["web"],
       "collab": true
     },
-    "thumb": "/wip/games/celestial-slot/thumbs/CS-001.png",
+    "thumb": "/wip/games/celestial-slot/thumbs/CSC-00000001.png",
     "description": "活動者、VRCなる箱コラボ筐体。COLLAB SLOT（NARUHAKO ver）。デカくてかわいいお姉さん系の写真を投稿されている方です。よかったら、VRCなる箱さんのかわいい画像を見ていきませんか？",
-    "playUrl": "/games/slot/CS-001/index.html",
+    "playUrl": "/games/slot/CSC-00000001/index.html",
     "links": { "x": "https://x.com/VRC_box420", "youtube": "", "page": "" },
     "createdAt": "2026-01-21"
   }

@@ -258,7 +258,7 @@ const joinBase = (p) => {
       wrap.hidden = false;
       // Load if not loaded (or reload if it was blanked)
       if (!(iframe as HTMLIFrameElement).src || (iframe as HTMLIFrameElement).src === "about:blank") {
-        (iframe as HTMLIFrameElement).src = baseJoin("/games/slot/CS-000/index.html");
+        (iframe as HTMLIFrameElement).src = baseJoin("/games/slot/CST-00000000/index.html");
       }
       wrap.scrollIntoView({ behavior: "smooth", block: "center" });
       btn.textContent = "■ 閉じる (SLOT 000 停止)";
